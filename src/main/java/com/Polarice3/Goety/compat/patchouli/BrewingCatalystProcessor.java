@@ -51,8 +51,8 @@ public class BrewingCatalystProcessor implements IComponentProcessor {
             }
         }
 
-        if (key.startsWith("linger")){
-            if (!this.brewEffect.canLinger()){
+        if (key.startsWith("linger")) {
+            if (!this.brewEffect.canLinger()) {
                 return IVariable.wrap(I18n.get("jei.goety.linger"));
             }
         }
@@ -61,7 +61,7 @@ public class BrewingCatalystProcessor implements IComponentProcessor {
             return IVariable.wrap(this.brewEffect.getDescriptionId());
         }
 
-        if (key.startsWith("text")){
+        if (key.startsWith("text")) {
             return IVariable.wrap(this.extraText);
         }
 

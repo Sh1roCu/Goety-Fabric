@@ -6,7 +6,7 @@ import sereneseasons.season.SeasonHooks;
 
 public class SSeasonsIntegration {
 
-    public static boolean summonSnowVariant(Level level, BlockPos pos){
+    public static boolean summonSnowVariant(Level level, BlockPos pos) {
         return SeasonHooks.coldEnoughToSnowSeasonal(level, pos);
     }
 }

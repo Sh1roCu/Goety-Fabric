@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.compat;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.compat.trinkets.TrinketsIntegration;
 import com.Polarice3.Goety.compat.patchouli.PatchouliIntegration;
+import com.Polarice3.Goety.compat.trinkets.TrinketsIntegration;
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.loader.api.FabricLoader;
 

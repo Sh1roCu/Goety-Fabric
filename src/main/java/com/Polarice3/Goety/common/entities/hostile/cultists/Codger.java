@@ -46,7 +46,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
 public class Codger extends Cultist implements RangedAttackMob {
     private int coolDown;

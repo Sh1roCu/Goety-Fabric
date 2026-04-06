@@ -39,7 +39,7 @@ public class RitualRecipeProcessor implements IComponentProcessor {
         }
 
         if (key.startsWith("activation_item")) {
-            if (this.recipe.getRitual() instanceof EnchantItemRitual){
+            if (this.recipe.getRitual() instanceof EnchantItemRitual) {
                 return IVariable.from(Ingredient.of(Items.BOOK));
             } else {
                 return IVariable.from(this.recipe.getActivationItem().getItems());
@@ -48,7 +48,7 @@ public class RitualRecipeProcessor implements IComponentProcessor {
 
         if (key.startsWith("craftType")) {
             if (this.recipe.getCraftType() != null) {
-                return IVariable.wrap(I18n.get("jei.goety.craftType") + I18n.get( "jei.goety.craftType." + I18n.get(recipe.getCraftType())));
+                return IVariable.wrap(I18n.get("jei.goety.craftType") + I18n.get("jei.goety.craftType." + I18n.get(recipe.getCraftType())));
             }
         }
 
@@ -77,14 +77,14 @@ public class RitualRecipeProcessor implements IComponentProcessor {
         }
 
         if (key.equals("output")) {
-            if (this.recipe.getRitual() instanceof EnchantItemRitual && this.recipe.getEnchantment() != null){
+            if (this.recipe.getRitual() instanceof EnchantItemRitual && this.recipe.getEnchantment() != null) {
                 List<ItemStack> results = new ArrayList<>();
-                for (int i = 1; i <= recipe.getEnchantment().getMaxLevel(); ++i){
+                for (int i = 1; i <= recipe.getEnchantment().getMaxLevel(); ++i) {
                     EnchantmentInstance enchantmentInstance = new EnchantmentInstance(recipe.getEnchantment(), i);
                     results.add(EnchantedBookItem.createForEnchantment(enchantmentInstance));
                 }
                 List<IVariable> variables = new ArrayList<>();
-                for (ItemStack itemStack : results){
+                for (ItemStack itemStack : results) {
                     variables.add(IVariable.from(itemStack));
                 }
                 return IVariable.wrapList(variables);

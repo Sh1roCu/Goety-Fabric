@@ -1,10 +1,8 @@
 package com.Polarice3.Goety.compat.trinkets;
 
 import com.Polarice3.Goety.common.items.ModItems;
-import com.Polarice3.Goety.common.items.curios.SingleStackItem;
 import com.Polarice3.Goety.compat.ICompatable;
 import com.google.common.collect.ImmutableMap;
-import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.world.item.Item;
 
 import java.util.Map;

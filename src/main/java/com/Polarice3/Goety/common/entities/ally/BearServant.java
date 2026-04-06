@@ -52,8 +52,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Predicate;
-
 public class BearServant extends AnimalSummon implements PlayerRideable, IAutoRideable {
     private static final EntityDataAccessor<Boolean> DATA_STANDING_ID = SynchedEntityData.defineId(BearServant.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_CAVE = SynchedEntityData.defineId(BearServant.class, EntityDataSerializers.BOOLEAN);
