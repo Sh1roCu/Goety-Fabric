@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "goety:phobia",
+    "goety:doom",
+    "goety:hellfire",
+    "goety:indirect_hellfire",
+    "goety:acid",
+    "goety:spike",
+    "goety:magic_bolt",
+    "goety:choke",
+    "goety:voided",
+    "goety:dismissed",
+    "goety:death"
+  ]
+}

@@ -1,0 +1,155 @@
+package com.Polarice3.Goety.init;
+
+import com.Polarice3.Goety.client.particles.*;
+import com.Polarice3.Goety.utils.ColorUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.LightTexture;
+
+@Environment(EnvType.CLIENT)
+public class ClientSideInit extends SidedInit {
+
+    public void init() {
+        setupParticles();
+    }
+
+    private void setupParticles() {
+        var registry = ParticleFactoryRegistry.getInstance();
+        registry.register(ModParticleTypes.NONE, NoneParticle.Provider::new);
+        registry.register(ModParticleTypes.TOTEM_EFFECT, SpellParticle.Provider::new);
+        registry.register(ModParticleTypes.PLAGUE_EFFECT, SpellParticle.Provider::new);
+        registry.register(ModParticleTypes.DOOM, SpellParticle.Provider::new);
+        registry.register(ModParticleTypes.DOOM_DEATH, DoomDeathParticle.Provider::new);
+        registry.register(ModParticleTypes.WHITE_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
+        registry.register(ModParticleTypes.BULLET_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
+        registry.register(ModParticleTypes.NECRO_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
+        registry.register(ModParticleTypes.GLOW_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
+        registry.register(ModParticleTypes.LICH, BigSpellParticle.Provider::new);
+        registry.register(ModParticleTypes.WARLOCK, SpellParticle.WitchProvider::new);
+        registry.register(ModParticleTypes.BONE, ShortFlameParticle.Provider::new);
+        registry.register(ModParticleTypes.LEECH, FlameParticle.Provider::new);
+        registry.register(ModParticleTypes.CHANT, FlameParticle.Provider::new);
+        registry.register(ModParticleTypes.ELECTRIC, GlowParticle.ElectricSparkProvider::new);
+        registry.register(ModParticleTypes.BIG_ELECTRIC, BigElectricParticle.Provider::new);
+        registry.register(ModParticleTypes.SPELL_ELECTRIC, GlowParticle.ElectricSparkProvider::new);
+        registry.register(ModParticleTypes.BUBBLE_STREAM, BubbleStreamParticle.Provider::new);
+        registry.register(ModParticleTypes.BREW_BUBBLE, BrewBubbleParticle.Provider::new);
+        registry.register(ModParticleTypes.WIND_BLAST, SonicBoomParticle.Provider::new);
+        registry.register(ModParticleTypes.HEAL_EFFECT, HeartParticle.Provider::new);
+        registry.register(ModParticleTypes.HEAL_EFFECT_2, SoulExplodeParticle.SummonProvider::new);
+        registry.register(ModParticleTypes.SOUL_LIGHT_EFFECT, GlowingParticle.Provider::new);
+        registry.register(ModParticleTypes.GLOW_LIGHT_EFFECT, GlowingParticle.Provider::new);
+        registry.register(ModParticleTypes.LASER_GATHER, GatheringParticle.Provider::new);
+        registry.register(ModParticleTypes.RESONANCE_GATHER, GatheringParticle.Provider::new);
+        registry.register(ModParticleTypes.BURNING, FlameParticle.Provider::new);
+        registry.register(ModParticleTypes.FIERY_PILLAR, FieryPillarParticle.Provider::new);
+        registry.register(ModParticleTypes.SOUL_EXPLODE_BITS, AdditiveFlameParticle.Provider::new);
+        registry.register(ModParticleTypes.XP_TAKE, AdditiveFlameParticle.Provider::new);
+        registry.register(ModParticleTypes.CULT_SPELL, SpellParticle.MobProvider::new);
+        registry.register(ModParticleTypes.BIG_CULT_SPELL, BigSpellParticle.MobProvider::new);
+        registry.register(ModParticleTypes.SMALL_STATION_CULT_SPELL, FireParticle.SmallerColorProvider::new);
+        registry.register(ModParticleTypes.STATION_CULT_SPELL, FireParticle.ColorProvider::new);
+        registry.register(ModParticleTypes.MUD_GAS, MudGasParticle.Provider::new);
+        registry.register(ModParticleTypes.CONFUSED, HeartParticle.Provider::new);
+        registry.register(ModParticleTypes.WRAITH, WraithParticle.Provider::new);
+        registry.register(ModParticleTypes.WRAITH_BURST, WraithParticle.Provider::new);
+        registry.register(ModParticleTypes.WRAITH_FIRE, BreathParticle.Provider::new);
+        registry.register(ModParticleTypes.BIG_FIRE, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.BIG_FIRE_DROP, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.BIG_FIRE_GROUND, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.BIG_SOUL_FIRE, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.BIG_SOUL_FIRE_DROP, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.BIG_SOUL_FIRE_GROUND, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.NECRO_FIRE, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.NECRO_FIRE_DROP, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.SMALL_NECRO_FIRE, FireParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.NECRO_FLAME, FlameParticle.Provider::new);
+        registry.register(ModParticleTypes.DRAGON_FLAME, DragonFlameParticle.Provider::new);
+        registry.register(ModParticleTypes.DRAGON_FLAME_DROP, FireParticle.EmberProvider::new);
+        registry.register(ModParticleTypes.SMALL_DRAGON_FLAME, DragonFlameParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.SMALL_DRAGON_FLAME_GROUND, FireParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.END_FIRE, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.END_FIRE_DROP, FireParticle.Provider::new);
+        registry.register(ModParticleTypes.SMALL_END_FIRE, FireParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.FROST, FireParticle.FrostProvider::new);
+        registry.register(ModParticleTypes.FROST_NOVA, FlameParticle.Provider::new);
+        registry.register(ModParticleTypes.FLY, FireParticle.FlyProvider::new);
+        registry.register(ModParticleTypes.SPELL_CLOUD, FireParticle.ColorProvider::new);
+        registry.register(ModParticleTypes.FANG_RAIN, WaterDropParticle.Provider::new);
+        registry.register(ModParticleTypes.REDSTONE_EXPLODE, RedstoneExplodeParticle.Provider::new);
+        registry.register(ModParticleTypes.MINE_PULSE, PulsatingCircleParticle.Provider::new);
+        registry.register(ModParticleTypes.ELECTRIC_EXPLODE, ElectricExplosionParticle.Provider::new);
+        registry.register(ModParticleTypes.FAN_CLOUD, FanCloudParticle.Provider::new);
+        registry.register(ModParticleTypes.REDSTONE_DEBRIS, FootprintParticle.Provider::new);
+        registry.register(ModParticleTypes.GOO_STAIN, StainGroundParticle.GlowProvider::new);
+        registry.register(ModParticleTypes.CHORUS_LEAVES, FallingLeavesParticle.Provider::new);
+        registry.register(ModParticleTypes.CHORUS_BLOSSOM_LEAVES, FallingLeavesParticle.Provider::new);
+        registry.register(ModParticleTypes.MAGIC_BOLT, RollingParticle.Provider::new);
+        registry.register(ModParticleTypes.NECRO_BOLT, RollingParticle.QuickProvider::new);
+        registry.register(ModParticleTypes.STUN, RollingParticle.Provider::new);
+        registry.register(ModParticleTypes.AURA, AuraParticle.Provider::new);
+        registry.register(ModParticleTypes.VERTICAL_CIRCLE_EXPLODE, VerticalCircleExplodeParticle.Provider::new);
+        registry.register(ModParticleTypes.RISING_SPIRAL, RisingRollingParticle.SpiralProvider::new);
+        registry.register(ModParticleTypes.RISING_ENCHANT, RisingRollingParticle.Provider::new);
+        registry.register(ModParticleTypes.ROLLING_SPIRAL, RollingParticle.EnchantProvider::new);
+        registry.register(ModParticleTypes.ROLLING_ENCHANT, RollingParticle.EnchantProvider::new);
+        registry.register(ModParticleTypes.ROLLING_TARGET, RollingParticle.TargetProvider::new);
+        registry.register(ModParticleTypes.FUNGUS_EXPLOSION, HugeExplosionParticle.Provider::new);
+        registry.register(ModParticleTypes.FUNGUS_EXPLOSION_EMITTER, new HugeFungusExplosionSeedParticle.Provider());
+        registry.register(ModParticleTypes.SOUL_EXPLODE, SoulExplodeParticle.Provider::new);
+        registry.register(ModParticleTypes.SUMMON, SummonParticle.Provider::new);
+        registry.register(ModParticleTypes.VOID_SPAWNER_DETECTION, SummonParticle.Provider::new);
+        registry.register(ModParticleTypes.VOID_VAULT_CONNECT, ConnectionParticle.Provider::new);
+        registry.register(ModParticleTypes.SPELL_SQUARE, SpellSquareParticle.Provider::new);
+        registry.register(ModParticleTypes.SMALL_SPELL_SQUARE, SpellSquareParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.TRAIL, TrailParticle.MobProvider::new);
+        registry.register(ModParticleTypes.SUMMON_TRAIL, SummonTrailParticle.Provider::new);
+        registry.register(ModParticleTypes.DROPLET, DropParticle.Provider::new);
+        registry.register(ModParticleTypes.GO, SoulExplodeParticle.Provider::new);
+        registry.register(ModParticleTypes.STOP, SoulExplodeParticle.Provider::new);
+        registry.register(ModParticleTypes.SPARKLE, SparkleParticle.Provider::new);
+        registry.register(ModParticleTypes.DUST_CLOUD, DustCloudParticle.Provider::new);
+        registry.register(ModParticleTypes.SHOCKWAVE, ShockwaveParticle.Provider::new);
+        registry.register(ModParticleTypes.REVERSE_SHOCKWAVE, ShockwaveParticle.ReverseProvider::new);
+        registry.register(ModParticleTypes.LICH_DEATH, ShockwaveParticle.Provider::new);
+        registry.register(ModParticleTypes.CIRCLE_EXPLODE, CircleExplodeParticle.Provider::new);
+        registry.register(ModParticleTypes.AOE_INDICATOR, AoEParticle.Provider::new);
+        registry.register(ModParticleTypes.FOG_CLOUD, FoggyCloudParticle.Provider::new);
+        registry.register(ModParticleTypes.SOUL_HEAL, RisingCircleParticle.Provider::new);
+        registry.register(ModParticleTypes.MOD_SHRIEK, ModShriekParticle.Provider::new);
+        registry.register(ModParticleTypes.SCULK_BUBBLE, SculkBubbleParticle.Provider::new);
+        registry.register(ModParticleTypes.WIND, WindParticle.Provider::new);
+        registry.register(ModParticleTypes.WIND_BLOW, WindBlowParticle.Provider::new);
+        registry.register(ModParticleTypes.WIND_SHOCKWAVE, WindShockwaveParticle.Provider::new);
+        registry.register(ModParticleTypes.WIND_GATHER, WindGatherParticle.Provider::new);
+        registry.register(ModParticleTypes.FAST_DUST, FastFallDust.Provider::new);
+        registry.register(ModParticleTypes.GATHER_TRAIL, GatherTrailParticle.Provider::new);
+        registry.register(ModParticleTypes.ABSORB_TRAIL, AbsorbTrailParticle.Provider::new);
+        registry.register(ModParticleTypes.FROST_GATHER, GatherFrostParticle.Provider::new);
+        registry.register(ModParticleTypes.MAGIC_SMOKE, MagicSmokeParticle.Provider::new);
+        registry.register(ModParticleTypes.MAGIC_ASH_SMOKE, MagicAshSmokeParticle.Provider::new);
+        registry.register(ModParticleTypes.FOLLOW_CULT_SPELL, FollowFireParticle.Provider::new);
+        registry.register(ModParticleTypes.SPIRALLING, SpirallingParticle.Provider::new);
+        registry.register(ModParticleTypes.SHOOT_INDICATOR, new ShootIndicatorParticle.Provider());
+        registry.register(ModParticleTypes.SLAM, new SlamParticle.Provider());
+        registry.register(ModParticleTypes.SPHERE_EXPLODE, new SphereExplodeParticle.Provider());
+        registry.register(ModParticleTypes.GOD_RAY, GodRayParticle.Provider::new);
+        registry.register(ModParticleTypes.STRETCHED_GOD_RAY, StretchedGodRayParticle.Provider::new);
+        registry.register(ModParticleTypes.WATER_STREAM, new WaterStreamParticle.Provider());
+        registry.register(ModParticleTypes.WATER_JET, WaterJetParticle.Provider::new);
+        registry.register(ModParticleTypes.WATER_TRAIL, WaterTrailParticle.Provider::new);
+        registry.register(ModParticleTypes.BLOSSOM_THORN_INDICATOR,
+                spriteSet -> new GeometricParticle.Provider(spriteSet,
+                        particleContext -> {
+                            GeometricParticle particle = new GeometricParticle(particleContext, 30, GeometricParticle.Geometries::buildFlatGeometry, true, true);
+                            particle.setColorOverride(f -> new ColorUtil(ChatFormatting.LIGHT_PURPLE));
+                            particle.setColorVariation(0.2D);
+                            particle.setBrightnessOverride(f -> LightTexture.FULL_BRIGHT);
+                            particle.setScaleOverride(f -> (1.0F + f) * 0.25F);
+                            return particle;
+                        }));
+    }
+}

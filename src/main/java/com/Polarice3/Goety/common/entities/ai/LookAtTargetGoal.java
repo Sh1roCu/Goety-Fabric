@@ -1,0 +1,46 @@
+package com.Polarice3.Goety.common.entities.ai;
+
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+
+import java.util.EnumSet;
+
+public class LookAtTargetGoal extends Goal {
+    protected final Mob mob;
+    protected LivingEntity target;
+    protected final float lookDistance;
+
+    public LookAtTargetGoal(Mob looker, float distance) {
+        this.mob = looker;
+        this.target = looker.getTarget();
+        this.lookDistance = distance;
+        this.setFlags(EnumSet.of(Flag.LOOK));
+    }
+
+    @Override
+    public boolean canUse() {
+        this.target = this.mob.getTarget();
+        return this.target != null;
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        if (!this.target.isAlive()) {
+            return false;
+        } else return !(this.mob.distanceToSqr(this.target) > (double) (this.lookDistance * this.lookDistance));
+    }
+
+    @Override
+    public void stop() {
+        this.target = null;
+        this.mob.getLookControl().setLookAt(this.mob);
+    }
+
+    @Override
+    public void tick() {
+        if (this.target.isAlive()) {
+            this.mob.getLookControl().setLookAt(this.target.getX(), this.mob.getEyeY(), this.target.getZ());
+        }
+    }
+}

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "goety",
+  "version": "${version}",
+  "name": "Goety",
+  "description": "An unofficial Fabric port of Goety",
+  "authors": [
+    "Sh1roCu"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "Goety.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "com.Polarice3.Goety.data.ModDataGenerator"
+    ],
+    "client": [
+      "cn.sh1rocu.goety.client.GoetyFabricClient"
+    ],
+    "main": [
+      "cn.sh1rocu.goety.GoetyFabric"
+    ],
+    "cardinal-components-entity": [
+      "com.Polarice3.Goety.common.capabilities.ModCapabilities"
+    ],
+    "mm:early_risers": [
+      "cn.sh1rocu.goety.asm.EnumRiser"
+    ],
+    "jade": [
+      "com.Polarice3.Goety.compat.jade.JadePlugin"
+    ],
+    "jei_mod_plugin": [
+      "com.Polarice3.Goety.compat.jei.GoetyJeiPlugin"
+    ]
+  },
+  "custom": {
+    "cardinal-components": [
+      "goety:lichdom",
+      "goety:misc",
+      "goety:soulenergy",
+      "goety:witchbarter"
+    ]
+  },
+  "mixins": [
+    "goety.mixins.json",
+    "goety.fabric.mixins.json"
+  ],
+  "accessWidener": "goety.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.18.5",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "forgeconfigapiport": "*",
+    "mm": "*"
+  }
+}

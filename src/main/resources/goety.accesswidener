@@ -1,0 +1,75 @@
+accessWidener v2 named
+
+accessible field net/minecraft/world/entity/Entity dimensions Lnet/minecraft/world/entity/EntityDimensions;
+accessible field net/minecraft/world/entity/Entity nextStep F
+accessible field net/minecraft/world/entity/Entity invulnerable Z
+accessible field net/minecraft/world/entity/Entity level Lnet/minecraft/world/level/Level;
+extendable method net/minecraft/world/entity/Entity collide (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+
+accessible field net/minecraft/world/entity/projectile/Projectile ownerUUID Ljava/util/UUID;
+accessible field net/minecraft/world/entity/projectile/Projectile leftOwner Z
+accessible field net/minecraft/world/entity/projectile/Projectile hasBeenShot Z
+
+accessible field net/minecraft/world/entity/LivingEntity attributes Lnet/minecraft/world/entity/ai/attributes/AttributeMap;
+mutable field net/minecraft/world/entity/LivingEntity attributes Lnet/minecraft/world/entity/ai/attributes/AttributeMap;
+accessible field net/minecraft/world/entity/LivingEntity lastHurtByPlayer Lnet/minecraft/world/entity/player/Player;
+accessible field net/minecraft/world/entity/LivingEntity lastHurtByPlayerTime I
+accessible field net/minecraft/world/entity/LivingEntity lastHurtByMob Lnet/minecraft/world/entity/LivingEntity;
+accessible field net/minecraft/world/entity/LivingEntity lastHurtByMobTimestamp I
+accessible field net/minecraft/world/entity/LivingEntity lastHurtMob Lnet/minecraft/world/entity/LivingEntity;
+accessible field net/minecraft/world/entity/LivingEntity lastHurtMobTimestamp I
+accessible field net/minecraft/world/entity/LivingEntity noJumpDelay I
+accessible method net/minecraft/world/entity/LivingEntity setLivingEntityFlag (IZ)V
+
+accessible field net/minecraft/world/entity/Mob handDropChances [F
+accessible field net/minecraft/world/entity/Mob armorDropChances [F
+
+accessible field net/minecraft/world/entity/monster/ZombieVillager gossips Lnet/minecraft/nbt/Tag;
+accessible field net/minecraft/world/entity/monster/ZombieVillager tradeOffers Lnet/minecraft/nbt/CompoundTag;
+
+accessible field net/minecraft/world/entity/decoration/Painting DATA_PAINTING_VARIANT_ID Lnet/minecraft/network/syncher/EntityDataAccessor;
+
+accessible field net/minecraft/world/level/block/SaplingBlock treeGrower Lnet/minecraft/world/level/block/grower/AbstractTreeGrower;
+
+accessible field net/minecraft/world/level/block/DispenserBlock DISPENSER_REGISTRY Ljava/util/Map;
+
+accessible field net/minecraft/world/level/block/entity/DecoratedPotPatterns ITEM_TO_POT_TEXTURE Ljava/util/Map;
+
+accessible field net/minecraft/server/level/ChunkMap entityMap Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
+accessible class net/minecraft/server/level/ChunkMap$TrackedEntity
+
+accessible field net/minecraft/world/entity/ai/goal/target/NearestAttackableTargetGoal targetType Ljava/lang/Class;
+
+accessible field net/minecraft/client/gui/components/BossHealthOverlay events Ljava/util/Map;
+
+accessible method net/minecraft/client/renderer/entity/player/PlayerRenderer setModelProperties (Lnet/minecraft/client/player/AbstractClientPlayer;)V
+accessible method net/minecraft/client/renderer/entity/player/PlayerRenderer scale (Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;F)V
+
+accessible field net/minecraft/client/model/geom/ModelPart children Ljava/util/Map;
+
+accessible class net/minecraft/client/renderer/FogRenderer$FogData
+accessible field net/minecraft/client/renderer/FogRenderer$FogData start F
+
+accessible class net/minecraft/client/renderer/RenderStateShard$ShaderStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$CullStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$LightmapStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$OverlayStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$WriteMaskStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$LayeringStateShard
+accessible class net/minecraft/client/renderer/RenderStateShard$DepthTestStateShard
+accessible class net/minecraft/client/renderer/RenderType$CompositeState
+accessible class net/minecraft/client/renderer/RenderStateShard$MultiTextureStateShard
+
+accessible field net/minecraft/client/model/geom/LayerDefinitions INNER_ARMOR_DEFORMATION Lnet/minecraft/client/model/geom/builders/CubeDeformation;
+accessible field net/minecraft/client/model/geom/LayerDefinitions OUTER_ARMOR_DEFORMATION Lnet/minecraft/client/model/geom/builders/CubeDeformation;
+
+accessible method net/minecraft/world/entity/monster/AbstractSkeleton getStepSound ()Lnet/minecraft/sounds/SoundEvent;
+accessible class net/minecraft/world/entity/raid/Raid$RaiderType
+
+accessible class net/minecraft/server/commands/TeleportCommand$LookAt
+
+accessible method net/minecraft/world/damagesource/DamageSource <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;)V
+
+extendable class net/minecraft/world/item/enchantment/EnchantmentCategory

@@ -1,0 +1,18 @@
+{
+  "type": "goety:brewing",
+  "ingredient": {
+    "item": "alexscaves:uranium"
+  },
+  "effect": "alexscaves:irradiated",
+  "soulCost": 25,
+  "capacityExtra": 4,
+  "duration": 1800,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alexscaves"
+      ]
+    }
+  ]
+}

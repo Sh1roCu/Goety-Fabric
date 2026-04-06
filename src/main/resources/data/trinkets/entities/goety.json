@@ -1,0 +1,20 @@
+{
+  "entities": [
+    "player",
+    "goety:haunted_armor_stand"
+  ],
+  "slots": [
+    "head/hat",
+    "head/face",
+    "chest/necklace",
+    "chest/cape",
+    "chest/back",
+    "legs/belt",
+    "feet/shoes",
+    "feet/aglet",
+    "hand/glove",
+    "hand/ring",
+    "offhand/glove",
+    "offhand/ring"
+  ]
+}

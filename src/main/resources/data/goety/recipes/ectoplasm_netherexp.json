@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "eee",
+    "ebe",
+    "eee"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:ectoplasm"
+    },
+    "b":
+    {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "netherexp:ectoplasm_bucket"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "netherexp"
+      ]
+    }
+  ]
+}

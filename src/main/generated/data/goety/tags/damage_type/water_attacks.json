@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "goety:bubble_stream",
+    "goety:drench",
+    "goety:direct_drench",
+    "goety:indirect_drench"
+  ]
+}

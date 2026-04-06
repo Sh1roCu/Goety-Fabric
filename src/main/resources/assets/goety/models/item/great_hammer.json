@@ -1,0 +1,7 @@
+{
+  "parent": "goety:item/template_hammer",
+  "gui_light": "front",
+  "textures": {
+    "hammer": "goety:item/great_hammer_model"
+  }
+}

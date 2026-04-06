@@ -1,0 +1,16 @@
+{
+  "type": "goety:soul_absorber_recipes",
+  "ingredient": {
+    "item": "born_in_chaos_v1:ethereal_spirit"
+  },
+  "soulIncrease": 5,
+  "cookingtime": 50,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "born_in_chaos_v1"
+      ]
+    }
+  ]
+}

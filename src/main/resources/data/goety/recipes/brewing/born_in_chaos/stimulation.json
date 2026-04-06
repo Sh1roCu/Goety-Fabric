@@ -1,0 +1,18 @@
+{
+  "type": "goety:brewing",
+  "ingredient": {
+    "item": "born_in_chaos_v1:stimulating_decoction"
+  },
+  "effect": "born_in_chaos_v1:stimulation",
+  "soulCost": 25,
+  "capacityExtra": 0,
+  "duration": 2400,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "born_in_chaos_v1"
+      ]
+    }
+  ]
+}

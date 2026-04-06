@@ -1,0 +1,18 @@
+{
+  "type": "goety:brewing",
+  "ingredient": {
+    "item": "alexsmobs:bear_fur"
+  },
+  "effect": "alexsmobs:knockback_resistance",
+  "soulCost": 25,
+  "capacityExtra": 0,
+  "duration": 3600,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alexsmobs"
+      ]
+    }
+  ]
+}

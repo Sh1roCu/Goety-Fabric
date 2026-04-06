@@ -1,0 +1,21 @@
+{
+  "type": "goety:brewing",
+  "ingredient": {
+    "item": "born_in_chaos_v1:intoxicating_decoction"
+  },
+  "entity": {
+    "entity_type": "born_in_chaos_v1:zombie_clown"
+  },
+  "effect": "born_in_chaos_v1:intoxication",
+  "soulCost": 25,
+  "capacityExtra": 0,
+  "duration": 800,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "born_in_chaos_v1"
+      ]
+    }
+  ]
+}

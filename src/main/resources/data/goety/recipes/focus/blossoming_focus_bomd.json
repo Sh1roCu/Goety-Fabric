@@ -1,0 +1,32 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:poison_dart_focus"
+  },
+  "craftType": "overgrown",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "goety:overgrown_roots"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "bosses_of_mass_destruction:void_thorn"
+    }
+  ],
+  "result": {
+    "item": "goety:blossoming_focus"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "bosses_of_mass_destruction"
+      ]
+    }
+  ]
+}
