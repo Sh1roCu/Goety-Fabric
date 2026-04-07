@@ -48,7 +48,7 @@ public class OrderFocus extends MagicFocus implements ILeftClickEntity {
             }
             List<LivingEntity> list = getServants(stack);
             List<LivingEntity> list2 = OrderFocus.getServantsClient(worldIn, stack);
-            List<Integer> integerList = getServantIds(stack);
+//            List<Integer> integerList = getServantIds(stack);
             if (!list.isEmpty()) {
                 for (int i = 0; i < list.size(); ++i) {
                     LivingEntity livingEntity = list.get(i);
@@ -61,15 +61,18 @@ public class OrderFocus extends MagicFocus implements ILeftClickEntity {
                                 setServantsClient(stack, worldIn, livingEntity);
                             }
                         }
-                        if (!integerList.isEmpty()) {
-                            if (integerList.size() >= list.size()) {
-                                int id = integerList.get(i);
-                                Entity entity = worldIn.getEntity(id);
-                                if (!(entity instanceof LivingEntity) || entity.isRemoved() || !entity.isAlive() || livingEntity.getId() != id) {
-                                    removeServantClient(stack, id, worldIn);
-                                }
-                            }
-                        }
+                        // this block of code will cause taht the OrderFocus update nbt continuously,
+                        // so that a player which is holding OrderFocus will play reequip animation continuously.
+
+//                        if (!integerList.isEmpty()) {
+//                            if (integerList.size() >= list.size()) {
+//                                int id = integerList.get(i);
+//                                Entity entity = worldIn.getEntity(id);
+//                                if (!(entity instanceof LivingEntity) || entity.isRemoved() || !entity.isAlive() || livingEntity.getId() != id) {
+//                                    removeServantClient(stack, id, worldIn);
+//                                }
+//                            }
+//                        }
                     }
                 }
             } else {
