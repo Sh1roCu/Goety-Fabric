@@ -1,15 +1,20 @@
 package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.utils.ColorUtil;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Locale;
 
-public abstract class GatherTrailParticleOption implements ParticleOptions {
-    /*public static final Codec<GatherTrailParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class GatherTrailParticleOption implements ParticleOptions {
+    public static final Codec<GatherTrailParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.FLOAT.fieldOf("red").forGetter(d -> d.red),
             Codec.FLOAT.fieldOf("green").forGetter(d -> d.green),
             Codec.FLOAT.fieldOf("blue").forGetter(d -> d.blue),
@@ -17,7 +22,8 @@ public abstract class GatherTrailParticleOption implements ParticleOptions {
             Codec.FLOAT.fieldOf("endY").forGetter(d -> d.endY),
             Codec.FLOAT.fieldOf("endZ").forGetter(d -> d.endZ)
     ).apply(instance, GatherTrailParticleOption::new));
-    public static final Deserializer<GatherTrailParticleOption> DESERIALIZER = new Deserializer<GatherTrailParticleOption>() {
+    public static final Deserializer<GatherTrailParticleOption> DESERIALIZER = new Deserializer<>() {
+        @Override
         public GatherTrailParticleOption fromCommand(ParticleType<GatherTrailParticleOption> particleTypeIn, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float red = reader.readFloat();
@@ -34,16 +40,17 @@ public abstract class GatherTrailParticleOption implements ParticleOptions {
             return new GatherTrailParticleOption(red, green, blue, endX, endY, endZ);
         }
 
+        @Override
         public GatherTrailParticleOption fromNetwork(ParticleType<GatherTrailParticleOption> particleTypeIn, FriendlyByteBuf buffer) {
             return new GatherTrailParticleOption(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
-    };*/
-    private final float red;
-    private final float green;
-    private final float blue;
-    private final float endX;
-    private final float endY;
-    private final float endZ;
+    };
+    public final float red;
+    public final float green;
+    public final float blue;
+    public final float endX;
+    public final float endY;
+    public final float endZ;
 
     public GatherTrailParticleOption(ColorUtil color, Vec3 end) {
         this.red = color.red();
@@ -88,10 +95,10 @@ public abstract class GatherTrailParticleOption implements ParticleOptions {
                 BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.endX, this.endY, this.endZ);
     }
 
-/*    @Override
+    @Override
     public ParticleType<GatherTrailParticleOption> getType() {
         return ModParticleTypes.GATHER_TRAIL;
-    }*/
+    }
 
     public float getRed() {
         return this.red;

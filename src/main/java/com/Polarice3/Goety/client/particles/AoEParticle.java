@@ -82,9 +82,10 @@ public class AoEParticle extends GroundCircleParticle {
         }
     }
 
-    public boolean shouldCull() {
-        return false;
-    }
+//    @Override
+//    public boolean shouldCull() {
+//        return false;
+//    }
 
     public static class Provider implements ParticleProvider<AoEParticleOption> {
         private final SpriteSet sprite;

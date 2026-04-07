@@ -805,6 +805,12 @@ public class ClientInitEvents {
             return new BakedLeavesModel(bakedModel);
         }
 
+        if (id.getNamespace().equals(Goety.MOD_ID)
+                && id.getPath().contains("leaves")
+                && (id.getPath().contains("mcd") || id.getPath().contains("chorus"))) {
+            return new FullLeavesModel(bakedModel);
+        }
+
         for (Pair<ModelResourceLocation, ResourceLocation> pair : PERSPECTIVE_MODEL_LIST) {
             if (id instanceof ModelResourceLocation modelId && modelId.equals(pair.getLeft())) {
                 BakedModel newModel = context.baker().bake(pair.getRight(), context.settings());

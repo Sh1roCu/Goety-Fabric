@@ -610,11 +610,7 @@ public abstract class AbstractSpiderServant extends Spider implements PlayerRide
     @Nullable
     @Override
     public LivingEntity getMasterOwner() {
-        if (this.getTrueOwner() instanceof IOwned owned) {
-            return owned.getTrueOwner();
-        } else {
-            return this.getTrueOwner();
-        }
+        return IServant.super.getMasterOwner();
     }
 
     @Nullable

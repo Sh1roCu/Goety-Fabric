@@ -1,21 +1,27 @@
 package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.utils.ColorUtil;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Locale;
 
-public abstract class AuraParticleOption implements ParticleOptions {
-    /*public static final Codec<AuraParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class AuraParticleOption implements ParticleOptions {
+    public static final Codec<AuraParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("ownerId").forGetter(d -> d.ownerId),
             Codec.FLOAT.fieldOf("size").forGetter(d -> d.size),
             Codec.FLOAT.fieldOf("red").forGetter(d -> d.red),
             Codec.FLOAT.fieldOf("green").forGetter(d -> d.green),
             Codec.FLOAT.fieldOf("blue").forGetter(d -> d.blue)
     ).apply(instance, AuraParticleOption::new));
-    public static final Deserializer<AuraParticleOption> DESERIALIZER = new Deserializer<AuraParticleOption>() {
+    public static final Deserializer<AuraParticleOption> DESERIALIZER = new Deserializer<>() {
+        @Override
         public AuraParticleOption fromCommand(ParticleType<AuraParticleOption> particleTypeIn, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             int ownerId = reader.readInt();
@@ -30,10 +36,11 @@ public abstract class AuraParticleOption implements ParticleOptions {
             return new AuraParticleOption(ownerId, size, red, green, blue);
         }
 
+        @Override
         public AuraParticleOption fromNetwork(ParticleType<AuraParticleOption> particleTypeIn, FriendlyByteBuf buffer) {
             return new AuraParticleOption(buffer.readInt(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
-    };*/
+    };
     private final int ownerId;
     private final float size;
     private final float red;
@@ -71,10 +78,10 @@ public abstract class AuraParticleOption implements ParticleOptions {
                 BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), this.ownerId, this.size, this.red, this.green, this.blue);
     }
 
-/*    @Override
+    @Override
     public ParticleType<AuraParticleOption> getType() {
         return ModParticleTypes.AURA;
-    }*/
+    }
 
     public int getOwnerId() {
         return this.ownerId;

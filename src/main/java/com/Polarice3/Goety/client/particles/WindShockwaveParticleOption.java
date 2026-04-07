@@ -1,14 +1,19 @@
 package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.utils.ColorUtil;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Locale;
 
-public abstract class WindShockwaveParticleOption implements ParticleOptions {
-    /*public static final Codec<WindShockwaveParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class WindShockwaveParticleOption implements ParticleOptions {
+    public static final Codec<WindShockwaveParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.FLOAT.fieldOf("red").forGetter(d -> d.red),
             Codec.FLOAT.fieldOf("green").forGetter(d -> d.green),
             Codec.FLOAT.fieldOf("blue").forGetter(d -> d.blue),
@@ -19,7 +24,8 @@ public abstract class WindShockwaveParticleOption implements ParticleOptions {
             Codec.INT.fieldOf("life").forGetter(d -> d.life),
             Codec.INT.fieldOf("ownerId").forGetter(d -> d.ownerId)
     ).apply(instance, WindShockwaveParticleOption::new));
-    public static final Deserializer<WindShockwaveParticleOption> DESERIALIZER = new Deserializer<WindShockwaveParticleOption>() {
+    public static final Deserializer<WindShockwaveParticleOption> DESERIALIZER = new Deserializer<>() {
+        @Override
         public WindShockwaveParticleOption fromCommand(ParticleType<WindShockwaveParticleOption> particleTypeIn, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float red = reader.readFloat();
@@ -42,10 +48,11 @@ public abstract class WindShockwaveParticleOption implements ParticleOptions {
             return new WindShockwaveParticleOption(red, green, blue, width, height, increase, startYRot, life, ownerId);
         }
 
+        @Override
         public WindShockwaveParticleOption fromNetwork(ParticleType<WindShockwaveParticleOption> particleTypeIn, FriendlyByteBuf buffer) {
             return new WindShockwaveParticleOption(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readInt(), buffer.readInt());
         }
-    };*/
+    };
     private final float red;
     private final float green;
     private final float blue;
@@ -123,10 +130,10 @@ public abstract class WindShockwaveParticleOption implements ParticleOptions {
                 BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.width, this.height, this.increase, this.startYRot, this.life, this.ownerId);
     }
 
-/*    @Override
+    @Override
     public ParticleType<WindShockwaveParticleOption> getType() {
         return ModParticleTypes.WIND_SHOCKWAVE;
-    }*/
+    }
 
     public float getRed() {
         return this.red;

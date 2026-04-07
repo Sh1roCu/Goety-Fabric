@@ -175,6 +175,21 @@ public class MiscCapHelper {
         MiscCapHelper.sendMiscUpdatePacket(livingEntity);
     }
 
+    public static int getCustomFoodLevel(LivingEntity livingEntity) {
+        return getCapability(livingEntity).getCustomFoodLevel();
+    }
+
+    public static void setCustomFoodLevel(LivingEntity livingEntity, int foodLevel) {
+        getCapability(livingEntity).setCustomFoodLevel(foodLevel);
+        MiscCapHelper.sendMiscUpdatePacket(livingEntity);
+    }
+
+    public static void decreaseCustomFoodLevel(LivingEntity livingEntity) {
+        if (getCustomFoodLevel(livingEntity) > 0) {
+            setCustomFoodLevel(livingEntity, getCustomFoodLevel(livingEntity) - 1);
+        }
+    }
+
     @Nullable
     public static ResourceLocation getCustomSpinTexture(LivingEntity livingEntity) {
         String string = getCapability(livingEntity).customSpinTexture();
@@ -207,6 +222,9 @@ public class MiscCapHelper {
         tag.putInt("mobTargetID", misc.getMobTargetID());
         if (misc.getNoHealTime() > 0) {
             tag.putInt("noHealTime", misc.getNoHealTime());
+        }
+        if (misc.getCustomFoodLevel() > -1) {
+            tag.putInt("customFoodLevel", misc.getCustomFoodLevel());
         }
         tag.putInt("shakeTime", misc.getShakeTime());
         if (!misc.customSpinTexture().isEmpty()) {
@@ -242,6 +260,9 @@ public class MiscCapHelper {
         }
         if (tag.contains("shakeTime")) {
             misc.setShakeTime(tag.getInt("shakeTime"));
+        }
+        if (tag.contains("customFoodLevel")) {
+            misc.setCustomFoodLevel(tag.getInt("customFoodLevel"));
         }
         if (tag.contains("customSpinTexture")) {
             misc.setCustomSpinTexture(tag.getString("customSpinTexture"));

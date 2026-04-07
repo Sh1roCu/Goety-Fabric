@@ -7,14 +7,25 @@ import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
 import com.Polarice3.Goety.config.SpellConfig;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.init.ModTags;
+import com.Polarice3.Goety.utils.BlockFinder;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LightningRodBlock;
+import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -50,14 +61,59 @@ public class GravestoneBlockEntity extends TrainingBlockEntity {
     @Override
     public void setVariant(ItemStack itemStack, Level level, BlockPos blockPos) {
         if (level instanceof ServerLevel serverLevel) {
-            ZombieServant zombieServant = new ZombieServant(ModEntityType.ZOMBIE_SERVANT, serverLevel);
-            BlockState blockState = level.getBlockState(blockPos);
-            if (blockState.hasProperty(BlockStateProperties.WATERLOGGED) && blockState.getValue(BlockStateProperties.WATERLOGGED)) {
-                this.setEntityType(ModEntityType.DROWNED_SERVANT);
-                this.markUpdated();
-            } else if (this.getTrainMob() != zombieServant.getVariant(this.getPlayer(), serverLevel, blockPos.above())) {
-                this.setEntityType(zombieServant.getVariant(this.getPlayer(), serverLevel, blockPos.above()));
-                this.markUpdated();
+            BlockState blockState0 = level.getBlockState(blockPos);
+            if (blockState0.hasProperty(BlockStateProperties.WATERLOGGED) && blockState0.getValue(BlockStateProperties.WATERLOGGED)) {
+                if (this.getTrainMob() != ModEntityType.DROWNED_SERVANT) {
+                    this.setEntityType(ModEntityType.DROWNED_SERVANT);
+                    this.markUpdated();
+                }
+            } else if (serverLevel.getBiome(blockPos.above()).is(ConventionalBiomeTags.DESERT) || (getBlocks(blockState -> blockState.is(BlockTags.SAND/*Tags.Blocks.SAND*/), 15) && getBlocks(blockState -> blockState.is(Blocks.GOLD_BLOCK/*Tags.Blocks.STORAGE_BLOCKS_GOLD*/), 1))) {
+                if (this.getTrainMob() != ModEntityType.HUSK_SERVANT) {
+                    this.setEntityType(ModEntityType.HUSK_SERVANT);
+                    this.markUpdated();
+                }
+            } else if (serverLevel.getBiome(blockPos.above()).value().coldEnoughToSnow(blockPos.above()) || (getBlocks(blockState -> blockState.is(BlockTags.SNOW), 20) && getBlocks(blockState -> blockState.is(BlockTags.ICE), 8))) {
+                if (this.getTrainMob() != ModEntityType.FROZEN_ZOMBIE_SERVANT) {
+                    this.setEntityType(ModEntityType.FROZEN_ZOMBIE_SERVANT);
+                    this.markUpdated();
+                }
+            } else if (serverLevel.getBiome(blockPos.above()).is(BiomeTags.IS_JUNGLE) || (getBlocks(blockState -> blockState.getBlock() instanceof VineBlock, 20) && getBlocks(blockState -> blockState.is(BlockTags.LEAVES), 8))) {
+                if (this.getTrainMob() != ModEntityType.JUNGLE_ZOMBIE_SERVANT) {
+                    this.setEntityType(ModEntityType.JUNGLE_ZOMBIE_SERVANT);
+                    this.markUpdated();
+                }
+            } else if ((serverLevel.isThundering() && serverLevel.canSeeSky(blockPos.above()))
+                    || (getBlocks(blockState -> blockState.getBlock() instanceof LightningRodBlock, 1) && getBlocks(blockState -> blockState.is(Blocks.COPPER_BLOCK/*Tags.Blocks.STORAGE_BLOCKS_COPPER*/), 8))) {
+                if (this.getTrainMob() != ModEntityType.FRAYED_SERVANT) {
+                    this.setEntityType(ModEntityType.FRAYED_SERVANT);
+                    this.markUpdated();
+                }
+            } else if (BlockFinder.findStructure(serverLevel, blockPos.above(), StructureTags.ON_WOODLAND_EXPLORER_MAPS) || (getBlocks(blockState -> blockState.is(Blocks.DARK_OAK_LOG), 15) && getBlocks(blockState -> blockState.is(Blocks.ANVIL), 1))) {
+                if (this.getTrainMob() != ModEntityType.ZOMBIE_VINDICATOR_SERVANT) {
+                    this.setEntityType(ModEntityType.ZOMBIE_VINDICATOR_SERVANT);
+                    this.markUpdated();
+                }
+            } else if (BlockFinder.findStructure(serverLevel, blockPos.above(), ModTags.Structures.CAN_SUMMON_BRUTES)
+                    || (getBlocks(blockState -> blockState.getBlock().getDescriptionId().contains("blackstone"), 25) && getBlocks(blockState -> blockState.is(Blocks.GOLD_BLOCK/*Tags.Blocks.STORAGE_BLOCKS_GOLD*/), 8) && getBlocks(blockState -> blockState.is(Blocks.ANCIENT_DEBRIS/*Tags.Blocks.ORES_NETHERITE_SCRAP*/), 1))) {
+                if (this.getTrainMob() != ModEntityType.ZPIGLIN_BRUTE_SERVANT) {
+                    this.setEntityType(ModEntityType.ZPIGLIN_BRUTE_SERVANT);
+                    this.markUpdated();
+                }
+            } else if (serverLevel.dimension() == Level.NETHER || (getBlocks(blockState -> blockState.is(Blocks.NETHERRACK/*Tags.Blocks.NETHERRACK*/), 25) && getBlocks(blockState -> blockState.getBlock() instanceof BaseFireBlock, 2))) {
+                if (this.getTrainMob() != ModEntityType.ZPIGLIN_SERVANT) {
+                    this.setEntityType(ModEntityType.ZPIGLIN_SERVANT);
+                    this.markUpdated();
+                }
+            } else if ((BlockFinder.findStructure(serverLevel, blockPos.above(), StructureTags.VILLAGE) || BlockFinder.findVillageSize(serverLevel, blockPos.above(), 3)) || (getBlocks(blockState -> blockState.is(Blocks.DIRT_PATH), 14))) {
+                if (this.getTrainMob() != ModEntityType.ZOMBIE_VILLAGER_SERVANT) {
+                    this.setEntityType(ModEntityType.ZOMBIE_VILLAGER_SERVANT);
+                    this.markUpdated();
+                }
+            } else {
+                if (this.getTrainMob() != ModEntityType.ZOMBIE_SERVANT) {
+                    this.setEntityType(ModEntityType.ZOMBIE_SERVANT);
+                    this.markUpdated();
+                }
             }
         }
     }

@@ -411,19 +411,19 @@ public class ModParticleTypes {
                 }
             });
 
-    public static final ParticleType<WindBlowParticle.Option> WIND_BLOW = register("wind_blow",
-            () -> new ParticleType<>(false, WindBlowParticle.Option.DESERIALIZER) {
+    public static final ParticleType<WindBlowParticleOption> WIND_BLOW = register("wind_blow",
+            () -> new ParticleType<>(false, WindBlowParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<WindBlowParticle.Option> codec() {
-                    return WindBlowParticle.Option.CODEC;
+                public Codec<WindBlowParticleOption> codec() {
+                    return WindBlowParticleOption.CODEC;
                 }
             });
 
-    public static final ParticleType<WindShockwaveParticle.Option> WIND_SHOCKWAVE = register("wind_shockwave",
-            () -> new ParticleType<>(false, WindShockwaveParticle.Option.DESERIALIZER) {
+    public static final ParticleType<WindShockwaveParticleOption> WIND_SHOCKWAVE = register("wind_shockwave",
+            () -> new ParticleType<>(false, WindShockwaveParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<WindShockwaveParticle.Option> codec() {
-                    return WindShockwaveParticle.Option.CODEC;
+                public Codec<WindShockwaveParticleOption> codec() {
+                    return WindShockwaveParticleOption.CODEC;
                 }
             });
 
@@ -435,35 +435,35 @@ public class ModParticleTypes {
                 }
             });
 
-    public static final ParticleType<GatherTrailParticle.Option> GATHER_TRAIL = register("gather_trail",
-            () -> new ParticleType<>(false, GatherTrailParticle.Option.DESERIALIZER) {
+    public static final ParticleType<GatherTrailParticleOption> GATHER_TRAIL = register("gather_trail",
+            () -> new ParticleType<>(false, GatherTrailParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<GatherTrailParticle.Option> codec() {
-                    return GatherTrailParticle.Option.CODEC;
+                public Codec<GatherTrailParticleOption> codec() {
+                    return GatherTrailParticleOption.CODEC;
                 }
             });
 
-    public static final ParticleType<GatherFrostParticle.Option> FROST_GATHER = register("frost_gather",
-            () -> new ParticleType<>(false, GatherFrostParticle.Option.DESERIALIZER) {
+    public static final ParticleType<GatherFrostParticleOption> FROST_GATHER = register("frost_gather",
+            () -> new ParticleType<>(false, GatherFrostParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<GatherFrostParticle.Option> codec() {
-                    return GatherFrostParticle.Option.CODEC;
+                public Codec<GatherFrostParticleOption> codec() {
+                    return GatherFrostParticleOption.CODEC;
                 }
             });
 
-    public static final ParticleType<AuraParticle.Option> AURA = register("aura",
-            () -> new ParticleType<>(false, AuraParticle.Option.DESERIALIZER) {
+    public static final ParticleType<AuraParticleOption> AURA = register("aura",
+            () -> new ParticleType<>(false, AuraParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<AuraParticle.Option> codec() {
-                    return AuraParticle.Option.CODEC;
+                public Codec<AuraParticleOption> codec() {
+                    return AuraParticleOption.CODEC;
                 }
             });
 
-    public static final ParticleType<GroundAuraParticle.Option> GROUND_AURA = register("ground_aura",
-            () -> new ParticleType<>(false, GroundAuraParticle.Option.DESERIALIZER) {
+    public static final ParticleType<GroundAuraParticleOption> GROUND_AURA = register("ground_aura",
+            () -> new ParticleType<>(false, GroundAuraParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<GroundAuraParticle.Option> codec() {
-                    return GroundAuraParticle.Option.CODEC;
+                public Codec<GroundAuraParticleOption> codec() {
+                    return GroundAuraParticleOption.CODEC;
                 }
             });
 
@@ -483,27 +483,27 @@ public class ModParticleTypes {
                 }
             });
 
-    public static final ParticleType<MagicSmokeParticle.Option> MAGIC_SMOKE = register("magic_smoke",
-            () -> new ParticleType<>(false, MagicSmokeParticle.Option.DESERIALIZER) {
+    public static final ParticleType<MagicSmokeParticleOption> MAGIC_SMOKE = register("magic_smoke",
+            () -> new ParticleType<>(false, MagicSmokeParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<MagicSmokeParticle.Option> codec() {
-                    return MagicSmokeParticle.Option.CODEC;
+                public Codec<MagicSmokeParticleOption> codec() {
+                    return MagicSmokeParticleOption.CODEC;
                 }
             });
 
-    public static final ParticleType<MagicAshSmokeParticle.Option> MAGIC_ASH_SMOKE = register("magic_ash_smoke",
-            () -> new ParticleType<>(false, MagicAshSmokeParticle.Option.DESERIALIZER) {
+    public static final ParticleType<MagicAshSmokeParticleOption> MAGIC_ASH_SMOKE = register("magic_ash_smoke",
+            () -> new ParticleType<>(false, MagicAshSmokeParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<MagicAshSmokeParticle.Option> codec() {
-                    return MagicAshSmokeParticle.Option.CODEC;
+                public Codec<MagicAshSmokeParticleOption> codec() {
+                    return MagicAshSmokeParticleOption.CODEC;
                 }
             });
 
-    public static final ParticleType<FollowFireParticle.Option> FOLLOW_CULT_SPELL = register("follow_cult_spell",
-            () -> new ParticleType<>(false, FollowFireParticle.Option.DESERIALIZER) {
+    public static final ParticleType<FollowFireParticleOption> FOLLOW_CULT_SPELL = register("follow_cult_spell",
+            () -> new ParticleType<>(false, FollowFireParticleOption.DESERIALIZER) {
                 @Override
-                public Codec<FollowFireParticle.Option> codec() {
-                    return FollowFireParticle.Option.CODEC;
+                public Codec<FollowFireParticleOption> codec() {
+                    return FollowFireParticleOption.CODEC;
                 }
             });
 
@@ -528,6 +528,14 @@ public class ModParticleTypes {
                 @Override
                 public Codec<SlamParticleOption> codec() {
                     return SlamParticleOption.CODEC;
+                }
+            });
+
+    public static final ParticleType<SmashParticleOption> SMASH = register("smash",
+            () -> new ParticleType<>(false, SmashParticleOption.DESERIALIZER) {
+                @Override
+                public Codec<SmashParticleOption> codec() {
+                    return SmashParticleOption.CODEC;
                 }
             });
 

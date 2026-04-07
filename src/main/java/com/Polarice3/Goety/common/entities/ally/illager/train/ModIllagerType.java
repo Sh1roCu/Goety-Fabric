@@ -31,7 +31,7 @@ public class ModIllagerType implements ITrainIllager {
             return mob.getType() == ModEntityType.GEOMANCER_SERVANT || mob.getType() == ModEntityType.WIND_CALLER_SERVANT;
         } else if (entityType == ModEntityType.CRYOLOGER_SERVANT) {
             return mob.getType() == ModEntityType.ICEOLOGER_SERVANT;
-        } else if (entityType == ModEntityType.VINDICATOR_CHEF_SERVANT || entityType == ModEntityType.MOUNTAINEER_SERVANT) {
+        } else if (entityType == ModEntityType.VINDICATOR_CHEF_SERVANT || entityType == ModEntityType.MOUNTAINEER_SERVANT || entityType == ModEntityType.CRUSHER_SERVANT) {
             return mob.getType() == ModEntityType.VINDICATOR_SERVANT;
         } else if (entityType == ModEntityType.PIKER_SERVANT) {
             return mob instanceof Neollager neollager && neollager.getTrueOwner() instanceof Player player && SEHelper.hasResearch(player, ResearchList.FRONT);
@@ -78,12 +78,10 @@ public class ModIllagerType implements ITrainIllager {
                 && checker.hasBlocks(blockState -> blockState.getBlock() instanceof BarrelBlock, 8)
                 && level.getBiome(blockPos).value().coldEnoughToSnow(blockPos)) {
             return ModEntityType.MOUNTAINEER_SERVANT;
-        } else if (checker.hasBlocks(blockState -> blockState.is(BlockTags.PLANKS), 64)
-                && checker.hasBlocks(blockState -> blockState.getBlock().getDescriptionId().contains("bricks"), 64)
-                && checker.hasBlocks(blockState -> blockState.is(BlockTags.FENCES), 8)
-                && checker.hasBlocks(blockState -> blockState.getBlock() instanceof BlastFurnaceBlock, 8)
+        } else if (checker.hasBlocks(blockState -> blockState.getBlock() instanceof BlastFurnaceBlock, 8)
                 && checker.hasBlocks(blockState -> blockState.getBlock() instanceof LavaCauldronBlock, 2)
                 && checker.hasBlocks(blockState -> blockState.is(Blocks.WATER_CAULDRON), 2)
+                && checker.hasBlocks(blockState -> blockState.getBlock() instanceof SmithingTableBlock, 1)
                 && checker.hasBlocks(blockState -> blockState.getBlock() instanceof AnvilBlock, 4)) {
             return ModEntityType.CRUSHER_SERVANT;
         } else if (BlockFinder.getNearbyEnchantPower(level, blockPos, range, 32)

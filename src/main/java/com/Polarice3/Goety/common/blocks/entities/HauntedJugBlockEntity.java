@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.blocks.entities;
 import cn.sh1rocu.goety.util.transfer.InfiniteFluidStorage;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.BrewCauldronBlock;
+import com.Polarice3.Goety.common.blocks.HauntedJugBlock;
 import com.Polarice3.Goety.compat.botania.BotaniaIntegration;
 import com.Polarice3.Goety.compat.botania.BotaniaLoaded;
 import com.Polarice3.Goety.utils.BlockFinder;
@@ -44,90 +45,92 @@ public class HauntedJugBlockEntity extends ModBlockEntity implements SidedStorag
     public void tick() {
         if (this.level != null) {
             if (!this.level.isClientSide) {
-                FluidVariant waterVariant = FluidVariant.of(Fluids.WATER);
-                if (BlockFinder.isPassableBlock(this.level, this.getBlockPos().above())) {
-                    ++this.search;
-                    int radius = 5;
-                    int x = this.search / radius % radius;
-                    int y = this.search / radius / radius % (radius - 2);
-                    int z = this.search % radius;
-                    if (this.search > 1 && x == 0 && y == 0 && z == 0) {
-                        this.search = 0;
-                    }
-                    BlockPos blockPos = this.getBlockPos().offset(x - 2, y - 1, z - 2);
-                    BlockState blockState = this.level.getBlockState(blockPos);
-                    BlockEntity blockEntity = this.level.getBlockEntity(blockPos);
-                    var fluidStorage = FluidStorage.SIDED.find(this.level, blockPos, blockState, blockEntity, Direction.UP);
-                    boolean fluidHandler0 = blockEntity != null && !(blockEntity instanceof HauntedJugBlockEntity) && fluidStorage != null && !blockEntity.getBlockState().getBlock().getDescriptionId().contains("pipe");
-                    boolean water = blockState.getBlock() == Blocks.WATER_CAULDRON && blockState.getValue(LayeredCauldronBlock.LEVEL) < 3;
-                    boolean vanillaCauldron = blockState.getBlock() == Blocks.CAULDRON || water;
-                    boolean brewCauldron = blockState.getBlock() instanceof BrewCauldronBlock && blockEntity instanceof BrewCauldronBlockEntity cauldronEntity && blockState.getValue(BrewCauldronBlock.LEVEL) < 3 && BrewUtils.isEmpty(cauldronEntity.getBrew());
-                    AABB aabb = new AABB(blockPos);
-                    List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, aabb, livingEntity -> livingEntity.isAlive() && (livingEntity.getRemainingFireTicks() > 0 || livingEntity instanceof Axolotl));
-                    if (!list.isEmpty()) {
-                        LivingEntity livingEntity = list.get(this.level.random.nextInt(list.size()));
-                        this.streamWater(blockPos);
-                        livingEntity.extinguishFire();
-                        if (livingEntity.isSensitiveToWater()) {
-                            livingEntity.hurt(livingEntity.damageSources().drown(), 1.0F);
+                if (this.getBlockState().getValue(HauntedJugBlock.ENABLED)) {
+                    FluidVariant waterVariant = FluidVariant.of(Fluids.WATER);
+                    if (BlockFinder.isPassableBlock(this.level, this.getBlockPos().above())) {
+                        ++this.search;
+                        int radius = 5;
+                        int x = this.search / radius % radius;
+                        int y = this.search / radius / radius % (radius - 2);
+                        int z = this.search % radius;
+                        if (this.search > 1 && x == 0 && y == 0 && z == 0) {
+                            this.search = 0;
                         }
-                        if (livingEntity instanceof Axolotl axolotl) {
-                            axolotl.rehydrate();
-                        }
-                    } else if (fluidHandler0) {
-                        try (Transaction tx = Transaction.openOuter()) {
-                            long filled = fluidStorage.insert(waterVariant, 250 * 81, tx);
-                            if (filled > 0) {
-                                this.streamWater(blockPos);
-                                this.fluidTank.extract(waterVariant, filled, tx);
-                                this.markUpdated();
-                                tx.commit();
-                            }
-                        }
-                    } else if (brewCauldron) {
-                        this.level.setBlock(blockPos, blockState.cycle(BrewCauldronBlock.LEVEL), 2);
-                        this.level.updateNeighborsAt(blockPos, blockState.getBlock());
-                        this.streamWater(blockPos);
-                        try (Transaction tx = Transaction.openOuter()) {
-                            this.fluidTank.extract(waterVariant, 333 * 81, tx);
-                            tx.commit();
-                        }
-                        this.markUpdated();
-                    } else if (vanillaCauldron) {
-                        if (water) {
-                            this.level.setBlock(blockPos, blockState.cycle(LayeredCauldronBlock.LEVEL), 2);
-                        } else if (blockState.getBlock() == Blocks.CAULDRON) {
-                            this.level.setBlock(blockPos, Blocks.WATER_CAULDRON.defaultBlockState(), 2);
-                        }
-                        this.level.updateNeighborsAt(blockPos, blockState.getBlock());
-                        this.streamWater(blockPos);
-                        try (Transaction tx = Transaction.openOuter()) {
-                            this.fluidTank.extract(waterVariant, 333 * 81, tx);
-                            tx.commit();
-                        }
-                        this.markUpdated();
-                    } else if (BotaniaLoaded.BOTANIA.isLoaded()) {
-                        if (BotaniaIntegration.fillApothecary(blockPos, this.level)) {
-                            this.level.updateNeighborsAt(blockPos, blockState.getBlock());
+                        BlockPos blockPos = this.getBlockPos().offset(x - 2, y - 1, z - 2);
+                        BlockState blockState = this.level.getBlockState(blockPos);
+                        BlockEntity blockEntity = this.level.getBlockEntity(blockPos);
+                        var fluidStorage = FluidStorage.SIDED.find(this.level, blockPos, blockState, blockEntity, Direction.UP);
+                        boolean fluidHandler0 = blockEntity != null && !(blockEntity instanceof HauntedJugBlockEntity) && fluidStorage != null && !blockEntity.getBlockState().getBlock().getDescriptionId().contains("pipe");
+                        boolean water = blockState.getBlock() == Blocks.WATER_CAULDRON && blockState.getValue(LayeredCauldronBlock.LEVEL) < 3;
+                        boolean vanillaCauldron = blockState.getBlock() == Blocks.CAULDRON || water;
+                        boolean brewCauldron = blockState.getBlock() instanceof BrewCauldronBlock && blockEntity instanceof BrewCauldronBlockEntity cauldronEntity && blockState.getValue(BrewCauldronBlock.LEVEL) < 3 && BrewUtils.isEmpty(cauldronEntity.getBrew());
+                        AABB aabb = new AABB(blockPos);
+                        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, aabb, livingEntity -> livingEntity.isAlive() && (livingEntity.getRemainingFireTicks() > 0 || livingEntity instanceof Axolotl));
+                        if (!list.isEmpty()) {
+                            LivingEntity livingEntity = list.get(this.level.random.nextInt(list.size()));
                             this.streamWater(blockPos);
-                            try (Transaction tx = Transaction.openOuter()) {
-                                this.fluidTank.extract(waterVariant, FluidConstants.BUCKET, tx);
-                                tx.commit();
+                            livingEntity.extinguishFire();
+                            if (livingEntity.isSensitiveToWater()) {
+                                livingEntity.hurt(livingEntity.damageSources().drown(), 1.0F);
                             }
-                            this.markUpdated();
-                        }
-                    }
-                } else {
-                    BlockEntity blockEntity = this.level.getBlockEntity(this.getBlockPos().above());
-                    if (blockEntity != null) {
-                        var storage = FluidStorage.SIDED.find(this.level, blockEntity.getBlockPos(), blockEntity.getBlockState(), blockEntity, Direction.DOWN);
-                        if (storage != null) {
+                            if (livingEntity instanceof Axolotl axolotl) {
+                                axolotl.rehydrate();
+                            }
+                        } else if (fluidHandler0) {
                             try (Transaction tx = Transaction.openOuter()) {
-                                long filled = storage.insert(waterVariant, FluidConstants.BUCKET, tx);
+                                long filled = fluidStorage.insert(waterVariant, 250 * 81, tx);
                                 if (filled > 0) {
+                                    this.streamWater(blockPos);
                                     this.fluidTank.extract(waterVariant, filled, tx);
                                     this.markUpdated();
                                     tx.commit();
+                                }
+                            }
+                        } else if (brewCauldron) {
+                            this.level.setBlock(blockPos, blockState.cycle(BrewCauldronBlock.LEVEL), 2);
+                            this.level.updateNeighborsAt(blockPos, blockState.getBlock());
+                            this.streamWater(blockPos);
+                            try (Transaction tx = Transaction.openOuter()) {
+                                this.fluidTank.extract(waterVariant, 333 * 81, tx);
+                                tx.commit();
+                            }
+                            this.markUpdated();
+                        } else if (vanillaCauldron) {
+                            if (water) {
+                                this.level.setBlock(blockPos, blockState.cycle(LayeredCauldronBlock.LEVEL), 2);
+                            } else if (blockState.getBlock() == Blocks.CAULDRON) {
+                                this.level.setBlock(blockPos, Blocks.WATER_CAULDRON.defaultBlockState(), 2);
+                            }
+                            this.level.updateNeighborsAt(blockPos, blockState.getBlock());
+                            this.streamWater(blockPos);
+                            try (Transaction tx = Transaction.openOuter()) {
+                                this.fluidTank.extract(waterVariant, 333 * 81, tx);
+                                tx.commit();
+                            }
+                            this.markUpdated();
+                        } else if (BotaniaLoaded.BOTANIA.isLoaded()) {
+                            if (BotaniaIntegration.fillApothecary(blockPos, this.level)) {
+                                this.level.updateNeighborsAt(blockPos, blockState.getBlock());
+                                this.streamWater(blockPos);
+                                try (Transaction tx = Transaction.openOuter()) {
+                                    this.fluidTank.extract(waterVariant, FluidConstants.BUCKET, tx);
+                                    tx.commit();
+                                }
+                                this.markUpdated();
+                            }
+                        }
+                    } else {
+                        BlockEntity blockEntity = this.level.getBlockEntity(this.getBlockPos().above());
+                        if (blockEntity != null) {
+                            var storage = FluidStorage.SIDED.find(this.level, blockEntity.getBlockPos(), blockEntity.getBlockState(), blockEntity, Direction.DOWN);
+                            if (storage != null) {
+                                try (Transaction tx = Transaction.openOuter()) {
+                                    long filled = storage.insert(waterVariant, FluidConstants.BUCKET, tx);
+                                    if (filled > 0) {
+                                        this.fluidTank.extract(waterVariant, filled, tx);
+                                        this.markUpdated();
+                                        tx.commit();
+                                    }
                                 }
                             }
                         }

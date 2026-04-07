@@ -221,6 +221,11 @@ public abstract class AbstractBoundIllager extends RaiderServant {
         return false;
     }
 
+    @Override
+    public boolean canWearArmor() {
+        return true;
+    }
+
     protected int getSpellCastingTime() {
         return this.spellCastingTickCount;
     }

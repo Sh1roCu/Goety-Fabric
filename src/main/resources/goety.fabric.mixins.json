@@ -9,10 +9,13 @@
   "refmap": "goety.refmap.json",
   "plugin": "cn.sh1rocu.goety.mixin.MixinPlugin",
   "mixins": [
+    "accessor.VillagerAccessor",
+    "accessor.AbstractFurnaceBlockEntityAccessor",
     "accessor.BlockAccessor",
     "accessor.BucketItemAccessor",
     "accessor.EntityAccessor",
     "accessor.ExplosionAccessor",
+    "accessor.LivingEntityAccessor",
     "accessor.MobAccessor",
     "accessor.ModelTemplatesAccessor",
     "accessor.NaturalSpawnerAccessor",

@@ -3,6 +3,7 @@ package com.Polarice3.Goety.client.render;
 import com.Polarice3.Goety.client.render.model.DarkRobeModel;
 import com.Polarice3.Goety.client.render.model.GloveModel;
 import com.Polarice3.Goety.common.items.ModItems;
+import com.Polarice3.Goety.common.items.curios.UnholyHatItem;
 import com.Polarice3.Goety.config.ItemConfig;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -103,7 +104,7 @@ public class WearRenderer implements TrinketRenderer {
         model.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTicks);
         TrinketRenderer.followBodyRotations(livingEntity, model);
-        render(livingEntity, matrixStack, renderTypeBuffer, light);
+        render(livingEntity, stack, matrixStack, renderTypeBuffer, light);
 
         if (capedRobe(stack)) {
             if (livingEntity instanceof AbstractClientPlayer p_116618_) {
@@ -151,10 +152,18 @@ public class WearRenderer implements TrinketRenderer {
         }
     }
 
-    private void render(LivingEntity livingEntity, PoseStack matrixStack, MultiBufferSource buffer, int light) {
+    private void render(LivingEntity livingEntity, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light) {
         RenderType renderType = this.getModel().renderType(getTexture(livingEntity));
         VertexConsumer vertexBuilder = buffer.getBuffer(renderType);
         this.getModel().renderToBuffer(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        if (stack.getItem() instanceof UnholyHatItem) {
+            String glow = "unholy_hat_halo.png";
+            if (MobUtil.healthIsHalved(livingEntity)) {
+                glow = "unholy_hat_halo_red.png";
+            }
+            VertexConsumer vertexBuilder2 = buffer.getBuffer(ModRenderType.wraith(TrinketsRenderer.render(glow)));
+            this.getModel().renderToBuffer(matrixStack, vertexBuilder2, 15728640, OverlayTexture.NO_OVERLAY, 1, 1, 1, 0.15F);
+        }
     }
 
     public void renderFirstPersonArm(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, HumanoidArm side, boolean hasFoil) {

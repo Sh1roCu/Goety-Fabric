@@ -101,6 +101,11 @@ public abstract class SpellcasterIllagerServant extends AbstractIllagerServant {
         }
     }
 
+    @Override
+    public boolean canHaveWeapon() {
+        return false;
+    }
+
     protected int getSpellCastingTime() {
         return this.spellCastingTickCount;
     }

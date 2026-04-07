@@ -1,13 +1,19 @@
 package com.Polarice3.Goety.client.particles;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.Locale;
 
-public abstract class MagicSmokeParticleOption implements ParticleOptions {
-    /*public static final Codec<MagicSmokeParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class MagicSmokeParticleOption implements ParticleOptions {
+    public static final Codec<MagicSmokeParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("colorFrom").forGetter(MagicSmokeParticleOption::getColorFrom),
             Codec.INT.fieldOf("colorTo").forGetter(MagicSmokeParticleOption::getColorTo),
             ExtraCodecs.POSITIVE_INT.fieldOf("duration").forGetter(MagicSmokeParticleOption::getDuration),
@@ -16,6 +22,7 @@ public abstract class MagicSmokeParticleOption implements ParticleOptions {
     ).apply(instance, MagicSmokeParticleOption::new));
 
     public static final ParticleOptions.Deserializer<MagicSmokeParticleOption> DESERIALIZER = new ParticleOptions.Deserializer<>() {
+        @Override
         public MagicSmokeParticleOption fromCommand(ParticleType<MagicSmokeParticleOption> p_235961_, StringReader p_235962_) throws CommandSyntaxException {
             p_235962_.expect(' ');
             int colorFrom = p_235962_.readInt();
@@ -30,10 +37,11 @@ public abstract class MagicSmokeParticleOption implements ParticleOptions {
             return new MagicSmokeParticleOption(colorFrom, colorTo, duration, size, gravity);
         }
 
+        @Override
         public MagicSmokeParticleOption fromNetwork(ParticleType<MagicSmokeParticleOption> p_235964_, FriendlyByteBuf p_235965_) {
             return new MagicSmokeParticleOption(p_235965_.readInt(), p_235965_.readInt(), p_235965_.readInt(), p_235965_.readFloat(), p_235965_.readFloat());
         }
-    };*/
+    };
     public int colorFrom;
     public int colorTo;
     public int duration;
@@ -52,10 +60,10 @@ public abstract class MagicSmokeParticleOption implements ParticleOptions {
         this(colorFrom, colorTo, duration, size, -0.1F);
     }
 
-/*    @Override
+    @Override
     public ParticleType<MagicSmokeParticleOption> getType() {
         return ModParticleTypes.MAGIC_SMOKE;
-    }*/
+    }
 
     @Override
     public void writeToNetwork(FriendlyByteBuf p_123732_) {

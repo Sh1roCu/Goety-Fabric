@@ -119,6 +119,11 @@ public class InsectSwarm extends Owned {
 
     @Override
     public void lifeSpanDamage() {
+        this.dismiss();
+    }
+
+    @Override
+    public void dismiss() {
         this.discard();
     }
 }

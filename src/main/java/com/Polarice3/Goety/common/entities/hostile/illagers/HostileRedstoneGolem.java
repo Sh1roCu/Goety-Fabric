@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import cn.sh1rocu.goety.mixin.accessor.LivingEntityAccessor;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.entities.ModEntityType;
@@ -149,15 +150,15 @@ public class HostileRedstoneGolem extends HostileGolem {
     }
 
     public int getAnimationState(String animation) {
-        if (Objects.equals(animation, "idle")) {
+        if (Objects.equals(animation, IDLE)) {
             return 1;
-        } else if (Objects.equals(animation, "attack")) {
+        } else if (Objects.equals(animation, ATTACK)) {
             return 2;
-        } else if (Objects.equals(animation, "summon")) {
+        } else if (Objects.equals(animation, SUMMON)) {
             return 3;
-        } else if (Objects.equals(animation, "novelty")) {
+        } else if (Objects.equals(animation, NOVELTY)) {
             return 4;
-        } else if (Objects.equals(animation, "death")) {
+        } else if (Objects.equals(animation, DEATH)) {
             return 5;
         } else {
             return 0;
@@ -380,7 +381,22 @@ public class HostileRedstoneGolem extends HostileGolem {
 
     @Override
     public boolean canAnimateMove() {
-        return this.isCurrentAnimation(IDLE);
+        return this.isCurrentAnimation(IDLE) || this.isCurrentAnimation(ATTACK);
+    }
+
+    @Override
+    public void handleDamageEvent(DamageSource damageSource) {
+        this.invulnerableTime = 20;
+        this.hurtDuration = 10;
+        this.hurtTime = this.hurtDuration;
+        SoundEvent soundevent = this.getHurtSound(damageSource);
+        if (soundevent != null) {
+            this.playSound(soundevent, this.getSoundVolume(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+        }
+
+        this.hurt(this.damageSources().generic(), 0.0F);
+        ((LivingEntityAccessor) this).goety$setLastDamageSource(damageSource);
+        ((LivingEntityAccessor) this).goety$setLastDamageStamp(this.level().getGameTime());
     }
 
     public void stopMostAnimations(AnimationState animationState0) {
@@ -637,7 +653,7 @@ public class HostileRedstoneGolem extends HostileGolem {
          */
         @Override
         public boolean canContinueToUse() {
-            return HostileRedstoneGolem.this.attackTick < MathHelper.secondsToTicks(1.3F);
+            return HostileRedstoneGolem.this.attackTick < 5;
         }
 
         @Override

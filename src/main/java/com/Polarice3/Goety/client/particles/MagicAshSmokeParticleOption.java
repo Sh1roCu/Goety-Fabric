@@ -1,18 +1,24 @@
 package com.Polarice3.Goety.client.particles;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Locale;
 
-public abstract class MagicAshSmokeParticleOption implements ParticleOptions {
-    /*public static final Codec<MagicAshSmokeParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class MagicAshSmokeParticleOption implements ParticleOptions {
+    public static final Codec<MagicAshSmokeParticleOption> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("colorFrom").forGetter(MagicAshSmokeParticleOption::getColorFrom),
             Codec.INT.fieldOf("colorTo").forGetter(MagicAshSmokeParticleOption::getColorTo)
     ).apply(instance, MagicAshSmokeParticleOption::new));
 
     public static final Deserializer<MagicAshSmokeParticleOption> DESERIALIZER = new Deserializer<>() {
+        @Override
         public MagicAshSmokeParticleOption fromCommand(ParticleType<MagicAshSmokeParticleOption> p_235961_, StringReader p_235962_) throws CommandSyntaxException {
             p_235962_.expect(' ');
             int colorFrom = p_235962_.readInt();
@@ -21,10 +27,11 @@ public abstract class MagicAshSmokeParticleOption implements ParticleOptions {
             return new MagicAshSmokeParticleOption(colorFrom, colorTo);
         }
 
+        @Override
         public MagicAshSmokeParticleOption fromNetwork(ParticleType<MagicAshSmokeParticleOption> p_235964_, FriendlyByteBuf p_235965_) {
             return new MagicAshSmokeParticleOption(p_235965_.readInt(), p_235965_.readInt());
         }
-    };*/
+    };
     public int colorFrom;
     public int colorTo;
 
@@ -38,10 +45,10 @@ public abstract class MagicAshSmokeParticleOption implements ParticleOptions {
         this.colorTo = color;
     }
 
-/*    @Override
+    @Override
     public ParticleType<MagicAshSmokeParticleOption> getType() {
         return ModParticleTypes.MAGIC_ASH_SMOKE;
-    }*/
+    }
 
     @Override
     public void writeToNetwork(FriendlyByteBuf p_123732_) {

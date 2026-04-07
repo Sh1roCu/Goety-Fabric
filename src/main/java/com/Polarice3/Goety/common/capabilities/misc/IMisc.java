@@ -53,4 +53,8 @@ public interface IMisc extends AutoSyncedComponent {
     int getShakeTime();
 
     void setShakeTime(int ticks);
+
+    int getCustomFoodLevel();
+
+    void setCustomFoodLevel(int foodLevel);
 }

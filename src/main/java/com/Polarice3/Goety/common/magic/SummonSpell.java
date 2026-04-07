@@ -47,6 +47,11 @@ public abstract class SummonSpell extends Spell implements ISummonSpell {
         return CuriosFinder.hasNetherRobe(entityLiving);
     }
 
+    @Override
+    public boolean GeoPower(LivingEntity entityLiving) {
+        return CuriosFinder.hasGeoRobe(entityLiving);
+    }
+
     public int summonLimit() {
         return 64;
     }

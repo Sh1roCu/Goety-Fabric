@@ -218,7 +218,12 @@ public class PikerServant extends AbstractIllagerServant {
     }
 
     @Override
-    public boolean canPickUpLoot() {
+    public boolean canWearArmor() {
+        return false;
+    }
+
+    @Override
+    public boolean canHaveWeapon() {
         return false;
     }
 

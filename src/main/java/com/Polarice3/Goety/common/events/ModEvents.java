@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.events;
 import cn.sh1rocu.goety.api.event.*;
 import cn.sh1rocu.goety.api.extension.IEntityPersistentData;
 import cn.sh1rocu.goety.mixin.accessor.MobAccessor;
+import cn.sh1rocu.goety.mixin.accessor.VillagerAccessor;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.entities.IHiding;
 import com.Polarice3.Goety.api.entities.IOwned;
@@ -797,6 +798,7 @@ public class ModEvents {
                             }
                         }
                     }
+                    MiscCapHelper.setCustomFoodLevel(villager, Math.max(0, ((VillagerAccessor) villager).goety$getFoodLevel()));
                 }
             }
         }

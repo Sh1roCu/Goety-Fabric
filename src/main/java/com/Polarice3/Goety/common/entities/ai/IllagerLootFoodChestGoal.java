@@ -12,6 +12,11 @@ public class IllagerLootFoodChestGoal<T extends AbstractIllagerServant> extends 
     }
 
     @Override
+    public boolean hasItemInInv() {
+        return true;
+    }
+
+    @Override
     public boolean canUse() {
         if (this.illager.getChestPos() == null) {
             return false;

@@ -17,6 +17,7 @@ public class MiscImp implements IMisc {
     private int mobTargetID = 0;
     private int noHealTime = 0;
     private int shakeTime = 0;
+    private int customFoodLevel = -1;
     private String customSpinTexture = "textures/entity/trident_riptide.png";
 
     @Override
@@ -143,6 +144,16 @@ public class MiscImp implements IMisc {
     @Override
     public void setShakeTime(int ticks) {
         this.shakeTime = ticks;
+    }
+
+    @Override
+    public int getCustomFoodLevel() {
+        return this.customFoodLevel;
+    }
+
+    @Override
+    public void setCustomFoodLevel(int foodLevel) {
+        this.customFoodLevel = foodLevel;
     }
 
     @Override

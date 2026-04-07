@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.entities.ally.golem;
 
+import cn.sh1rocu.goety.mixin.accessor.LivingEntityAccessor;
 import com.Polarice3.Goety.api.blocks.entities.IWindPowered;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.client.particles.SmashParticleOption;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.items.ModItems;
@@ -502,6 +504,21 @@ public class SquallGolem extends AbstractGolemServant implements IWindPowered {
     }
 
     @Override
+    public void handleDamageEvent(DamageSource damageSource) {
+        this.invulnerableTime = 20;
+        this.hurtDuration = 10;
+        this.hurtTime = this.hurtDuration;
+        SoundEvent soundevent = this.getHurtSound(damageSource);
+        if (soundevent != null) {
+            this.playSound(soundevent, this.getSoundVolume(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+        }
+
+        this.hurt(this.damageSources().generic(), 0.0F);
+        ((LivingEntityAccessor) this).goety$setLastDamageSource(damageSource);
+        ((LivingEntityAccessor) this).goety$setLastDamageStamp(this.level().getGameTime());
+    }
+
+    @Override
     public void handleEntityEvent(byte pId) {
         if (pId == 5) {
             this.attackTick = 0;
@@ -759,7 +776,7 @@ public class SquallGolem extends AbstractGolemServant implements IWindPowered {
                     Vec3 vec3 = new Vec3(SquallGolem.this.getX() + SquallGolem.this.getHorizontalLookAngle().x * 2, SquallGolem.this.getY() - 1.0F, SquallGolem.this.getZ() + SquallGolem.this.getHorizontalLookAngle().z * 2);
                     BlockPos blockPos = BlockPos.containing(vec3);
                     BlockParticleOption option = new BlockParticleOption(ParticleTypes.BLOCK, serverLevel.getBlockState(blockPos));
-                    ServerParticleUtil.windShockwaveParticle(serverLevel, colorUtil, 2, 0, 15, -1, vec3.add(0.0D, 1.0D, 0.0D));
+                    serverLevel.sendParticles(new SmashParticleOption(colorUtil, 5, 10), vec3.x, vec3.y + 1.0D, vec3.z, 1, 0.0D, 0.0D, 0.0D, 0.0F);
                     for (int i = 0; i < 8; ++i) {
                         ServerParticleUtil.circularParticles(serverLevel, option, vec3.x, SquallGolem.this.getY() + 0.25D, vec3.z, 3.0F);
                     }

@@ -135,6 +135,7 @@ public class ClientSideInit extends SidedInit {
         registry.register(ModParticleTypes.SPIRALLING, SpirallingParticle.Provider::new);
         registry.register(ModParticleTypes.SHOOT_INDICATOR, new ShootIndicatorParticle.Provider());
         registry.register(ModParticleTypes.SLAM, new SlamParticle.Provider());
+        registry.register(ModParticleTypes.SMASH, new SmashParticle.Provider());
         registry.register(ModParticleTypes.SPHERE_EXPLODE, new SphereExplodeParticle.Provider());
         registry.register(ModParticleTypes.GOD_RAY, GodRayParticle.Provider::new);
         registry.register(ModParticleTypes.STRETCHED_GOD_RAY, StretchedGodRayParticle.Provider::new);

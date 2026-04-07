@@ -278,11 +278,7 @@ public class Owned extends PathfinderMob implements IOwned, OwnableEntity, ICust
     @Nullable
     @Override
     public LivingEntity getMasterOwner() {
-        if (this.getTrueOwner() instanceof IOwned owned) {
-            return owned.getTrueOwner();
-        } else {
-            return this.getTrueOwner();
-        }
+        return IOwned.super.getMasterOwner();
     }
 
     @Nullable

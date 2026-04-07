@@ -1,9 +1,10 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import cn.sh1rocu.goety.mixin.accessor.LivingEntityAccessor;
 import com.Polarice3.Goety.api.entities.IRM;
-import com.Polarice3.Goety.client.particles.CircleExplodeParticleOption;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.client.particles.SlamParticleOption;
+import com.Polarice3.Goety.client.particles.SmashParticleOption;
 import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.ally.golem.RedstoneCube;
@@ -238,17 +239,17 @@ public class HostileRedstoneMonstrosity extends HostileGolem implements IRM {
     }
 
     public int getAnimationState(String animation) {
-        if (Objects.equals(animation, "activate")) {
+        if (Objects.equals(animation, ACTIVATE)) {
             return 1;
-        } else if (Objects.equals(animation, "idle")) {
+        } else if (Objects.equals(animation, IDLE)) {
             return 2;
-        } else if (Objects.equals(animation, "attack")) {
+        } else if (Objects.equals(animation, ATTACK)) {
             return 3;
-        } else if (Objects.equals(animation, "summon")) {
+        } else if (Objects.equals(animation, SUMMON)) {
             return 4;
-        } else if (Objects.equals(animation, "belch")) {
+        } else if (Objects.equals(animation, BELCH)) {
             return 5;
-        } else if (Objects.equals(animation, "death")) {
+        } else if (Objects.equals(animation, DEATH)) {
             return 6;
         } else {
             return 0;
@@ -277,6 +278,21 @@ public class HostileRedstoneMonstrosity extends HostileGolem implements IRM {
     @Override
     public boolean canAnimateMove() {
         return this.isCurrentAnimation(IDLE);
+    }
+
+    @Override
+    public void handleDamageEvent(DamageSource damageSource) {
+        this.invulnerableTime = 20;
+        this.hurtDuration = 10;
+        this.hurtTime = this.hurtDuration;
+        SoundEvent soundevent = this.getHurtSound(damageSource);
+        if (soundevent != null) {
+            this.playSound(soundevent, this.getSoundVolume(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+        }
+
+        this.hurt(this.damageSources().generic(), 0.0F);
+        ((LivingEntityAccessor) this).goety$setLastDamageSource(damageSource);
+        ((LivingEntityAccessor) this).goety$setLastDamageStamp(this.level().getGameTime());
     }
 
     public int getCurrentAnimation() {
@@ -604,8 +620,10 @@ public class HostileRedstoneMonstrosity extends HostileGolem implements IRM {
                         }
                         if (this.summonTick == MathHelper.secondsToTicks(SUMMON_SECONDS_TIME - 1)) {
                             ColorUtil colorUtil = new ColorUtil(0xff8200);
-                            serverLevel.sendParticles(new CircleExplodeParticleOption(colorUtil.red(), colorUtil.green(), colorUtil.blue(), 3, 1), this.getXLeft(), BlockFinder.moveDownToGround(this), this.getZLeft(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
-                            serverLevel.sendParticles(new CircleExplodeParticleOption(colorUtil.red(), colorUtil.green(), colorUtil.blue(), 3, 1), this.getXRight(), BlockFinder.moveDownToGround(this), this.getZRight(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                            serverLevel.sendParticles(new SmashParticleOption(colorUtil, 3, 1.5F, 10), this.getXLeft(), BlockFinder.moveDownToGround(this), this.getZLeft(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                            serverLevel.sendParticles(new SmashParticleOption(colorUtil, 3, 1.5F, 10), this.getXRight(), BlockFinder.moveDownToGround(this), this.getZRight(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                            ServerParticleUtil.sendGodRay(serverLevel, this.getXLeft(), BlockFinder.moveDownToGround(this), this.getZLeft(), colorUtil);
+                            ServerParticleUtil.sendGodRay(serverLevel, this.getXRight(), BlockFinder.moveDownToGround(this), this.getZRight(), colorUtil);
                             this.playSound(ModSounds.REDSTONE_MONSTROSITY_BELCH, this.getSoundVolume(), 0.7F);
                             AABB aabb = new AABB(this.blockPosition());
                             for (LivingEntity target : this.level.getEntitiesOfClass(LivingEntity.class, aabb.inflate(MELEE_RANGE / 2.0F))) {
