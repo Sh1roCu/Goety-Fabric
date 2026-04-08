@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
 public class EntityUtil {
 
     public static boolean isInFluid(Entity entity) {
-        return !((EntityAccessor) entity).goety$fluidHeight().isEmpty();
+        return ((EntityAccessor) entity).goety$fluidHeight().object2DoubleEntrySet().stream().anyMatch(e -> e.getDoubleValue() > 0);
     }
 
     public static boolean isInFluid(Entity entity, FluidState fluidState) {
