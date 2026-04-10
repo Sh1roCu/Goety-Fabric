@@ -9,7 +9,6 @@
   "refmap": "goety.refmap.json",
   "plugin": "cn.sh1rocu.goety.mixin.MixinPlugin",
   "mixins": [
-    "accessor.VillagerAccessor",
     "accessor.AbstractFurnaceBlockEntityAccessor",
     "accessor.BlockAccessor",
     "accessor.BucketItemAccessor",
@@ -25,6 +24,7 @@
     "accessor.StructureAccessor",
     "accessor.StructureSettingsAccessor",
     "accessor.StructureSpawnOverrideAccessor",
+    "accessor.VillagerAccessor",
     "asm.EnchantmentCategoryASM",
     "common.AbstractArrowMixin",
     "common.AbstractHorseMixin",

@@ -705,7 +705,7 @@ public class ClientEvents {
                         if (WandUtil.getSpell(player1) instanceof BurrowingSpell) {
                             BurrowingLaserRenderer.renderLaser(context, player1, Minecraft.getInstance().getFrameTime());
                         } else if (WandUtil.getSpell(player1) instanceof PrismaBeamSpell) {
-                            GuardianLaserRenderer.renderLaser(context, player1, Minecraft.getInstance().getFrameTime());
+                            PrismaBeamRenderer.renderLaser(context, player1, Minecraft.getInstance().getFrameTime());
                         } else if (WandUtil.getSpell(player1) instanceof WaterJetSpell) {
                             WaterJetRenderer.renderWaterJet(context, player1, Minecraft.getInstance().getFrameTime());
                         }
