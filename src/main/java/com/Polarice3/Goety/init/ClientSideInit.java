@@ -9,7 +9,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.LightTexture;
 
-@Environment(EnvType.CLIENT)
 public class ClientSideInit extends SidedInit {
 
     public void init() {

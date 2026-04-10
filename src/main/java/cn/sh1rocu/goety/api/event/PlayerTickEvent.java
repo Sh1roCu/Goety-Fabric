@@ -1,12 +1,9 @@
 package cn.sh1rocu.goety.api.event;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.entity.player.Player;
 
-@Environment(EnvType.CLIENT)
 public abstract class PlayerTickEvent extends PlayerEvent {
 
     public PlayerTickEvent(Player player) {

@@ -302,7 +302,7 @@ public class RitualRecipe extends ModShapelessRecipe {
 
             Enchantment enchantment = null;
             int xpLevelCost = 0;
-            if (buffer.readBoolean()) {
+            if (buffer.readBoolean() && buffer.readBoolean()) {
                 enchantment = BuiltInRegistries.ENCHANTMENT.get(buffer.readResourceLocation());
                 xpLevelCost = buffer.readVarInt();
             }
@@ -345,6 +345,7 @@ public class RitualRecipe extends ModShapelessRecipe {
             if (recipe.entityToConvertInto != null) {
                 buffer.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(recipe.entityToConvertInto));
             }
+            buffer.writeBoolean(recipe.enchantment != null);
             if (recipe.enchantment != null) {
                 ResourceLocation enchant = BuiltInRegistries.ENCHANTMENT.getKey(recipe.enchantment);
                 buffer.writeBoolean(enchant != null);
