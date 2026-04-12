@@ -1,6 +1,7 @@
 package cn.sh1rocu.goety.client;
 
 import cn.sh1rocu.goety.api.event.*;
+import cn.sh1rocu.goety.api.extension.client.ICustomArmorRenderer;
 import cn.sh1rocu.goety.api.extension.client.ICustomRenderer;
 import com.Polarice3.Goety.client.events.ClientEvents;
 import com.Polarice3.Goety.common.blocks.fluids.EndMudFluid;
@@ -16,11 +17,42 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 
 public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlugin {
+
+    // Vanilla
+    private static void setPartVisibility(HumanoidModel<?> model, EquipmentSlot slot) {
+        model.setAllVisible(false);
+        switch (slot) {
+            case HEAD -> {
+                model.head.visible = true;
+                model.hat.visible = true;
+            }
+            case CHEST -> {
+                model.body.visible = true;
+                model.rightArm.visible = true;
+                model.leftArm.visible = true;
+            }
+            case LEGS -> {
+                model.body.visible = true;
+                model.rightLeg.visible = true;
+                model.leftLeg.visible = true;
+            }
+            case FEET -> {
+                model.rightLeg.visible = true;
+                model.leftLeg.visible = true;
+            }
+        }
+    }
 
     @Override
     public void onInitializeClient() {
@@ -28,13 +60,21 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
 
         ModNetwork.registerS2CPackets();
 
-        ModItems.ITEMS.forEach(item -> {
-            if (item instanceof ICustomRenderer customRenderer) {
-                BuiltinItemRendererRegistry.INSTANCE.register(item,
-                        (stack, mode, matrices, vertexConsumers, light, overlay) ->
-                                customRenderer.getCustomRenderer().renderByItem(stack, mode, matrices, vertexConsumers, light, overlay));
-            }
-        });
+        ModItems.ITEMS.stream()
+                .filter(item -> item instanceof ICustomRenderer)
+                .forEach(item ->
+                        BuiltinItemRendererRegistry.INSTANCE.register(item,
+                                (stack, mode, matrices, vertexConsumers, light, overlay) ->
+                                        ((ICustomRenderer) item).getCustomRenderer().renderByItem(stack, mode, matrices, vertexConsumers, light, overlay)));
+
+        var armorRenderers = ModItems.ITEMS.stream().filter(item -> item instanceof ArmorItem && item instanceof ICustomArmorRenderer).toArray(Item[]::new);
+
+        ArmorRenderer.register((matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
+            var custom = (ICustomArmorRenderer) stack.getItem();
+            var model = custom.getHumanoidArmorModel(entity, stack, slot, contextModel);
+            setPartVisibility(model, slot);
+            ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, model, new ResourceLocation(custom.getArmorTexture(stack, entity, slot, "")));
+        }, armorRenderers);
 
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.VOID_FLUID_SOURCE, ModFluids.VOID_FLUID_FLOWING, new SimpleFluidRenderHandler(VoidFluid.FLUID_STILL, VoidFluid.FLUID_FLOWING, VoidFluid.OVERLAY));
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.END_MUD_FLUID_SOURCE, ModFluids.END_MUD_FLUID_FLOWING, new SimpleFluidRenderHandler(EndMudFluid.FLUID_STILL, EndMudFluid.FLUID_FLOWING, EndMudFluid.OVERLAY));

@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.items.armor;
 
-import cn.sh1rocu.goety.api.extension.client.ICustomArmorTexture;
-import cn.sh1rocu.goety.api.extension.client.ICustomHumanoidArmorModel;
+import cn.sh1rocu.goety.api.extension.client.ICustomArmorRenderer;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.items.IPersist;
 import com.Polarice3.Goety.api.items.ISoulRepair;
@@ -36,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DarkArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, IPersist, ICustomHumanoidArmorModel, ICustomArmorTexture {
+public class DarkArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, IPersist, ICustomArmorRenderer {
     public DarkArmor(Type p_40387_) {
         super(ModArmorMaterials.DARK, p_40387_, ModItems.baseProperties().customDamage(DarkArmor::damageItem));
     }
@@ -108,7 +107,7 @@ public class DarkArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, 
 
     @Environment(EnvType.CLIENT)
     @Override
-    public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+    public HumanoidModel<LivingEntity> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> parent) {
         EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
         ModelPart root = modelSet.bakeLayer(equipmentSlot == EquipmentSlot.LEGS ? ModModelLayer.DARK_ARMOR_INNER : ModModelLayer.DARK_ARMOR_OUTER);
         DarkArmorModel model = new DarkArmorModel(root).animate(livingEntity);
@@ -126,11 +125,11 @@ public class DarkArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, 
             }
         }
 
-        model.young = original.young;
-        model.crouching = original.crouching;
-        model.riding = original.riding;
-        model.rightArmPose = original.rightArmPose;
-        model.leftArmPose = original.leftArmPose;
+        model.young = parent.young;
+        model.crouching = parent.crouching;
+        model.riding = parent.riding;
+        model.rightArmPose = parent.rightArmPose;
+        model.leftArmPose = parent.leftArmPose;
 
         return model;
     }

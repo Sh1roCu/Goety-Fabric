@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.items.armor;
 
-import cn.sh1rocu.goety.api.extension.client.ICustomArmorTexture;
-import cn.sh1rocu.goety.api.extension.client.ICustomHumanoidArmorModel;
+import cn.sh1rocu.goety.api.extension.client.ICustomArmorRenderer;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.items.IPersist;
 import com.Polarice3.Goety.client.render.ModModelLayer;
@@ -33,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CursedKnightArmor extends ArmorItem implements IPersist, ICustomHumanoidArmorModel, ICustomArmorTexture {
+public class CursedKnightArmor extends ArmorItem implements IPersist, ICustomArmorRenderer {
     public CursedKnightArmor(Type p_40387_) {
         super(ModArmorMaterials.CURSED_KNIGHT, p_40387_, ModItems.baseProperties().customDamage(CursedKnightArmor::damageItem));
     }
@@ -102,7 +101,7 @@ public class CursedKnightArmor extends ArmorItem implements IPersist, ICustomHum
 
     @Environment(EnvType.CLIENT)
     @Override
-    public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+    public HumanoidModel<LivingEntity> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> parent) {
         EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
         ModelPart root = modelSet.bakeLayer(equipmentSlot == EquipmentSlot.LEGS ? ModModelLayer.CURSED_KNIGHT_ARMOR_INNER : ModModelLayer.CURSED_KNIGHT_ARMOR_OUTER);
         CursedKnightArmorModel model = new CursedKnightArmorModel(root);
@@ -113,11 +112,11 @@ public class CursedKnightArmor extends ArmorItem implements IPersist, ICustomHum
         model.rightLeg.visible = equipmentSlot == EquipmentSlot.FEET;
         model.leftLeg.visible = equipmentSlot == EquipmentSlot.FEET;
 
-        model.young = original.young;
-        model.crouching = original.crouching;
-        model.riding = original.riding;
-        model.rightArmPose = original.rightArmPose;
-        model.leftArmPose = original.leftArmPose;
+        model.young = parent.young;
+        model.crouching = parent.crouching;
+        model.riding = parent.riding;
+        model.rightArmPose = parent.rightArmPose;
+        model.leftArmPose = parent.leftArmPose;
 
         return model;
     }

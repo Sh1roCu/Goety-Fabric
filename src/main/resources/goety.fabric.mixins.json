@@ -92,7 +92,6 @@
     "client.GameRendererMixin",
     "client.GuiGraphicsMixin",
     "client.GuiMixin",
-    "client.HumanoidArmorLayerMixin",
     "client.HumanoidModelMixin",
     "client.ItemInHandRendererMixin",
     "client.KeyboardHandlerMixin",

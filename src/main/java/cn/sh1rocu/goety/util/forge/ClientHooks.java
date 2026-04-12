@@ -3,9 +3,8 @@ package cn.sh1rocu.goety.util.forge;
 import cn.sh1rocu.goety.api.event.CustomizeGuiOverlayEvent;
 import cn.sh1rocu.goety.api.event.MovementInputUpdateEvent;
 import cn.sh1rocu.goety.api.event.ViewportEvent;
-import cn.sh1rocu.goety.api.extension.client.ICustomArmorTexture;
 import cn.sh1rocu.goety.api.extension.client.ICustomGenericArmorModel;
-import cn.sh1rocu.goety.api.extension.client.ICustomHumanoidArmorModel;
+import cn.sh1rocu.goety.api.extension.client.ICustomArmorRenderer;
 import cn.sh1rocu.goety.util.client.MinecraftUtil;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.shaders.FogShape;
@@ -63,13 +62,13 @@ public class ClientHooks {
     }
 
     public static String getArmorTexture(Entity entity, ItemStack armor, String _default, EquipmentSlot slot, String type) {
-        String result = armor.getItem() instanceof ICustomArmorTexture custom ? custom.getArmorTexture(armor, entity, slot, type) : _default;
+        String result = armor.getItem() instanceof ICustomArmorRenderer custom ? custom.getArmorTexture(armor, entity, slot, type) : _default;
         return result != null ? result : _default;
     }
 
     @NotNull
     private static Model getGenericArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-        HumanoidModel<?> replacement = itemStack.getItem() instanceof ICustomHumanoidArmorModel custom
+        HumanoidModel<?> replacement = itemStack.getItem() instanceof ICustomArmorRenderer custom
                 ? custom.getHumanoidArmorModel(livingEntity, itemStack, equipmentSlot, original)
                 : getHumanoidArmorModel(livingEntity, itemStack, equipmentSlot, original);
         if (replacement != original) {
