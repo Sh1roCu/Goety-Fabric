@@ -46,6 +46,7 @@ public class DarkArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, 
         return stack.isDamaged();
     }
 
+    @Override
     public int getBarColor(ItemStack stack) {
         if (this.isBroken(stack)) {
             return 0x800000;

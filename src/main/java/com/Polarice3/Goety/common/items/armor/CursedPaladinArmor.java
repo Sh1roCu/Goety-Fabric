@@ -35,7 +35,7 @@ import java.util.function.Consumer;
 
 public class CursedPaladinArmor extends ArmorItem implements IPersist, ICustomHumanoidArmorModel, ICustomArmorTexture {
     public CursedPaladinArmor(Type p_40387_) {
-        super(ModArmorMaterials.CURSED_PALADIN, p_40387_, ModItems.baseProperties());
+        super(ModArmorMaterials.CURSED_PALADIN, p_40387_, ModItems.baseProperties().customDamage(CursedPaladinArmor::damageItem));
     }
 
     @Override
@@ -43,6 +43,7 @@ public class CursedPaladinArmor extends ArmorItem implements IPersist, ICustomHu
         return stack.isDamaged();
     }
 
+    @Override
     public int getBarColor(ItemStack stack) {
         if (this.isBroken(stack)) {
             return 0x800000;
@@ -58,8 +59,8 @@ public class CursedPaladinArmor extends ArmorItem implements IPersist, ICustomHu
         return super.getBarWidth(stack);
     }
 
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        if (ItemHelper.armorSet(entity, this.getMaterial())) {
+    private static <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        if (ItemHelper.armorSet(entity, ((ArmorItem) stack.getItem()).getMaterial())) {
             if (entity.getRandom().nextBoolean()) {
                 return 0;
             }
