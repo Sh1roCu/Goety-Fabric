@@ -31,6 +31,7 @@ import com.Polarice3.Goety.common.items.WaystoneItem;
 import com.Polarice3.Goety.common.items.curios.OminousCharmItem;
 import com.Polarice3.Goety.common.items.magic.*;
 import com.Polarice3.Goety.common.items.revive.SoulJar;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -76,6 +77,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class ClientInitEvents {
@@ -426,7 +428,7 @@ public class ClientInitEvents {
     }
 
     private static void onRegisterRenders() {
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+        Supplier<ItemRenderer> itemRenderer = Suppliers.memoize(() -> Minecraft.getInstance().getItemRenderer());
         BlockEntityRenderers.register(ModBlockEntities.ARCA, ArcaRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.CURSED_INFUSER, CursedInfuserRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.GRIM_INFUSER, GrimInfuserRenderer::new);

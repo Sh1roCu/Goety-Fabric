@@ -15,18 +15,20 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.function.Supplier;
+
 public class BoneShardRenderer<T extends AbstractArrow> extends EntityRenderer<T> {
-    private final ItemRenderer itemRenderer;
+    private final Supplier<ItemRenderer> itemRenderer;
     private final float scale;
 
-    public BoneShardRenderer(EntityRendererProvider.Context p_i226035_1_, ItemRenderer p_i226035_2_, float p_i226035_3_) {
-        super(p_i226035_1_);
-        this.itemRenderer = p_i226035_2_;
+    public BoneShardRenderer(EntityRendererProvider.Context context, Supplier<ItemRenderer> supplier, float p_i226035_3_) {
+        super(context);
+        this.itemRenderer = supplier;
         this.scale = p_i226035_3_;
     }
 
-    public BoneShardRenderer(EntityRendererProvider.Context p_i50957_1_, ItemRenderer p_i50957_2_) {
-        this(p_i50957_1_, p_i50957_2_, 1.0F);
+    public BoneShardRenderer(EntityRendererProvider.Context context, Supplier<ItemRenderer> supplier) {
+        this(context, supplier, 1.0F);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class BoneShardRenderer<T extends AbstractArrow> extends EntityRenderer<T
             float f10 = -Mth.sin(f9 * 5.0F) * f9;
             pMatrixStack.mulPose(Axis.ZP.rotationDegrees(f10));
         }
-        this.itemRenderer.renderStatic(new ItemStack(ModItems.BONE_SHARD), ItemDisplayContext.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY, pMatrixStack, pBuffer, pEntity.level, 0);
+        this.itemRenderer.get().renderStatic(new ItemStack(ModItems.BONE_SHARD), ItemDisplayContext.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY, pMatrixStack, pBuffer, pEntity.level, 0);
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }

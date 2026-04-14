@@ -43,7 +43,7 @@ public abstract class ThrownEnderpearlMixin extends ThrowableItemProjectile {
 //    }
 
     // used for 1.20
-    @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;resetFallDistance()V"))
+    @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;resetFallDistance()V", ordinal = 0))
     private void goety$teleport(HitResult hitResult, CallbackInfo ci, @Local Entity entity, @Share("teleport") LocalRef<EntityTeleportEvent.EnderPearl> eventRef) {
         Vec3 target = eventRef.get().getTarget();
         entity.teleportTo(target.x, target.y, target.z);

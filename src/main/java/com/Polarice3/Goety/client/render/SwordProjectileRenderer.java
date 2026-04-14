@@ -15,20 +15,22 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 
+import java.util.function.Supplier;
+
 public class SwordProjectileRenderer<T extends AbstractArrow & ItemSupplier> extends EntityRenderer<T> {
-    private final ItemRenderer itemRenderer;
+    private final Supplier<ItemRenderer> itemRenderer;
     private final float scale;
     private final boolean fullBright;
 
-    public SwordProjectileRenderer(EntityRendererProvider.Context p_i226035_1_, ItemRenderer p_i226035_2_, float p_i226035_3_, boolean p_i226035_4_) {
-        super(p_i226035_1_);
-        this.itemRenderer = p_i226035_2_;
+    public SwordProjectileRenderer(EntityRendererProvider.Context context, Supplier<ItemRenderer> supplier, float p_i226035_3_, boolean p_i226035_4_) {
+        super(context);
+        this.itemRenderer = supplier;
         this.scale = p_i226035_3_;
         this.fullBright = p_i226035_4_;
     }
 
-    public SwordProjectileRenderer(EntityRendererProvider.Context p_i50957_1_, ItemRenderer p_i50957_2_) {
-        this(p_i50957_1_, p_i50957_2_, 1.0F, false);
+    public SwordProjectileRenderer(EntityRendererProvider.Context context, Supplier<ItemRenderer> supplier) {
+        this(context, supplier, 1.0F, false);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class SwordProjectileRenderer<T extends AbstractArrow & ItemSupplier> ext
                 float f10 = -Mth.sin(f9 * 5.0F) * f9;
                 pMatrixStack.mulPose(Axis.ZP.rotationDegrees(f10));
             }
-            this.itemRenderer.renderStatic(pEntity.getItem(), ItemDisplayContext.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY, pMatrixStack, pBuffer, pEntity.level, 0);
+            this.itemRenderer.get().renderStatic(pEntity.getItem(), ItemDisplayContext.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY, pMatrixStack, pBuffer, pEntity.level, 0);
             pMatrixStack.popPose();
             super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
         }
