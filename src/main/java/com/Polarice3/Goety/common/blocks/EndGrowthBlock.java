@@ -23,7 +23,7 @@ import net.minecraft.world.level.material.MapColor;
 public class EndGrowthBlock extends Block implements BonemealableBlock {
 
     public EndGrowthBlock() {
-        super(ModBlocks.EndStoneProperties()
+        super(ModBlocks.endStoneProperties()
                 .mapColor(MapColor.COLOR_PURPLE)
                 .randomTicks()
                 .sound(ModSoundTypes.CHORUS_GRASS));

@@ -237,6 +237,11 @@ public class SingleStackItem extends TrinketItem implements IEnchantment {
                 tooltip.add(Component.translatable("info.goety.ominous_charm", ModKeybindings.keyBindings[14].getTranslatedKeyMessage().getString()).withStyle(secondary));
                 tooltip.add(Component.translatable("info.goety.ominous_charm.level").withStyle(ChatFormatting.DARK_AQUA).append(Component.literal(" " + OminousCharmItem.getOmenAmount(stack))));
             }
+            if (stack.is(ModItems.TARGETING_MONOCLE)) {
+                tooltip.add(Component.translatable("info.goety.targeting_monocle").withStyle(main));
+                tooltip.add(Component.translatable("info.goety.targeting_monocle.activate", ModKeybindings.keyBindings[14].getTranslatedKeyMessage().getString()).withStyle(secondary));
+                tooltip.add(Component.translatable("info.goety.targeting_monocle.deactivate", ModKeybindings.keyBindings[14].getTranslatedKeyMessage().getString()).withStyle(secondary));
+            }
         }
     }
 }

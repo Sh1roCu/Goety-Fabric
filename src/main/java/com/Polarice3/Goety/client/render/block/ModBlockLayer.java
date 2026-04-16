@@ -15,14 +15,16 @@ public class ModBlockLayer {
     public static final ModelLayerLocation REDSTONE_MONSTROSITY_HEAD = register("redstone_monstrosity_head");
     public static final ModelLayerLocation LOFTY_CHEST = register("lofty_chest");
     public static final ModelLayerLocation BLACK_CRYSTAL = register("black_crystal");
+    public static final ModelLayerLocation OMINOUS_STATUE = register("ominous_statue");
+    public static final ModelLayerLocation BRAZIER_STATUE = register("brazier_statue");
     public static final ModelLayerLocation PLUSHIE = register("plushie");
 
-    private static ModelLayerLocation register(String p_171294_) {
-        return register(p_171294_, "main");
+    private static ModelLayerLocation register(String name) {
+        return register(name, "main");
     }
 
-    private static ModelLayerLocation register(String p_171296_, String p_171297_) {
-        ModelLayerLocation modellayerlocation = createLocation(p_171296_, p_171297_);
+    private static ModelLayerLocation register(String name, String variant) {
+        ModelLayerLocation modellayerlocation = createLocation(name, variant);
         if (!ALL_MODELS.add(modellayerlocation)) {
             throw new IllegalStateException("Duplicate registration for " + modellayerlocation);
         } else {
@@ -30,8 +32,8 @@ public class ModBlockLayer {
         }
     }
 
-    private static ModelLayerLocation createLocation(String p_171301_, String p_171302_) {
-        return new ModelLayerLocation(Goety.location(p_171301_), p_171302_);
+    private static ModelLayerLocation createLocation(String name, String variant) {
+        return new ModelLayerLocation(Goety.location(name), variant);
     }
 
 }

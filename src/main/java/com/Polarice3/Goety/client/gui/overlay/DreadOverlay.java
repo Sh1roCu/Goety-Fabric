@@ -33,7 +33,11 @@ public class DreadOverlay {
                     default -> Goety.location("textures/gui/dread/dread_overlay_0.png");
                 };
 
-                float alpha = 1.0F - (Math.min(1.0F, wight.distanceTo(player) / 48.0F));
+                float distance = wight.distanceTo(player);
+                if (!player.hasLineOfSight(wight)) {
+                    distance *= 1.5F;
+                }
+                float alpha = 1.0F - (Math.min(1.0F, distance / 48.0F));
                 renderOverlay(overlay, alpha, guiGraphics.guiWidth(), guiGraphics.guiHeight());
             }
         }

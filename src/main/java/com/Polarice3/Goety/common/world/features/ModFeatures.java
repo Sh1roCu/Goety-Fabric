@@ -16,6 +16,7 @@ public class ModFeatures {
 
     public static final Feature<ModTreeFeatureConfig> CHORUS_TREE = register("chorus_tree", () -> new ChorusTreeFeature(ModTreeFeatureConfig.CODEC, false));
     public static final Feature<ModTreeFeatureConfig> CHORUS_VOID_TREE = register("chorus_void_tree", () -> new ChorusTreeFeature(ModTreeFeatureConfig.CODEC, true));
+    public static final Feature<NetherForestVegetationConfig> RED_MOSS_VEGETATION = register("red_moss_vegetation", () -> new RedMossVegetationFeature(NetherForestVegetationConfig.CODEC));
     public static final Feature<NetherForestVegetationConfig> END_VEGETATION = register("end_vegetation", () -> new EndVegetationFeature(NetherForestVegetationConfig.CODEC));
     public static final Feature<NetherForestVegetationConfig> END_GROWTH = register("end_growth", () -> new EndGrowthFeature(NetherForestVegetationConfig.CODEC));
     public static final Feature<NetherForestVegetationConfig> END_CHORUS = register("end_chorus", () -> new EndChorusFeature(NetherForestVegetationConfig.CODEC));

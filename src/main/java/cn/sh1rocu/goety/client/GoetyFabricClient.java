@@ -15,12 +15,15 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -101,6 +104,9 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         MovementInputUpdateEvent.EVENT.register(ClientEvents::updateInputEvent);
         InputEvent.Key.EVENT.register(ClientEvents::keyInputs);
         InputEvent.InteractionKeyMappingTriggered.EVENT.register(BaseEvent.HIGHEST, ClientEvents::interactionKeyEvent);
+        ClientTickEvents.START_CLIENT_TICK.register(ClientEvents::targetMonocleEvents);
+        ClientPlayConnectionEvents.DISCONNECT.register(ClientEvents::logOff);
+        ServerLivingEntityEvents.AFTER_DEATH.register(ClientEvents::onDying);
     }
 
     @Override

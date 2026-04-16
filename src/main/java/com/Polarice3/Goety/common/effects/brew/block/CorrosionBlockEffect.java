@@ -37,7 +37,7 @@ public class CorrosionBlockEffect extends BrewEffect {
                 BlockState state = serverLevel.getBlockState(blockPos);
                 if (!state.is(BlockTags.WITHER_IMMUNE)
                         && !state.hasBlockEntity()
-                        && canEntityDestroy(state, pLevel, blockPos, pSource)
+                        && this.canEntityBreak(serverLevel, state, blockPos, pSource)
                         && state.getDestroySpeed(serverLevel, blockPos) != -1.0F) {
                     // TODO: ConventionalBlockTags.OBSIDIAN
                     serverLevel.destroyBlock(blockPos, state.is(Blocks.OBSIDIAN) || state.is(Blocks.CRYING_OBSIDIAN) /*state.is(ConventionalBlockTags.OBSIDIAN)*/);
@@ -50,6 +50,7 @@ public class CorrosionBlockEffect extends BrewEffect {
         }
     }
 
+    // Vanilla
     private static boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity) {
         if (entity instanceof EnderDragon) {
             return !state.getBlock().defaultBlockState().is(BlockTags.DRAGON_IMMUNE);
@@ -59,6 +60,14 @@ public class CorrosionBlockEffect extends BrewEffect {
         }
 
         return true;
+    }
+
+    public boolean canEntityBreak(Level pLevel, BlockState state, BlockPos blockPos, LivingEntity pSource) {
+        if (pSource == null) {
+            return true;
+        } else {
+            return canEntityDestroy(state, pLevel, blockPos, pSource) /*&& ForgeEventFactory.onEntityDestroyBlock(pSource, blockPos, state)*/;
+        }
     }
 
     @Override

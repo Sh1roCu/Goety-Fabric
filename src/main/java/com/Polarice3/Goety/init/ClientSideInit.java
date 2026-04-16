@@ -2,8 +2,6 @@ package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.client.particles.*;
 import com.Polarice3.Goety.utils.ColorUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.particle.*;
@@ -56,6 +54,9 @@ public class ClientSideInit extends SidedInit {
         registry.register(ModParticleTypes.WRAITH, WraithParticle.Provider::new);
         registry.register(ModParticleTypes.WRAITH_BURST, WraithParticle.Provider::new);
         registry.register(ModParticleTypes.WRAITH_FIRE, BreathParticle.Provider::new);
+        registry.register(ModParticleTypes.SMALL_FIRE, FireParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.SMALL_FIRE_DROP, FireParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.SMALL_FIRE_GROUND, FireParticle.SmallProvider::new);
         registry.register(ModParticleTypes.BIG_FIRE, FireParticle.Provider::new);
         registry.register(ModParticleTypes.BIG_FIRE_DROP, FireParticle.Provider::new);
         registry.register(ModParticleTypes.BIG_FIRE_GROUND, FireParticle.Provider::new);

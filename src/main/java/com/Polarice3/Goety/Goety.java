@@ -465,6 +465,9 @@ public class Goety {
         StrippableBlockRegistry.register(ModBlocks.PINE_LOG, ModBlocks.STRIPPED_PINE_LOG);
         StrippableBlockRegistry.register(ModBlocks.PINE_WOOD, ModBlocks.STRIPPED_PINE_WOOD);
 
+//        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.SIENNA_GRASS.getId(), ModBlocks.POTTED_SIENNA_GRASS);
+//        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.SIENNA_FERN.getId(), ModBlocks.POTTED_SIENNA_FERN);
+//        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.WINDSWEPT_DEAD_BUSH.getId(), ModBlocks.POTTED_WINDSWEPT_DEAD_BUSH);
 //        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.CHORUS_STALK.getId(), ModBlocks.POTTED_CHORUS_STALK);
 //        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.CHORUS_FERN.getId(), ModBlocks.POTTED_CHORUS_FERN);
 //        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.HAUNTED_SAPLING.getId(), ModBlocks.POTTED_HAUNTED_SAPLING);
@@ -503,6 +506,11 @@ public class Goety {
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.PINE_LEAVES.asItem(), 0.3F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_VINE.asItem(), 0.3F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_BLOSSOM_VINES_PRUNED.asItem(), 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.SIENNA_GRASS.asItem(), 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.SIENNA_FERN.asItem(), 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.FIRETHORN_BERRIES, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.TALL_SIENNA_GRASS.asItem(), 0.5F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.LARGE_SIENNA_FERN.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.SNAP_FUNGUS, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.ROTTEN_SAPLING.asItem(), 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_SAPLING.asItem(), 0.65F);
@@ -520,6 +528,7 @@ public class Goety {
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.TALL_END_GRASS.asItem(), 1.0F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.LARGE_CHORUS_FERN.asItem(), 1.0F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_BLOSSOM_VINES.asItem(), 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(ModItems.RED_MOSS_GROWTH, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.CHORUS_GROWTH, 1.0F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.BLAST_FUNGUS, 1.0F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.BERSERK_FUNGUS, 1.0F);

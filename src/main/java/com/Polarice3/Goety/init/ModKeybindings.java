@@ -57,4 +57,12 @@ public class ModKeybindings {
         }
     }
 
+    public static KeyMapping useCurios() {
+        if (keyBindings[14] != null) {
+            return keyBindings[14];
+        } else {
+            return null;
+        }
+    }
+
 }

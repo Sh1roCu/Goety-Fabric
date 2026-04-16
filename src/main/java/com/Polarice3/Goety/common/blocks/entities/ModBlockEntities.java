@@ -150,6 +150,15 @@ public class ModBlockEntities {
     public static final BlockEntityType<MagicLightBlockEntity> MAGIC_LIGHT = register("magic_light",
             () -> BlockEntityType.Builder.of(MagicLightBlockEntity::new, ModBlocks.SOUL_LIGHT_BLOCK, ModBlocks.GLOW_LIGHT_BLOCK).build(null));
 
+    public static final BlockEntityType<MandalaBlockEntity> MANDALA = register("mandala",
+            () -> BlockEntityType.Builder.of(MandalaBlockEntity::new, ModBlocks.MANDALA).build(null));
+
+    public static final BlockEntityType<OminousStatueBlockEntity> OMINOUS_STATUE = register("ominous_statue",
+            () -> BlockEntityType.Builder.of(OminousStatueBlockEntity::new, ModBlocks.OMINOUS_STATUE).build(null));
+
+    public static final BlockEntityType<OminousBrazierStatueBlockEntity> OMINOUS_BRAZIER_STATUE = register("ominous_brazier_statue",
+            () -> BlockEntityType.Builder.of(OminousBrazierStatueBlockEntity::new, ModBlocks.OMINOUS_BRAZIER_STATUE).build(null));
+
     public static final BlockEntityType<TallSkullBlockEntity> TALL_SKULL = register("tall_skull",
             () -> BlockEntityType.Builder.of(TallSkullBlockEntity::new, ModBlocks.TALL_SKULL_BLOCK, ModBlocks.WALL_TALL_SKULL_BLOCK).build(null));
 

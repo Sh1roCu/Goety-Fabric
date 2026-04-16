@@ -42,6 +42,7 @@
     "LevelRendererMixin",
     "LivingEntityRendererMixin",
     "MinecraftMixin",
+    "MouseHandlerMixin",
     "PlayerRendererAccessor",
     "SpinAttackEffectLayerMixin"
   ]

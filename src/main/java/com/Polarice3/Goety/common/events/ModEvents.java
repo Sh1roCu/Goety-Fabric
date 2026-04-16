@@ -1608,6 +1608,10 @@ public class ModEvents {
         Set<ItemLike> set2 = Sets.newHashSet();
         set2.add(ModBlocks.WITCH_POLE);
         addFuels(set2, 200);
+
+        Set<ItemLike> set3 = Sets.newHashSet();
+        set3.add(ModBlocks.WINDSWEPT_DEAD_BUSH);
+        addFuels(set3, 100);
     }
 
     private static void addFuels(Collection<ItemLike> items, int burnTime) {

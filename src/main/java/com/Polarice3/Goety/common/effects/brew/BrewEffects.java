@@ -136,7 +136,7 @@ public class BrewEffects {
         this.register(new PotionBrewEffect(GoetyEffects.SWIRLING, BrewConfig.SwirlingCost.get(), BrewConfig.SwirlingCapacity.get(), 1800), Items.IRON_SWORD);
         this.register(new PotionBrewEffect(GoetyEffects.TRIPPING, BrewConfig.TrippingCost.get(), 1800), Items.CRACKED_STONE_BRICKS);
         this.register(new PotionBrewEffect(GoetyEffects.VENOMOUS_HANDS, BrewConfig.VenomousHandsCost.get(), 3600), ModItems.VENOMOUS_FANG);
-        this.register(new PotionBrewEffect(GoetyEffects.VOID_TOUCHED, BrewConfig.VoidTouchedCost.get(), 1800), ModItems.VOID_BOTTLE);
+        this.register(new PotionBrewEffect(GoetyEffects.VOID_TOUCHED, BrewConfig.VoidTouchedCost.get(), BrewConfig.VoidTouchedCapacity.get(), 1800), ModItems.VOID_BOTTLE);
         this.register(new PotionBrewEffect(GoetyEffects.WILD_RAGE, BrewConfig.WildRageCost.get(), BrewConfig.WildRageCapacity.get(), 900), ModItems.RAGING_MATTER);
 
         //Brew

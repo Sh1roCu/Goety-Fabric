@@ -19,13 +19,29 @@
   "result": {
     "item": "goety:ominous_shackles"
   },
-  "conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "forge:not",
-      "value": {
-        "tag": "forge:ingots/silver",
-        "type": "forge:tag_empty"
-      }
+      "condition": "fabric:or",
+      "values": [
+        {
+          "condition": "fabric:item_tags_populated",
+          "values": [
+            "c:ingots/silver"
+          ]
+        },
+        {
+          "condition": "fabric:item_tags_populated",
+          "values": [
+            "forge:ingots/silver"
+          ]
+        },
+        {
+          "condition": "fabric:item_tags_populated",
+          "values": [
+            "c:silver_ingot"
+          ]
+        }
+      ]
     }
   ]
 }

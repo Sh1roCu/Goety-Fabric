@@ -255,6 +255,8 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.REDSTONE_MONSTROSITY_HEAD, RedstoneMonstrosityHeadModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.LOFTY_CHEST, LoftyChestRenderer::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.BLACK_CRYSTAL, BlackCrystalRenderer::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.OMINOUS_STATUE, OminousStatueRenderer::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.BRAZIER_STATUE, OminousBrazierStatueRenderer::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.PLUSHIE, PlushieModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SPIKE, SpikeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HARPOON, HarpoonModel::createBodyLayer);
@@ -465,6 +467,9 @@ public class ClientInitEvents {
         BlockEntityRenderers.register(ModBlockEntities.PART_LIQUID, ModBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.NIGHT_BEACON, NightBeaconRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.VOID_BARREL, ModBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.MANDALA, MandalaRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.OMINOUS_STATUE, OminousStatueRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.OMINOUS_BRAZIER_STATUE, OminousBrazierStatueRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.TALL_SKULL, TallSkullBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.REDSTONE_GOLEM_SKULL, RedstoneGolemSkullBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.GRAVE_GOLEM_SKULL, GraveGolemSkullBlockEntityRenderer::new);

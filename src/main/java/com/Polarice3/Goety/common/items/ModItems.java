@@ -132,6 +132,7 @@ public class ModItems {
     public static final Item BLAST_FUNGUS = register("blast_fungus", BlastFungusItem::new);
     public static final Item BERSERK_FUNGUS = register("berserk_fungus", BerserkFungusItem::new);
     public static final Item WARTFUL_EGG = register("wartful_egg", WartlingEggItem::new);
+    public static final Item RED_MOSS_GROWTH = register("red_moss_growth", RedMossGrowthItem::new);
     public static final Item CHORUS_GROWTH = register("chorus_growth", ChorusGrowthItem::new);
     public static final Item QUICK_GROWING_SEED = register("quick_growing_seed", () -> new QuickGrowSeedItem(false));
     public static final Item POISON_QUILL_SEED = register("poison_quill_seed", () -> new QuickGrowSeedItem(true));
@@ -210,7 +211,7 @@ public class ModItems {
     public static final SingleStackItem RING_OF_THE_FORGE = register("ring_of_the_forge", RingItem::new);
     public static final SingleStackItem RING_OF_THE_DRAGON = register("ring_of_the_dragon", RingItem::new);
     public static final SingleStackItem PENDANT_OF_HUNGER = register("pendant_of_hunger", PendantOfHungerItem::new);
-    public static final SingleStackItem TARGETING_MONOCLE = register("targeting_monocle", SingleStackItem::new);
+    public static final SingleStackItem TARGETING_MONOCLE = register("targeting_monocle", TargetingMonocleItem::new);
     public static final SingleStackItem DARK_HAT = register("dark_hat", MagicHatItem::new);
     public static final SingleStackItem GRAND_TURBAN = register("grand_turban", MagicHatItem::new);
     public static final SingleStackItem FROST_CROWN = register("frost_crown", () -> new MagicCrownItem(SpellType.FROST));

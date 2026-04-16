@@ -33,6 +33,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -339,14 +340,14 @@ public class ItemEvents {
     }
 
     public static void usingItemEvents(LivingEntityUseItemEvent.Tick event) {
-        if (!event.getEntity().level.isClientSide) {
-            if (event.getItem().getItem() instanceof IWand && CuriosFinder.hasCurio(event.getEntity(), ModItems.TARGETING_MONOCLE)) {
-                Entity entity = MobUtil.getSingleTarget(event.getEntity().level, event.getEntity(), 16, 3);
-                if (entity instanceof LivingEntity living && !MobUtil.areAllies(entity, event.getEntity())) {
-                    event.getEntity().lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(living.getX(), living.getEyeY(), living.getZ()));
-                }
-            }
-        }
+//        if (!event.getEntity().level.isClientSide) {
+//            if (event.getItem().getItem() instanceof IWand && CuriosFinder.hasCurio(event.getEntity(), ModItems.TARGETING_MONOCLE)) {
+//                Entity entity = MobUtil.getSingleTarget(event.getEntity().level, event.getEntity(), 16, 3);
+//                if (entity instanceof LivingEntity living && !MobUtil.areAllies(entity, event.getEntity())) {
+//                    event.getEntity().lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(living.getX(), living.getEyeY(), living.getZ()));
+//                }
+//            }
+//        }
     }
 
     public static InteractionResult playerInteractBlockEvents(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
@@ -388,6 +389,24 @@ public class ItemEvents {
                 level.gameEvent(null, GameEvent.FLUID_PLACE, blockPos);
                 level.setBlockAndUpdate(blockPos, ModBlocks.END_SOIL.defaultBlockState());
                 return InteractionResult.sidedSuccess(level.isClientSide);
+            }
+        } else if (/*itemStack.canPerformAction(ToolActions.PICKAXE_DIG)*/ itemStack.is(ItemTags.PICKAXES) || itemStack.getItem() instanceof PickaxeItem) {
+            if (blockState.is(ModBlocks.COBBLED_OMINOUS_STONE_BLOCK)) {
+                if (blockHitResult.getDirection() != Direction.DOWN) {
+                    if (level.isEmptyBlock(blockPos.above())) {
+                        BlockState blockstate2 = ModBlocks.COBBLED_OMINOUS_STONE_PATH_BLOCK.defaultBlockState();
+                        level.playSound(player, blockPos, SoundEvents.UI_STONECUTTER_TAKE_RESULT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        if (!level.isClientSide) {
+                            level.setBlock(blockPos, blockstate2, 11);
+                            level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(player, blockstate2));
+                            if (player != null) {
+                                ItemHelper.hurtAndBreak(itemStack, 1, player);
+                                player.swing(hand);
+                            }
+                        }
+                        return InteractionResult.sidedSuccess(level.isClientSide);
+                    }
+                }
             }
         }
         return InteractionResult.PASS;

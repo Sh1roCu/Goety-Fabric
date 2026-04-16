@@ -24,7 +24,7 @@ import net.minecraft.world.level.material.MapColor;
 public class ChorusGrassBlock extends Block implements BonemealableBlock {
 
     public ChorusGrassBlock() {
-        super(ModBlocks.EndStoneProperties()
+        super(ModBlocks.endStoneProperties()
                 .mapColor(MapColor.COLOR_ORANGE)
                 .randomTicks()
                 .sound(ModSoundTypes.CHORUS_GRASS));

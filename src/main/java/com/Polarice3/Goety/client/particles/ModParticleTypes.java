@@ -107,6 +107,15 @@ public class ModParticleTypes {
     public static final SimpleParticleType WRAITH_FIRE = register("wraith_fire",
             () -> FabricParticleTypes.simple(false));
 
+    public static final SimpleParticleType SMALL_FIRE = register("small_fire",
+            () -> FabricParticleTypes.simple(false));
+
+    public static final SimpleParticleType SMALL_FIRE_DROP = register("small_fire_drop",
+            () -> FabricParticleTypes.simple(false));
+
+    public static final SimpleParticleType SMALL_FIRE_GROUND = register("small_fire_ground",
+            () -> FabricParticleTypes.simple(false));
+
     public static final SimpleParticleType BIG_FIRE = register("big_fire",
             () -> FabricParticleTypes.simple(false));
 
