@@ -1,13 +1,11 @@
 package com.Polarice3.Goety.init;
 
-import cn.sh1rocu.goety.api.event.CustomizeGuiOverlayEvent;
 import cn.sh1rocu.goety.api.event.EntityAddedLayerCallback;
 import cn.sh1rocu.goety.client.model.PerspectiveBakedModel;
 import cn.sh1rocu.goety.mixin.accessor.LivingEntityRendererAccessor;
 import cn.sh1rocu.goety.mixin.accessor.SheetsAccessor;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.items.magic.ITotem;
-import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.gui.overlay.CurrentFocusGui;
 import com.Polarice3.Goety.client.gui.overlay.DreadOverlay;
 import com.Polarice3.Goety.client.gui.overlay.RavagerRoarGui;
@@ -110,7 +108,6 @@ public class ClientInitEvents {
         MenuScreens.register(ModContainerType.DARK_ANVIL, DarkAnvilScreen::new);
         MenuScreens.register(ModContainerType.CRAFTING_FOCUS, CraftingScreen::new);
         ModKeybindings.init();
-        CustomizeGuiOverlayEvent.BOSS_EVENT_PROGRESS.register(BossBarEvent::renderBossBar);
 
         addWoodType(ModWoodType.HAUNTED);
         addWoodType(ModWoodType.ROTTEN);

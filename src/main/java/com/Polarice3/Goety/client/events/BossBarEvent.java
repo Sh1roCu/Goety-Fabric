@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.client.events;
 
-import cn.sh1rocu.goety.api.event.CustomizeGuiOverlayEvent;
+import cn.sh1rocu.goety.util.client.MinecraftUtil;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.entities.IRM;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
@@ -14,11 +14,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Mob;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Environment(EnvType.CLIENT)
 public class BossBarEvent {
@@ -29,24 +31,24 @@ public class BossBarEvent {
     protected static final ResourceLocation MINI_BOSS_BAR = Goety.location("textures/gui/miniboss_bar.png");
     public static Map<UUID, Mob> BOSS_BARS = new HashMap<>();
 
-    public static void renderBossBar(CustomizeGuiOverlayEvent.BossEventProgress event) {
+    public static void renderBossBar(GuiGraphics guiGraphics, BossEvent bossEvent, int x, int y, AtomicBoolean cancelled) {
         Minecraft minecraft = Minecraft.getInstance();
         if (MainConfig.SpecialBossBar.get()) {
             int i = minecraft.getWindow().getGuiScaledWidth();
-            if (BOSS_BARS.containsKey(event.getBossEvent().getId())) {
-                Mob boss = BOSS_BARS.get(event.getBossEvent().getId());
-                event.setCanceled(true);
+            if (BOSS_BARS.containsKey(bossEvent.getId())) {
+                Mob boss = BOSS_BARS.get(bossEvent.getId());
+                cancelled.set(true);
                 int k = i / 2 - 100;
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                drawBar(event.getGuiGraphics(), k, event.getY(), event.getPartialTick(), boss);
+                drawBar(guiGraphics, k, y, MinecraftUtil.getPartialTick(), boss);
                 Component itextcomponent = boss.getDisplayName();
                 int l = minecraft.font.width(itextcomponent);
                 int i1 = i / 2 - l / 2;
-                event.getGuiGraphics().drawString(minecraft.font, itextcomponent, i1, event.getY() - 9, 16777215);
-                if (event.getY() >= minecraft.getWindow().getGuiScaledHeight() / 3) {
+                guiGraphics.drawString(minecraft.font, itextcomponent, i1, y - 9, 16777215);
+                if (y >= minecraft.getWindow().getGuiScaledHeight() / 3) {
                     return;
                 }
-                event.setIncrement(12 + minecraft.font.lineHeight);
+                // event.setIncrement(12 + minecraft.font.lineHeight);
             }
         }
 

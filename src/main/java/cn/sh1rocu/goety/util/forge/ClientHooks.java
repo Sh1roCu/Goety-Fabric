@@ -1,19 +1,14 @@
 package cn.sh1rocu.goety.util.forge;
 
-import cn.sh1rocu.goety.api.event.CustomizeGuiOverlayEvent;
 import cn.sh1rocu.goety.api.event.MovementInputUpdateEvent;
 import cn.sh1rocu.goety.api.event.ViewportEvent;
-import cn.sh1rocu.goety.api.extension.client.ICustomGenericArmorModel;
 import cn.sh1rocu.goety.api.extension.client.ICustomArmorRenderer;
-import cn.sh1rocu.goety.util.client.MinecraftUtil;
-import com.mojang.blaze3d.platform.Window;
+import cn.sh1rocu.goety.api.extension.client.ICustomGenericArmorModel;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.player.Input;
@@ -29,13 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class ClientHooks {
-
-    public static CustomizeGuiOverlayEvent.BossEventProgress onCustomizeBossEventProgress(GuiGraphics guiGraphics, Window window, LerpingBossEvent bossInfo, int x, int y, int increment) {
-        CustomizeGuiOverlayEvent.BossEventProgress evt = new CustomizeGuiOverlayEvent.BossEventProgress(window, guiGraphics,
-                MinecraftUtil.getPartialTick(), bossInfo, x, y, increment);
-        CustomizeGuiOverlayEvent.BOSS_EVENT_PROGRESS.invoker().post(evt);
-        return evt;
-    }
 
     public static void onFogRender(FogRenderer.FogMode mode, FogType type, Camera camera, float partialTick, float renderDistance, float nearDistance, float farDistance, FogShape shape) {
         FluidState state = camera.getEntity().level().getFluidState(camera.getBlockPosition());
