@@ -1,6 +1,6 @@
 {
 	"parent": "goety:block/template_altar",
-	"loader": "forge:composite",
+	"loader": "porting_lib:composite",
 	"textures": {
 		"particle": "goety:block/dark_altar_crypt_stone"
 	},
@@ -19,7 +19,8 @@
 			"parent": "goety:block/template_altar",
 			"textures": {
 				"altar": "goety:block/dark_altar_activated"
-			}
+			},
+			"render_type": "cutout"
 		}
 	}
 }

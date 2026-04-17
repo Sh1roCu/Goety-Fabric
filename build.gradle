@@ -125,6 +125,9 @@ dependencies {
     modCompileOnly "vazkii.botania:Botania:1.20.1-445-FABRIC-SNAPSHOT"
 
     modCompileOnly "curse.maven:serene-seasons-291874:6398228"
+
+    modRuntimeOnly("maven.modrinth:sodium:mc1.20.1-0.5.13-fabric")
+    modRuntimeOnly("maven.modrinth:indium:1.0.36+mc1.20.1")
 }
 
 processResources {
