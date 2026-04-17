@@ -158,6 +158,14 @@ public class ModEvents {
 //                missingMapping.remap(ModItems.WATER_JET_FOCUS);
 //            }
 //        });
+//        event.getAllMappings(ForgeRegistries.Keys.BLOCKS).forEach(missingMapping -> {
+//            if (missingMapping.getKey().toString().equals("goety:soiled_oak_planks")) {
+//                missingMapping.remap(ModBlocks.SOILED_SPRUCE_PLANKS);
+//            }
+//            if (missingMapping.getKey().toString().equals("goety:soiled_oak_planks_heavy")) {
+//                missingMapping.remap(ModBlocks.SOILED_SPRUCE_PLANKS_HEAVY);
+//            }
+//        });
 //    }
 
     public static void onPlayerClone(ServerPlayer original, ServerPlayer player, boolean alive) {

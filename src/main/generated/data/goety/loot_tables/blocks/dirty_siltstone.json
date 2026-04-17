@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "goety:soiled_oak_planks"
+          "name": "goety:dirty_siltstone"
         }
       ],
       "rolls": 1.0
