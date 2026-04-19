@@ -14,13 +14,15 @@
             "parent": "goety:block/template_loot_urn",
             "textures": {
                 "urn": "goety:block/stash_urn"
-            }
+            },
+            "render_type": "cutout"
         },
         "emission": {
             "parent": "goety:block/template_loot_urn_glow",
             "textures": {
                 "glow": "goety:block/stash_urn_emission"
-            }
+            },
+            "render_type": "cutout"
         }
     }
 }

@@ -20,7 +20,8 @@
       "parent": "goety:block/glow_cross",
       "textures": {
         "cross": "goety:block/chorus_fern_glow"
-      }
+      },
+      "render_type": "cutout"
     }
   }
 }

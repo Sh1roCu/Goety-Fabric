@@ -20,7 +20,8 @@
       "parent": "goety:block/glow_cross",
       "textures": {
         "cross": "goety:block/tall_end_grass_glow"
-      }
+      },
+      "render_type": "cutout"
     }
   }
 }
