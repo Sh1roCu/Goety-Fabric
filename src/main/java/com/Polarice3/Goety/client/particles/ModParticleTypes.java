@@ -143,6 +143,9 @@ public class ModParticleTypes {
     public static final SimpleParticleType SMALL_NECRO_FIRE = register("small_necro_fire",
             () -> FabricParticleTypes.simple(false));
 
+    public static final SimpleParticleType SMALL_NECRO_FIRE_DROP = register("small_necro_fire_drop",
+            () -> FabricParticleTypes.simple(false));
+
     public static final SimpleParticleType NECRO_FLAME = register("necro_flame",
             () -> FabricParticleTypes.simple(false));
 

@@ -66,6 +66,7 @@ public class ClientSideInit extends SidedInit {
         registry.register(ModParticleTypes.NECRO_FIRE, FireParticle.Provider::new);
         registry.register(ModParticleTypes.NECRO_FIRE_DROP, FireParticle.Provider::new);
         registry.register(ModParticleTypes.SMALL_NECRO_FIRE, FireParticle.SmallProvider::new);
+        registry.register(ModParticleTypes.SMALL_NECRO_FIRE_DROP, FireParticle.SmallProvider::new);
         registry.register(ModParticleTypes.NECRO_FLAME, FlameParticle.Provider::new);
         registry.register(ModParticleTypes.DRAGON_FLAME, DragonFlameParticle.Provider::new);
         registry.register(ModParticleTypes.DRAGON_FLAME_DROP, FireParticle.EmberProvider::new);

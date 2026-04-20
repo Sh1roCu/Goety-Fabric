@@ -18,6 +18,7 @@ public class MiscImp implements IMisc {
     private int noHealTime = 0;
     private int shakeTime = 0;
     private int customFoodLevel = -1;
+    private int sunscreen = 0;
     private String customSpinTexture = "textures/entity/trident_riptide.png";
 
     @Override
@@ -154,6 +155,16 @@ public class MiscImp implements IMisc {
     @Override
     public void setCustomFoodLevel(int foodLevel) {
         this.customFoodLevel = foodLevel;
+    }
+
+    @Override
+    public int getSunscreen() {
+        return this.sunscreen;
+    }
+
+    @Override
+    public void setSunscreen(int ticks) {
+        this.sunscreen = ticks;
     }
 
     @Override

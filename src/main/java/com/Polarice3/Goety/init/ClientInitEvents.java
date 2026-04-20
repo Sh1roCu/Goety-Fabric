@@ -764,6 +764,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.VINE_HOOK, VineHookRenderer::new);
         EntityRendererRegistry.register(ModEntityType.SURVEY_EYE, TrapRenderer::new);
         EntityRendererRegistry.register(ModEntityType.CAMERA_SHAKE, TrapRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.SEAT, TrapRenderer::new);
     }
 
     private static void colorBlock() {

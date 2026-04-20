@@ -99,6 +99,9 @@ public class GoetyEffects {
     public static final MobEffect ELECTRIFIED = register("electrified",
             ElectrifiedEffect::new);
 
+    public static final MobEffect NECROSIS = register("necrosis",
+            () -> new GoetyBaseEffect(MobEffectCategory.NEUTRAL, 0x2f4e17));
+
     public static final MobEffect VOID_TOUCHED = register("void_touched",
             () -> new GoetyBaseEffect(MobEffectCategory.HARMFUL, 0));
 

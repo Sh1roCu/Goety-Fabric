@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
+import cn.sh1rocu.goety.api.extension.ICustomBlockPathType;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,12 +31,14 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
-public class FirethornBushBlock extends BushBlock implements BonemealableBlock {
+public class FirethornBushBlock extends BushBlock implements BonemealableBlock, ICustomBlockPathType {
     private static final float HURT_SPEED_THRESHOLD = 0.003F;
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
@@ -102,6 +106,7 @@ public class FirethornBushBlock extends BushBlock implements BonemealableBlock {
         }
     }
 
+    @Override
     public InteractionResult use(BlockState p_57275_, Level p_57276_, BlockPos p_57277_, Player p_57278_, InteractionHand p_57279_, BlockHitResult p_57280_) {
         int i = p_57275_.getValue(AGE);
         boolean flag = i == 3;
@@ -120,20 +125,29 @@ public class FirethornBushBlock extends BushBlock implements BonemealableBlock {
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_57282_) {
         p_57282_.add(AGE);
     }
 
+    @Override
     public boolean isValidBonemealTarget(LevelReader p_256056_, BlockPos p_57261_, BlockState p_57262_, boolean p_57263_) {
         return p_57262_.getValue(AGE) < 3;
     }
 
+    @Override
     public boolean isBonemealSuccess(Level p_222558_, RandomSource p_222559_, BlockPos p_222560_, BlockState p_222561_) {
         return true;
     }
 
+    @Override
     public void performBonemeal(ServerLevel p_222553_, RandomSource p_222554_, BlockPos p_222555_, BlockState p_222556_) {
         int i = Math.min(3, p_222556_.getValue(AGE) + 1);
         p_222553_.setBlock(p_222555_, p_222556_.setValue(AGE, Integer.valueOf(i)), 2);
+    }
+
+    @Override
+    public BlockPathTypes getBlockPathType(BlockState state, BlockGetter world, BlockPos pos, @Nullable Mob entity) {
+        return BlockPathTypes.DAMAGE_OTHER;
     }
 }

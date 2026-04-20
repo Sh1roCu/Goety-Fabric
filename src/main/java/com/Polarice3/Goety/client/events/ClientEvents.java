@@ -739,7 +739,8 @@ public class ClientEvents {
 
         if (!minecraft.options.hideGui && (player.hasEffect(GoetyEffects.SPASMS)
                 || player.hasEffect(GoetyEffects.CURSED))
-                || player.hasEffect(GoetyEffects.ACID_VENOM)) {
+                || player.hasEffect(GoetyEffects.ACID_VENOM)
+                || player.hasEffect(GoetyEffects.NECROSIS)) {
             setHearts(guiGraphics, cancelled);
         }
 
@@ -814,6 +815,8 @@ public class ClientEvents {
             heartX = 70;
         } else if (player.hasEffect(GoetyEffects.SPASMS)) {
             heartX = 34;
+        } else if (player.hasEffect(GoetyEffects.NECROSIS)){
+            heartX = 88;
         }
         float absorptionRemaining = (float) absorption;
 

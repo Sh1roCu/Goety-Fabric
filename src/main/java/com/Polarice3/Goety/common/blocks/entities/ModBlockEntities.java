@@ -87,6 +87,9 @@ public class ModBlockEntities {
     public static final BlockEntityType<SoulCandlestickBlockEntity> SOUL_CANDLESTICK = register("soul_candlestick",
             () -> BlockEntityType.Builder.of(SoulCandlestickBlockEntity::new, ModBlocks.SOUL_CANDLESTICK).build(null));
 
+    public static final BlockEntityType<NecroticCandlestickBlockEntity> NECROTIC_CANDLESTICK = register("necrotic_candlestick",
+            () -> BlockEntityType.Builder.of(NecroticCandlestickBlockEntity::new, ModBlocks.NECROTIC_GOLD_CANDLESTICK, ModBlocks.WALL_NECROTIC_GOLD_CANDLESTICK).build(null));
+
     public static final BlockEntityType<BrewCauldronBlockEntity> BREWING_CAULDRON = register("witch_cauldron",
             () -> BlockEntityType.Builder.of(BrewCauldronBlockEntity::new, ModBlocks.BREWING_CAULDRON).build(null));
 

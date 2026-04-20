@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.ai.AvoidTargetGoal;
 import com.Polarice3.Goety.common.entities.projectiles.IllBomb;
@@ -426,7 +427,7 @@ public class Minister extends HuntingIllagerEntity implements RangedAttackMob {
             }
             ServerParticleUtil.addAuraParticles(serverLevel, ParticleTypes.ENCHANT, this, 8.0F);
             for (LivingEntity living : serverLevel.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0F, 4.0F, 8.0F))) {
-                if (living.getMobType() == MobType.ILLAGER && living != this) {
+                if (living.getMobType() == MobType.ILLAGER && living != this && MobUtil.areAllies(this, living)) {
                     boolean flag = false;
                     if (living instanceof Mob mob) {
                         if (mob.getTarget() != this) {
@@ -713,7 +714,7 @@ public class Minister extends HuntingIllagerEntity implements RangedAttackMob {
         public void tick() {
             super.tick();
             for (AbstractIllager abstractIllager : Minister.this.getNearbyIllagers()) {
-                if (abstractIllager.isAlive() && abstractIllager.getMaxHealth() < Minister.this.getMaxHealth() && abstractIllager.getTarget() != Minister.this && (abstractIllager.getLastHurtByMob() == null || !abstractIllager.isAlliedTo(abstractIllager.getLastHurtByMob()))) {
+                if (MobUtil.areAllies(Minister.this, abstractIllager) && abstractIllager.isAlive() && abstractIllager.getMaxHealth() < Minister.this.getMaxHealth() && abstractIllager.getTarget() != Minister.this && (abstractIllager.getLastHurtByMob() == null || !abstractIllager.isAlliedTo(abstractIllager.getLastHurtByMob()))) {
                     abstractIllager.setTarget(null);
                     abstractIllager.setAggressive(false);
                     abstractIllager.getNavigation().stop();
@@ -725,9 +726,10 @@ public class Minister extends HuntingIllagerEntity implements RangedAttackMob {
 
         @Override
         protected void performSpellCasting() {
+            Minister.this.addEffect(new MobEffectInstance(GoetyEffects.RALLYING, MathHelper.secondsToTicks(20), 0, false, false));
             if (Minister.this.hasNearbyIllagers()) {
                 for (AbstractIllager abstractIllager : Minister.this.getNearbyIllagers()) {
-                    if (abstractIllager.isAlive() && abstractIllager.getTarget() != Minister.this && abstractIllager.getMaxHealth() < Minister.this.getMaxHealth()) {
+                    if (MobUtil.areAllies(Minister.this, abstractIllager) && abstractIllager.isAlive() && abstractIllager.getTarget() != Minister.this && abstractIllager.getMaxHealth() < Minister.this.getMaxHealth()) {
                         abstractIllager.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MathHelper.secondsToTicks(30)));
                     }
                 }
@@ -804,7 +806,7 @@ public class Minister extends HuntingIllagerEntity implements RangedAttackMob {
         public boolean canUse() {
             LivingEntity livingentity = Minister.this.getTarget();
             if (livingentity != null && livingentity.isAlive()) {
-                return !livingentity.hasEffect(MobEffects.WEAKNESS) && livingentity.canBeAffected(new MobEffectInstance(MobEffects.WEAKNESS)) && livingentity.distanceTo(Minister.this) <= 16.0F && super.canUse();
+                return !livingentity.hasEffect(MobEffects.WEAKNESS) && Minister.this.hasLineOfSight(livingentity) && livingentity.canBeAffected(new MobEffectInstance(MobEffects.WEAKNESS)) && livingentity.distanceTo(Minister.this) <= 16.0F && super.canUse();
             }
             return false;
         }

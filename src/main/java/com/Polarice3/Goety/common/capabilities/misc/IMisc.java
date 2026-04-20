@@ -57,4 +57,8 @@ public interface IMisc extends AutoSyncedComponent {
     int getCustomFoodLevel();
 
     void setCustomFoodLevel(int foodLevel);
+
+    int getSunscreen();
+
+    void setSunscreen(int ticks);
 }

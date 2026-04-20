@@ -38,6 +38,7 @@ import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.util.*;
 import com.Polarice3.Goety.common.entities.vehicle.ModBoat;
 import com.Polarice3.Goety.common.entities.vehicle.ModChestBoat;
+import com.Polarice3.Goety.common.entities.vehicle.SeatEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -1689,6 +1690,15 @@ public class ModEntityType {
                     .noSummon()
                     .sized(1.0F, 1.0F)
                     .updateInterval(Integer.MAX_VALUE));
+
+    public static final EntityType<SeatEntity> SEAT = register("seat",
+            FabricEntityTypeBuilder.<SeatEntity>create(MobCategory.MISC, SeatEntity::new)
+                    .fireImmune()
+                    .disableSummon()
+                    .trackRangeChunks(5)
+                    .trackedUpdateRate(Integer.MAX_VALUE)
+                    .forceTrackedVelocityUpdates(false)
+                    .dimensions(EntityDimensions.scalable(0.25F, 0.35F)));
 
     public static void init() {
 
