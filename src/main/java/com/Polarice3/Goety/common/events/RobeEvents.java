@@ -193,34 +193,25 @@ public class RobeEvents {
         }
     }
 
-    public static boolean attackEvent(LivingEntity victim, DamageSource damageSource, float amount) {
-        Entity source = damageSource.getEntity();
-        Entity direct = damageSource.getDirectEntity();
+    public static boolean attackEvent(LivingEntity victim, DamageSource originalDamageSource, float amount) {
+        Entity source = originalDamageSource.getEntity();
+        Entity direct = originalDamageSource.getDirectEntity();
         boolean cancelled = false;
         if (!victim.level.isClientSide) {
-            if (damageSource.is(DamageTypeTags.IS_FIRE)) {
+            if (originalDamageSource.is(DamageTypeTags.IS_FIRE)) {
                 LivingEntity source1 = null;
-                Entity direct1 = direct;
                 if (source instanceof LivingEntity living1) {
                     source1 = living1;
                 } else if (MobUtil.getOwner(source) != null) {
                     source1 = MobUtil.getOwner(source);
                 }
-                if (damageSource instanceof NoKnockBackDamageSource noKnockBackDamageSource) {
-                    if (noKnockBackDamageSource.getOwner() instanceof LivingEntity living1) {
-                        source1 = living1;
-                    } else if (MobUtil.getOwner(noKnockBackDamageSource.getOwner()) != null) {
-                        source1 = MobUtil.getOwner(noKnockBackDamageSource.getOwner());
-                    }
-                    direct1 = noKnockBackDamageSource.getDirectEntity();
-                }
                 if (CuriosFinder.hasNetherRobe(source1)) {
-                    if (victim.isInvulnerableTo(damageSource) || victim.hasEffect(MobEffects.FIRE_RESISTANCE)) {
-                        DamageSource magicFireBreath = ModDamageSource.magicFireBreath(direct1, source1);
+                    if (victim.isInvulnerableTo(originalDamageSource) || victim.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                        DamageSource damageSource = ModDamageSource.magicFireBreath(direct, source1);
                         if (CuriosFinder.hasUnholyRobe(source1)) {
-                            magicFireBreath = ModDamageSource.hellfire(direct1, source1);
+                            damageSource = ModDamageSource.hellfire(direct, source1);
                         }
-                        victim.hurt(magicFireBreath, amount);
+                        victim.hurt(damageSource, amount);
                         // event.setCanceled(true);
                         cancelled = true;
                     }
@@ -229,7 +220,7 @@ public class RobeEvents {
             if (amount > 0.0F) {
                 if (ItemConfig.VoidRobeTeleportChance.get() > 0) {
                     if (CuriosFinder.hasVoidRobe(victim)) {
-                        if (!victim.isInvulnerableTo(damageSource) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(victim)) {
+                        if (!victim.isInvulnerableTo(originalDamageSource) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(victim)) {
                             float chance = ItemConfig.VoidRobeTeleportChance.get() / 100.0F;
                             if (victim.getRandom().nextFloat() <= chance) {
                                 double d0 = victim.getX() + (victim.getRandom().nextDouble() - 0.5D) * ItemConfig.VoidRobeTeleportDistance.get();

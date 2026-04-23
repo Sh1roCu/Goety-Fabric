@@ -73,7 +73,6 @@ import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -919,6 +918,8 @@ public class ModEvents {
         }
     }
 
+    private static final String NO_KNOCKBACK_TAG = "goety:no_knockback";
+
     public static boolean attackEvent(LivingEntity victim, DamageSource damageSource, float amount) {
         Entity source = damageSource.getEntity();
         Entity direct = damageSource.getDirectEntity();
@@ -963,24 +964,10 @@ public class ModEvents {
             }
         }
 
-        if (damageSource instanceof NoKnockBackDamageSource noKnockBackDamageSource) {
-            if (noKnockBackDamageSource.getOwner() != null) {
-                if (noKnockBackDamageSource.getOwner() instanceof LivingEntity && !noKnockBackDamageSource.is(DamageTypeTags.NO_ANGER)) {
-                    victim.setLastHurtByMob((LivingEntity) noKnockBackDamageSource.getOwner());
-                }
-                if (noKnockBackDamageSource.getOwner() instanceof Player player) {
-                    victim.lastHurtByPlayer = player;
-                    victim.lastHurtByPlayerTime = 100;
-                }
-                if (noKnockBackDamageSource.getOwner() instanceof ServerPlayer) {
-                    CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayer) noKnockBackDamageSource.getOwner(), victim, noKnockBackDamageSource, amount, amount, false);
-                }
-                if (noKnockBackDamageSource.getOwner() instanceof IOwned owned) {
-                    if (owned.getMasterOwner() instanceof Player player) {
-                        victim.lastHurtByPlayer = player;
-                        victim.lastHurtByPlayerTime = 100;
-                    }
-                }
+        if (damageSource instanceof NoKnockBackDamageSource) {
+            if (!victim.level.isClientSide) {
+                CompoundTag tag = ((IEntityPersistentData) victim).goety$getPersistentData();
+                tag.putInt(NO_KNOCKBACK_TAG, victim.tickCount);
             }
         }
 
@@ -1104,8 +1091,7 @@ public class ModEvents {
         if (event.getAmount() > 0.0F) {
             float damageAmount = event.getAmount();
             if (event.getSource().is(ModDamageSource.LIFE_LEECH)
-                    && event.getSource() instanceof NoKnockBackDamageSource damageSource
-                    && damageSource.getOwner() instanceof LivingEntity livingEntity) {
+                    && event.getSource().getEntity() instanceof LivingEntity livingEntity) {
                 float percent = SpellConfig.LeechingPercent.get() / 100.0F;
                 livingEntity.heal(event.getAmount() * percent);
             }
@@ -1177,9 +1163,6 @@ public class ModEvents {
     public static void specialDeath(LivingEntity killed, DamageSource damageSource) {
         Entity killer = damageSource.getEntity();
         Level world = killed.getCommandSenderWorld();
-        if (damageSource instanceof NoKnockBackDamageSource noKnockBackDamageSource) {
-            killer = noKnockBackDamageSource.getOwner();
-        }
         if (killed instanceof PathfinderMob) {
             if (killed.hasEffect(GoetyEffects.GOLD_TOUCHED)) {
                 if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
@@ -1321,9 +1304,6 @@ public class ModEvents {
                     Player player = null;
                     Entity owner = event.getDamageSource().getEntity();
                     Entity direct = event.getDamageSource().getDirectEntity();
-                    if (event.getDamageSource() instanceof NoKnockBackDamageSource damageSource) {
-                        owner = damageSource.getOwner();
-                    }
                     if (owner instanceof Player player1) {
                         player = player1;
                     } else if (MobUtil.getOwner(owner) instanceof Player player1) {
@@ -1413,10 +1393,14 @@ public class ModEvents {
 
     public static void knockBackEvents(LivingKnockBackEvent event) {
         LivingEntity knocked = event.getEntity();
-        DamageSource lastDamage = knocked.getLastDamageSource();
-        if (lastDamage != null) {
-            if (lastDamage instanceof NoKnockBackDamageSource) {
-                event.setCanceled(true);
+        if (!knocked.level.isClientSide) {
+            CompoundTag tag = ((IEntityPersistentData) knocked).goety$getPersistentData();
+            if (tag.contains(NO_KNOCKBACK_TAG)) {
+                int stampedTick = tag.getInt(NO_KNOCKBACK_TAG);
+                if (knocked.tickCount - stampedTick <= 1) {
+                    event.setCanceled(true);
+                }
+                tag.remove(NO_KNOCKBACK_TAG);
             }
         }
     }
