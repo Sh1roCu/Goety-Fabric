@@ -1,5 +1,6 @@
 package cn.sh1rocu.goety.mixin.client;
 
+import cn.sh1rocu.goety.api.event.RenderArmEvent;
 import cn.sh1rocu.goety.api.event.RenderPlayerEvent;
 import cn.sh1rocu.goety.api.extension.client.ICustomArmPose;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -8,6 +9,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,5 +39,18 @@ public class PlayerRendererMixin {
         if (itemStack.getItem() instanceof ICustomArmPose custom) {
             ci.setReturnValue(custom.getArmPose(player, hand, itemStack));
         }
+    }
+
+    @Inject(method = "renderLeftHand", at = @At("HEAD"), cancellable = true)
+    private void goety$onRenderLeftArm(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+        var event = new RenderArmEvent(poseStack, buffer, packedLight, player, HumanoidArm.LEFT);
+        if (event.isCanceled()) ci.cancel();
+    }
+
+    @Inject(method = "renderRightHand", at = @At("HEAD"), cancellable = true)
+    private void goety$onRenderRightArm(PoseStack poseStack, MultiBufferSource buffer,
+                                        int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+        var event = new RenderArmEvent(poseStack, buffer, packedLight, player, HumanoidArm.RIGHT);
+        if (event.isCanceled()) ci.cancel();
     }
 }
