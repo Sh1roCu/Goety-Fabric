@@ -11,10 +11,7 @@ import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.hostile.Irk;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Crone;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Maverick;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Warlock;
+import com.Polarice3.Goety.common.entities.hostile.cultists.Cultist;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.entities.projectiles.BlastFungus;
@@ -26,6 +23,7 @@ import com.Polarice3.Goety.config.MainConfig;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModTags;
 import com.google.common.collect.Lists;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -369,7 +367,7 @@ public class MobUtil {
     }
 
     public static int getSummonLifespan(Level world) {
-        return 20 * (30 + world.random.nextInt(90));
+        return 20 * (30 + world.getRandom().nextInt(90));
     }
 
     public static List<EntityType<?>> getEntityTypesConfig(List<? extends String> config) {
@@ -728,7 +726,7 @@ public class MobUtil {
     }
 
     public static void shoot(Entity entity, double p_37266_, double p_37267_, double p_37268_, float p_37269_, float p_37270_) {
-        Vec3 vec3 = (new Vec3(p_37266_, p_37267_, p_37268_)).normalize().add(entity.level.random.triangle(0.0D, 0.0172275D * (double) p_37270_), entity.level.random.triangle(0.0D, 0.0172275D * (double) p_37270_), entity.level.random.triangle(0.0D, 0.0172275D * (double) p_37270_)).scale(p_37269_);
+        Vec3 vec3 = (new Vec3(p_37266_, p_37267_, p_37268_)).normalize().add(entity.level.getRandom().triangle(0.0D, 0.0172275D * (double) p_37270_), entity.level.getRandom().triangle(0.0D, 0.0172275D * (double) p_37270_), entity.level.getRandom().triangle(0.0D, 0.0172275D * (double) p_37270_)).scale(p_37269_);
         entity.setDeltaMovement(vec3);
     }
 
@@ -1231,6 +1229,34 @@ public class MobUtil {
         return MobUtil.calculateViewVector(0, entity.getYRot());
     }
 
+    public static Vec3 getLeftPos(Entity entity, double scale) {
+        Vec3 left = getHorizontalLeftLookAngle(entity);
+        double x = left.x * scale;
+        double z = left.z * scale;
+        return entity.position().add(x, 0, z);
+    }
+
+    public static Vec3 getRightPos(Entity entity, double scale) {
+        Vec3 right = getHorizontalRightLookAngle(entity);
+        double x = right.x * scale;
+        double z = right.z * scale;
+        return entity.position().add(x, 0, z);
+    }
+
+    public static Vec3 getFrontPos(Entity entity, double scale) {
+        Vec3 front = getHorizontalLookAngle(entity);
+        double x = front.x * scale;
+        double z = front.z * scale;
+        return entity.position().add(x, 0, z);
+    }
+
+    public static Vec3 getBackPos(Entity entity, double scale) {
+        Vec3 front = getHorizontalLookAngle(entity).reverse();
+        double x = front.x * scale;
+        double z = front.z * scale;
+        return entity.position().add(x, 0, z);
+    }
+
     public static void setRot(Entity entity, float p_19916_, float p_19917_) {
         entity.setYRot(p_19916_ % 360.0F);
         entity.setXRot(p_19917_ % 360.0F);
@@ -1467,7 +1493,7 @@ public class MobUtil {
     }
 
     public static boolean isWitchType(Entity target) {
-        return target instanceof Witch || target instanceof Warlock || target instanceof Maverick || target instanceof Heretic || target instanceof Crone || target.getType().is(ModTags.EntityTypes.WITCH_SET_NEUTRAL);
+        return target instanceof Witch || (target instanceof Cultist && !target.getType().is(ConventionalEntityTypeTags.BOSSES)) || target.getType().is(ModTags.EntityTypes.WITCH_SET_NEUTRAL);
     }
 
     public static void createWitherRose(LivingEntity target, @Nullable LivingEntity killer) {

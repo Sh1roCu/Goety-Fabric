@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
@@ -67,6 +68,19 @@ public enum ModArmorMaterials implements ArmorMaterial {
             ItemConfig.DarkArmorToughness.get().floatValue(),
             ItemConfig.DarkArmorKnockResist.get().floatValue(), () -> {
         return Ingredient.of(ModItems.DARK_ALLOY_INGOT);
+    }),
+    MALEFIC("malefic", ItemConfig.MaleficDurability.get(),
+            Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266652_) -> {
+                p_266652_.put(ArmorItem.Type.BOOTS, 0);
+                p_266652_.put(ArmorItem.Type.LEGGINGS, 0);
+                p_266652_.put(ArmorItem.Type.CHESTPLATE, 0);
+                p_266652_.put(ArmorItem.Type.HELMET, ItemConfig.MaleficHead.get());
+            }),
+            ItemConfig.MaleficEnchantability.get(),
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            ItemConfig.MaleficToughness.get().floatValue(),
+            ItemConfig.MaleficKnockResist.get().floatValue(), () -> {
+        return Ingredient.of(Items.BONE/*ConventionalItemTags.BONES*/);
     });
 
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};

@@ -105,7 +105,13 @@ public class ModLevelRegistry {
                                 .and(biome -> !biome.getBiomeRegistryEntry().is(ModTags.Biomes.MAVERICK_EXCLUDE_SPAWN))
                                 .and(biome -> MobsConfig.MaverickSpawnWeight.get() > 0),
                         builder -> builder.getSpawnSettings()
-                                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntityType.MAVERICK, MobsConfig.MaverickSpawnWeight.get(), MobsConfig.MaverickSpawnMinCount.get(), MobsConfig.MaverickSpawnMaxCount.get())));
+                                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntityType.MAVERICK, MobsConfig.MaverickSpawnWeight.get(), MobsConfig.MaverickSpawnMinCount.get(), MobsConfig.MaverickSpawnMaxCount.get())))
+                .add(ADD, rootPredicate
+                                .and(biome -> biome.getBiomeRegistryEntry().is(ModTags.Biomes.REPROBATE_SPAWN))
+                                .and(biome -> !biome.getBiomeRegistryEntry().is(ModTags.Biomes.REPROBATE_EXCLUDE_SPAWN))
+                                .and(biome -> MobsConfig.ReprobateSpawnWeight.get() > 0),
+                        builder -> builder.getSpawnSettings()
+                                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntityType.REPROBATE, MobsConfig.ReprobateSpawnWeight.get(), MobsConfig.ReprobateSpawnMinCount.get(), MobsConfig.ReprobateSpawnMaxCount.get())));
         // part2
         var rootPredicate2 = new Predicate<BiomeSelectionContext>() {
             @Override

@@ -5,10 +5,7 @@ import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.common.blocks.fluids.ModFluids;
 import com.Polarice3.Goety.common.entities.vehicle.ModBoat;
-import com.Polarice3.Goety.common.items.armor.BlackIronArmor;
-import com.Polarice3.Goety.common.items.armor.CursedKnightArmor;
-import com.Polarice3.Goety.common.items.armor.CursedPaladinArmor;
-import com.Polarice3.Goety.common.items.armor.DarkArmor;
+import com.Polarice3.Goety.common.items.armor.*;
 import com.Polarice3.Goety.common.items.block.HauntedArmorStandItem;
 import com.Polarice3.Goety.common.items.block.HauntedPaintingItem;
 import com.Polarice3.Goety.common.items.brew.BrewBag;
@@ -386,6 +383,7 @@ public class ModItems {
     public static final Item WITHER_SKULL_FOCUS = register("wither_skull_focus", () -> new MagicFocus(new WitherSkullSpell()));
     public static final Item GHASTLY_FOCUS = register("ghastly_focus", () -> new MagicFocus(new GhastSpell()));
     public static final Item BLAZING_FOCUS = register("blazing_focus", () -> new MagicFocus(new BlazeSpell()));
+    public static final Item HOGGING_FOCUS = register("hogging_focus", () -> new MagicFocus(new HoggingSpell()));
 
     /// Void
     public static final Item CALL_FOCUS = register("call_focus", CallFocus::new);
@@ -423,6 +421,8 @@ public class ModItems {
     public static final Item DARK_CHESTPLATE = register("dark_chestplate", () -> new DarkArmor(ArmorItem.Type.CHESTPLATE));
     public static final Item DARK_LEGGINGS = register("dark_leggings", () -> new DarkArmor(ArmorItem.Type.LEGGINGS));
     public static final Item DARK_BOOTS = register("dark_boots", () -> new DarkArmor(ArmorItem.Type.BOOTS));
+
+    public static final Item MALEFIC_HELM = register("malefic_helm", MaleficHelm::new);
 
     //Tools & Weapons
     public static final Item DARK_WAND = register("dark_wand", DarkWand::new);

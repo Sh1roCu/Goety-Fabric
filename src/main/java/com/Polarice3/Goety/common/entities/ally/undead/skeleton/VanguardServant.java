@@ -270,6 +270,13 @@ public class VanguardServant extends AbstractSkeletonServant {
         }
         if (this.isMeleeAttacking()) {
             ++this.attackTick;
+            if (!this.level.isClientSide && this.attackTick > 25) {
+                this.resetMeleeAttack();
+            }
+        } else {
+            if (this.attackTick != 0) {
+                this.attackTick = 0;
+            }
         }
         if (this.attackTick > 20) {
             this.setMeleeAttacking(false);
@@ -358,6 +365,12 @@ public class VanguardServant extends AbstractSkeletonServant {
 
     public boolean targetClose(LivingEntity enemy, double distToEnemySqr) {
         return (distToEnemySqr <= this.getAttackReachSqr(enemy) || this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.hasLineOfSight(enemy);
+    }
+
+    public void resetMeleeAttack() {
+        this.setVanguardFlags(1, false);
+        this.attackTick = 0;
+        this.level.broadcastEntityEvent(this, (byte) 5);
     }
 
     @Override
@@ -459,12 +472,16 @@ public class VanguardServant extends AbstractSkeletonServant {
 
         @Override
         public boolean canUse() {
-            return VanguardServant.this.getTarget() != null && VanguardServant.this.isMeleeAttacking();
+            return VanguardServant.this.getTarget() != null
+                    && VanguardServant.this.isMeleeAttacking()
+                    && VanguardServant.this.attackTick < 20;
         }
 
         @Override
         public boolean canContinueToUse() {
-            return VanguardServant.this.attackTick < 20;
+            return VanguardServant.this.isMeleeAttacking()
+                    && VanguardServant.this.attackTick < 20
+                    && VanguardServant.this.isAlive();
         }
 
         @Override
@@ -475,7 +492,7 @@ public class VanguardServant extends AbstractSkeletonServant {
 
         @Override
         public void stop() {
-            VanguardServant.this.setMeleeAttacking(false);
+            VanguardServant.this.resetMeleeAttack();
         }
 
         @Override

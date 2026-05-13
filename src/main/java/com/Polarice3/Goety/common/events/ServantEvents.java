@@ -420,10 +420,13 @@ public class ServantEvents {
         if (killed instanceof IOwned owned) {
             if (!killed.level.isClientSide) {
                 if (owned.canRevive(damageSource)) {
-                    killed.stopRiding();
-                    owned.startRevival();
-                    // event.setCanceled(true);
-                    cancelled = true;
+                    Entity revivalTarget = ServantUtil.peekReviveTarget(owned);
+                    if (revivalTarget != null) {
+                        killed.stopRiding();
+                        owned.startRevival();
+                        // event.setCanceled(true);
+                        cancelled = true;
+                    }
                 }
             }
         }

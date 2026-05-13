@@ -111,6 +111,9 @@ public class GoetyEffects {
     public static final MobEffect TREMOR_SENSE = register("tremor_sense",
             () -> new GoetyBaseEffect(MobEffectCategory.BENEFICIAL, 0));
 
+    public static final MobEffect HYSTERIA = register("hysteria",
+            HysteriaEffect::new);
+
     public static final MobEffect WOUNDED = register("wounded",
             () -> new BrewMobEffect(MobEffectCategory.HARMFUL, 0, false));
 

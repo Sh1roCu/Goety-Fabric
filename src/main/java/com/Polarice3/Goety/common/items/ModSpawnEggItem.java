@@ -6,7 +6,7 @@ import net.minecraft.world.item.SpawnEggItem;
 
 public class ModSpawnEggItem extends SpawnEggItem {
 
-    public ModSpawnEggItem(final EntityType<? extends Mob> entityTypeSupplier, int primaryColorIn, int secondaryColorIn, Properties builder) {
-        super(entityTypeSupplier, primaryColorIn, secondaryColorIn, builder);
+    public ModSpawnEggItem(final EntityType<? extends Mob> entityType, int backgroundColor, int highlightColor, Properties builder) {
+        super(entityType, backgroundColor, highlightColor, builder);
     }
 }

@@ -424,7 +424,7 @@ public class RedstoneGolem extends RaiderGolemServant {
 
     @Override
     public boolean canAnimateMove() {
-        return this.isCurrentAnimation(IDLE) || this.isCurrentAnimation(ATTACK);
+        return this.isCurrentAnimation(IDLE) || this.isCurrentAnimation(ATTACK) || this.isCurrentAnimation(SUMMON);
     }
 
     @Override
@@ -728,7 +728,7 @@ public class RedstoneGolem extends RaiderGolemServant {
 
         @Override
         public boolean canUse() {
-            return RedstoneGolem.this.getTarget() != null && RedstoneGolem.this.getTarget().isAlive();
+            return !RedstoneGolem.this.isSummoning() && RedstoneGolem.this.getTarget() != null && RedstoneGolem.this.getTarget().isAlive();
         }
 
         @Override

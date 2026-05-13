@@ -875,6 +875,16 @@ public class PotionEvents {
                 event.setResult(MobEffectEvent.Result.DENY);
             }
         }
+        if (event.getEffectInstance().getEffect() == MobEffects.POISON) {
+            if (event.getEntity().hasEffect(GoetyEffects.ACID_VENOM)) {
+                event.setResult(MobEffectEvent.Result.DENY);
+            }
+        }
+        if (event.getEffectInstance().getEffect() == GoetyEffects.HYSTERIA) {
+            if (event.getEntity().getType().is(ConventionalEntityTypeTags.BOSSES)) {
+                event.setResult(MobEffectEvent.Result.DENY);
+            }
+        }
         if (event.getEffectInstance().getEffect() == GoetyEffects.ILLAGUE) {
             if (event.getEntity().getType().is(EntityTypeTags.RAIDERS) || event.getEntity() instanceof PatrollingMonster) {
                 event.setResult(MobEffectEvent.Result.DENY);

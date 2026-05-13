@@ -268,6 +268,8 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SHIELD_DEBRIS, ShieldDebrisModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HELL_BLAST, HellBlastModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SCREAM, HellChantModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.POTION_CASE, ReprobateCarryModel::createCaseLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.POTION_BARREL, ReprobateCarryModel::createBarrelLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.VOID_SHOCK, VoidShockModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.VOID_SHOCK_BOMB, VoidShockBombModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SCATTER_MINE, ScatterMineModel::createBodyLayer);
@@ -290,8 +292,10 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.WARLOCK, WarlockModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HERETIC, HereticModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MAVERICK, MaverickModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.REPROBATE, ReprobateModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.CRONE, CroneModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MOD_WITCH, ModWitchModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HERESIARCH, HeresiarchModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.APOSTLE, ApostleModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.APOSTLE_SHADE, ApostleShadeRenderer.ApostleShadeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.ZOMBIE_VILLAGER_SERVANT, VillagerServantModel::createBodyLayer);
@@ -408,6 +412,7 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.BLACK_IRON_ARMOR_OUTER, BlackIronArmorModel::createOuterLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.DARK_ARMOR_INNER, DarkArmorModel::createInnerLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.DARK_ARMOR_OUTER, DarkArmorModel::createOuterLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MALEFIC_HELM, MaleficHelmModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SOUL_SHIELD, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(0.5F), false), 64, 64));
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SOUL_ARMOR, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(0.3F), false), 64, 64));
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.NAMELESS_STAFF, NamelessStaffModel::createBodyLayer);
@@ -496,6 +501,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.POISON_QUILL, PoisonQuillRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BONE_SHARD, (rendererManager) -> new BoneShardRenderer<>(rendererManager, itemRenderer));
         EntityRendererRegistry.register(ModEntityType.BREW, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.REPROBATE_CARRY, ReprobateCarryRenderer::new);
         EntityRendererRegistry.register(ModEntityType.SCYTHE, ScytheSlashRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MOD_DRAGON_FIREBALL, ModDragonFireballRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HAUNTED_SKULL_SHOT, HauntedSkullProjectileRenderer::new);
@@ -580,7 +586,9 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.WARTLING, WartlingRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HERETIC, HereticRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MAVERICK, MaverickRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.REPROBATE, ReprobateRenderer::new);
         EntityRendererRegistry.register(ModEntityType.CRONE, CroneRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.HERESIARCH, HeresiarchRenderer::new);
         EntityRendererRegistry.register(ModEntityType.APOSTLE, ApostleRenderer::new);
         EntityRendererRegistry.register(ModEntityType.SKELETON_VILLAGER_SERVANT, SkeletonVillagerServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.ZPIGLIN_SERVANT, ZPiglinRenderer::new);
@@ -647,6 +655,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.BOUND_STORM_CASTER, BoundStormCasterRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HAUNTED_ARMOR_SERVANT, HauntedArmorRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HAUNTED_SKULL, HauntedSkullRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.BURNING_HOGLIN, BurningHoglinRenderer::new);
         EntityRendererRegistry.register(ModEntityType.DOPPELGANGER, (render) -> new DoppelgangerRenderer(render, false));
         EntityRendererRegistry.register(ModEntityType.MINI_GHAST, MiniGhastRenderer::new);
         EntityRendererRegistry.register(ModEntityType.GHAST_SERVANT, GhastServantRenderer::new);
@@ -687,6 +696,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.WARLOCK_SERVANT, WarlockServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HERETIC_SERVANT, HereticServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MAVERICK_SERVANT, MaverickServantRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.REPROBATE_SERVANT, ReprobateServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BLACK_WOLF, BlackWolfRenderer::new);
         EntityRendererRegistry.register(ModEntityType.SKELETON_WOLF, SkeletonWolfRenderer::new);
         EntityRendererRegistry.register(ModEntityType.WINTER_WOLF, WinterWolfRenderer::new);
@@ -747,6 +757,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.MAGIC_LIGHTNING_TRAP, TrapRenderer::new);
         EntityRendererRegistry.register(ModEntityType.VOID_LIGHTNING_TRAP, TrapRenderer::new);
         EntityRendererRegistry.register(ModEntityType.UPDRAFT_BLAST, TrapRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.EFFECT_BLAST_TRAP, TrapRenderer::new);
         EntityRendererRegistry.register(ModEntityType.CUSHION, TrapRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MAGIC_GROUND, TrapRenderer::new);
         EntityRendererRegistry.register(ModEntityType.ACID_POOL, TrapRenderer::new);
@@ -773,7 +784,7 @@ public class ClientInitEvents {
                         lightReader != null && pos != null ?
                                 Minecraft.getInstance().level != null
                                         && Minecraft.getInstance().level.getBlockEntity(pos) instanceof BrewCauldronBlockEntity cauldronBlock
-                                        ? cauldronBlock.getColor() :
+                                ? cauldronBlock.getColor() :
                                         BiomeColors.getAverageWaterColor(lightReader, pos) : -1, ModBlocks.BREWING_CAULDRON);
 
         ColorProviderRegistry.BLOCK.register(

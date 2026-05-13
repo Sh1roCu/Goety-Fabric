@@ -476,8 +476,7 @@ public class MaverickServant extends CultistServant {
             }
 
             if (this.maverick.hurtTime != 0) {
-                if (this.maverick.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.Items.WITCH_CURRENCY)
-                        || this.maverick.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.Items.WITCH_BETTER_CURRENCY)) {
+                if (this.maverick.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.Items.WITCH_CURRENCY)) {
                     this.maverick.spawnAtLocation(this.maverick.getItemInHand(InteractionHand.OFF_HAND));
                     this.clearTrade();
                 }
@@ -499,7 +498,7 @@ public class MaverickServant extends CultistServant {
 
         @Override
         public boolean canUse() {
-            return this.maverick.getOffhandItem().is(ModTags.Items.WITCH_CURRENCY) || this.maverick.getOffhandItem().is(ModTags.Items.WITCH_BETTER_CURRENCY);
+            return this.maverick.getOffhandItem().is(ModTags.Items.WITCH_CURRENCY);
         }
 
         @Override

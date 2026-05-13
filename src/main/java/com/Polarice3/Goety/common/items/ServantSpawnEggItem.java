@@ -40,8 +40,8 @@ import java.util.Optional;
 
 public class ServantSpawnEggItem extends SpawnEggItem {
 
-    public ServantSpawnEggItem(final EntityType<? extends Mob> entityTypeSupplier, int primaryColorIn, int secondaryColorIn, Properties builder) {
-        super(entityTypeSupplier, primaryColorIn, secondaryColorIn, builder);
+    public ServantSpawnEggItem(final EntityType<? extends Mob> entityTypeSupplier, int backgroundColor, int highlightColor, Properties builder) {
+        super(entityTypeSupplier, backgroundColor, highlightColor, builder);
     }
 
     @Override

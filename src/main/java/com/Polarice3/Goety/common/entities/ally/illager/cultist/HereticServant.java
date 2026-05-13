@@ -86,7 +86,7 @@ public class HereticServant extends CultistServant implements IHeretic {
                 if (!HereticServant.this.isRemoved()) {
                     if (p_282184_ == GameEvent.ENTITY_DIE) {
                         Entity sourceEntity = p_283014_.sourceEntity();
-                        if (sourceEntity instanceof Mob mob && !(mob instanceof IOwned)) {
+                        if (sourceEntity instanceof Mob mob && !(mob instanceof IOwned) && !(mob instanceof IHeretic)) {
                             HereticServant.this.getConvokePos().add(mob.position());
                             return true;
                         }
@@ -409,9 +409,9 @@ public class HereticServant extends CultistServant implements IHeretic {
                 }
             }
         }
-        if (isOwner) {
+        /*if (isOwner) {
             return ServantUtil.equipServantArmor(pPlayer, this, itemstack, super.mobInteract(pPlayer, pHand));
-        }
+        }*/
         return super.mobInteract(pPlayer, pHand);
     }
 
@@ -474,7 +474,7 @@ public class HereticServant extends CultistServant implements IHeretic {
             if (this.chantTime % 10 == 0) {
                 HellChant hellChant = ModEntityType.HELL_CHANT.create(this.heretic.level);
                 if (hellChant != null) {
-                    hellChant.setExtraDamage(3.0F);
+                    hellChant.setExtraDamage((float) this.heretic.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     if (this.heretic.level.getDifficulty() == Difficulty.HARD) {
                         hellChant.setBurning(1);
                     }
@@ -553,10 +553,12 @@ public class HereticServant extends CultistServant implements IHeretic {
                 try {
                     if (this.targetPos != null) {
                         try {
-                            for (HereticServant heretic1 : this.heretic.level.getEntitiesOfClass(HereticServant.class, this.heretic.getBoundingBox().inflate(this.heretic.getAttributeValue(Attributes.FOLLOW_RANGE)))) {
-                                if (heretic1 != this.heretic) {
-                                    if (!heretic1.getConvokePos().isEmpty()) {
-                                        heretic1.getConvokePos().remove(this.targetPos);
+                            for (LivingEntity livingEntity : this.heretic.level.getEntitiesOfClass(LivingEntity.class, this.heretic.getBoundingBox().inflate(this.heretic.getAttributeValue(Attributes.FOLLOW_RANGE)), livingEntity -> livingEntity instanceof IHeretic)) {
+                                if (livingEntity instanceof IHeretic heretic1) {
+                                    if (heretic1 != this.heretic) {
+                                        if (!heretic1.getConvokePos().isEmpty()) {
+                                            heretic1.getConvokePos().remove(this.targetPos);
+                                        }
                                     }
                                 }
                             }

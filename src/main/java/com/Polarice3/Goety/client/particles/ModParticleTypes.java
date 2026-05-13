@@ -29,6 +29,9 @@ public class ModParticleTypes {
     public static final SimpleParticleType DOOM_DEATH = register("doom_death",
             () -> FabricParticleTypes.simple(false));
 
+    public static final SimpleParticleType HYSTERIA = register("hysteria",
+            () -> FabricParticleTypes.simple(false));
+
     public static final SimpleParticleType HEAL_EFFECT = register("heal",
             () -> FabricParticleTypes.simple(false));
 
@@ -240,7 +243,7 @@ public class ModParticleTypes {
             () -> FabricParticleTypes.simple(true));
 
     public static final SimpleParticleType SPELL_CLOUD = register("spell_cloud",
-            () -> FabricParticleTypes.simple(false));
+            () -> FabricParticleTypes.simple(true));
 
     public static final SimpleParticleType DROPLET = register("droplet",
             () -> FabricParticleTypes.simple(true));

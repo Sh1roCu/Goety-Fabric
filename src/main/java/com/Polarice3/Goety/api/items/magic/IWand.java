@@ -17,6 +17,8 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface IWand extends FabricItem {
     String SOULUSE = "Soul Use";
@@ -29,6 +31,12 @@ public interface IWand extends FabricItem {
     String SHOTS = "Shots";
 
     SpellType getSpellType();
+
+    default List<SpellType> getSpellTypes() {
+        List<SpellType> list = new ArrayList<>();
+        list.add(this.getSpellType());
+        return list;
+    }
 
     static ItemStack getFocus(ItemStack itemstack) {
         SoulUsingItemHandler handler = SoulUsingItemHandler.get(itemstack);

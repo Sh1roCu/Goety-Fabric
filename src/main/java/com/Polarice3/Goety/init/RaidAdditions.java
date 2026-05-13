@@ -27,6 +27,9 @@ public class RaidAdditions {
         if (MobsConfig.MaverickRaid.get()) {
             builder.addEnum("GOETY_MAVERICK", () -> new Object[]{ModEntityType.MAVERICK, getWaves(MobsConfig.MaverickRaidCount.get())});
         }
+        if (MobsConfig.ReprobateRaid.get()) {
+            builder.addEnum("GOETY_REPROBATE", ModEntityType.REPROBATE, MobsConfig.ReprobateRaidCount.get());
+        }
         if (MobsConfig.HereticRaid.get()) {
             builder.addEnum("GOETY_HERETIC", () -> new Object[]{ModEntityType.HERETIC, getWaves(MobsConfig.HereticRaidCount.get())});
         }

@@ -1,11 +1,13 @@
 package com.Polarice3.Goety.common.entities.hostile.servants;
 
+import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.neutral.SummonedFlying;
 import com.Polarice3.Goety.common.entities.projectiles.HellBlast;
 import com.Polarice3.Goety.common.entities.projectiles.Lavaball;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.init.ModMobType;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.ServerParticleUtil;
@@ -78,6 +80,16 @@ public class Malghast extends SummonedFlying {
     @Override
     public MobType getMobType() {
         return ModMobType.NETHER;
+    }
+
+    @Nullable
+    @Override
+    public EntityType<?> getVariant(@Nullable Player player, Level level, BlockPos blockPos) {
+        EntityType<?> entityType = ModEntityType.GHAST_SERVANT;
+        if (player != null && CuriosFinder.hasUnholySet(player)) {
+            entityType = ModEntityType.MALGHAST;
+        }
+        return entityType;
     }
 
     @Override
@@ -357,10 +369,14 @@ public class Malghast extends SummonedFlying {
 
                     if (this.shotTimes) {
                         fireballentity = new HellBlast(this.ghast, d2, d3, d4, world);
+                        if (fireballentity instanceof HellBlast hellBlast) {
+                            hellBlast.setDamage(AttributesConfig.MalghastDamage.get().floatValue() + this.ghast.getFireBallDamage());
+                        }
                         charge = -20;
                     } else {
                         fireballentity = new Lavaball(world, this.ghast, d2, d3, d4);
                         if (fireballentity instanceof Lavaball lavaball) {
+                            lavaball.setDamage(AttributesConfig.MalghastDamage.get().floatValue() + this.ghast.getFireBallDamage());
                             lavaball.setExplosionPower(power);
                             lavaball.setDangerous(world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING));
                         }

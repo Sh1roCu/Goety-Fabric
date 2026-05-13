@@ -20,6 +20,7 @@ public class ClientSideInit extends SidedInit {
         registry.register(ModParticleTypes.PLAGUE_EFFECT, SpellParticle.Provider::new);
         registry.register(ModParticleTypes.DOOM, SpellParticle.Provider::new);
         registry.register(ModParticleTypes.DOOM_DEATH, DoomDeathParticle.Provider::new);
+        registry.register(ModParticleTypes.HYSTERIA, SpellParticle.Provider::new);
         registry.register(ModParticleTypes.WHITE_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
         registry.register(ModParticleTypes.BULLET_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
         registry.register(ModParticleTypes.NECRO_EFFECT, AdditiveSpellParticle.AlphaProvider::new);

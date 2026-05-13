@@ -62,17 +62,29 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Learned item capabilities from codes made by @vemerion & @MrCrayfish
  */
 public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomArmPose, IForgeHandTransform {
     public SpellType spellType;
+    public List<SpellType> list = new ArrayList<>();
+
+    public DarkWand(Properties properties, SpellType... spellTypes) {
+        super(properties);
+        Optional<SpellType> first = Arrays.stream(spellTypes).findFirst();
+        first.ifPresent(type -> this.spellType = type);
+        this.list = List.of(spellTypes);
+    }
 
     public DarkWand(Properties properties, SpellType spellType) {
         super(properties);
         this.spellType = spellType;
+        this.list.add(spellType);
     }
 
     public DarkWand(SpellType spellType) {
@@ -83,8 +95,14 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
         this(SpellType.NONE);
     }
 
+    @Override
     public SpellType getSpellType() {
         return this.spellType;
+    }
+
+    @Override
+    public List<SpellType> getSpellTypes() {
+        return this.list;
     }
 
     public static Properties wandProperties() {

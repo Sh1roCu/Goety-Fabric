@@ -305,6 +305,9 @@ public class ServantSpawnEggs {
     public static final ServantSpawnEggItem MAVERICK_SERVANT_SPAWN_EGG = ModItems.register("maverick_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.MAVERICK_SERVANT, 0x92a7cd, 0x1a2524, egg()));
 
+    public static final ServantSpawnEggItem REPROBATE_SERVANT_SPAWN_EGG = ModItems.register("reprobate_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(ModEntityType.REPROBATE_SERVANT, 0x924663, 0x150d0c, egg()));
+
     public static final ServantSpawnEggItem PRISONER_SPAWN_EGG = ModItems.register("prisoner_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.PRISONER, 0x71544d, 0x2d4a49, egg()));
 

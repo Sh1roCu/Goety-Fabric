@@ -7,10 +7,7 @@ import com.Polarice3.Goety.common.entities.ally.ender.SnarelingServant;
 import com.Polarice3.Goety.common.entities.ally.ender.WatchlingServant;
 import com.Polarice3.Goety.common.entities.ally.golem.*;
 import com.Polarice3.Goety.common.entities.ally.illager.*;
-import com.Polarice3.Goety.common.entities.ally.illager.cultist.HereticServant;
-import com.Polarice3.Goety.common.entities.ally.illager.cultist.MaverickServant;
-import com.Polarice3.Goety.common.entities.ally.illager.cultist.WarlockServant;
-import com.Polarice3.Goety.common.entities.ally.illager.cultist.WitchServant;
+import com.Polarice3.Goety.common.entities.ally.illager.cultist.*;
 import com.Polarice3.Goety.common.entities.ally.illager.raider.*;
 import com.Polarice3.Goety.common.entities.ally.spider.*;
 import com.Polarice3.Goety.common.entities.ally.undead.*;
@@ -23,10 +20,7 @@ import com.Polarice3.Goety.common.entities.boss.Vizier;
 import com.Polarice3.Goety.common.entities.deco.HauntedArmorStand;
 import com.Polarice3.Goety.common.entities.deco.HauntedPainting;
 import com.Polarice3.Goety.common.entities.hostile.*;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Crone;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Maverick;
-import com.Polarice3.Goety.common.entities.hostile.cultists.Warlock;
+import com.Polarice3.Goety.common.entities.hostile.cultists.*;
 import com.Polarice3.Goety.common.entities.hostile.ender.Blastling;
 import com.Polarice3.Goety.common.entities.hostile.ender.Endersent;
 import com.Polarice3.Goety.common.entities.hostile.ender.Snareling;
@@ -142,6 +136,12 @@ public class ModEntityType {
     public static final EntityType<ThrownBrew> BREW = register("brew",
             EntityType.Builder.<ThrownBrew>of(ThrownBrew::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10));
+
+    public static final EntityType<ReprobateCarry> REPROBATE_CARRY = register("reprobate_carry",
+            EntityType.Builder.<ReprobateCarry>of(ReprobateCarry::new, MobCategory.MISC)
+                    .sized(0.75F, 0.75F)
                     .clientTrackingRange(4)
                     .updateInterval(10));
 
@@ -608,9 +608,19 @@ public class ModEntityType {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8));
 
+    public static final EntityType<Reprobate> REPROBATE = register("reprobate",
+            EntityType.Builder.of(Reprobate::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8));
+
     public static final EntityType<Crone> CRONE = register("crone",
             EntityType.Builder.of(Crone::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8));
+
+    public static final EntityType<Heresiarch> HERESIARCH = register("heresiarch",
+            EntityType.Builder.of(Heresiarch::new, MobCategory.MONSTER)
+                    .sized(0.75F, 2.4375F)
                     .clientTrackingRange(8));
 
     public static final EntityType<SkeletonVillagerServant> SKELETON_VILLAGER_SERVANT = register("skeleton_villager_servant",
@@ -953,6 +963,12 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .fireImmune());
 
+    public static final EntityType<BurningHoglin> BURNING_HOGLIN = register("burning_hoglin",
+            EntityType.Builder.of(BurningHoglin::new, MobCategory.MONSTER)
+                    .sized(1.05F, 1.05F)
+                    .clientTrackingRange(8)
+                    .fireImmune());
+
     public static final EntityType<Doppelganger> DOPPELGANGER = register("doppelganger",
             EntityType.Builder.of(Doppelganger::new, MobCategory.MISC)
                     .sized(0.6F, 1.95F)
@@ -1173,6 +1189,11 @@ public class ModEntityType {
 
     public static final EntityType<MaverickServant> MAVERICK_SERVANT = register("maverick_servant",
             EntityType.Builder.of(MaverickServant::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8));
+
+    public static final EntityType<ReprobateServant> REPROBATE_SERVANT = register("reprobate_servant",
+            EntityType.Builder.of(ReprobateServant::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8));
 
@@ -1513,6 +1534,13 @@ public class ModEntityType {
 
     public static final EntityType<UpdraftBlast> UPDRAFT_BLAST = register("updraft_blast",
             EntityType.Builder.<UpdraftBlast>of(UpdraftBlast::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(1.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE));
+
+    public static final EntityType<EffectBlastTrap> EFFECT_BLAST_TRAP = register("effect_blast_trap",
+            EntityType.Builder.<EffectBlastTrap>of(EffectBlastTrap::new, MobCategory.MISC)
                     .fireImmune()
                     .sized(1.0F, 0.5F)
                     .clientTrackingRange(10)

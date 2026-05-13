@@ -8,9 +8,11 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -49,6 +51,13 @@ public class SRepositionPacket {
                     entity.xOld = x;
                     entity.yOld = y;
                     entity.zOld = z;
+                    entity.setDeltaMovement(Vec3.ZERO);
+                    if (entity instanceof LocalPlayer) {
+                        return;
+                    }
+                    if (entity instanceof LivingEntity living) {
+                        living.lerpTo(x, y, z, entity.getYRot(), entity.getXRot(), 0, false);
+                    }
                 }
             }
         });

@@ -109,7 +109,7 @@ public abstract class Spell implements ISpell {
     }
 
     public boolean rightStaff(ItemStack staff) {
-        return staff.getItem() instanceof IWand darkWand && darkWand.getSpellType() == getSpellType();
+        return staff.getItem() instanceof IWand darkWand && darkWand.getSpellTypes().contains(this.getSpellType());
     }
 
     @Override
@@ -189,6 +189,8 @@ public abstract class Spell implements ISpell {
                 if (stack.is(ModItems.NAMELESS_STAFF)) {
                     range = 3;
                     color = 0xa7fc3e;
+                } else if (this.typeStaff(stack, SpellType.NECROMANCY)) {
+                    color = 0x8FE6DF;
                 }
                 if (caster instanceof Player player) {
                     for (int i = 0; i < (caster.getRandom().nextFloat() < 0.1F ? 3 : 1); i++) {
