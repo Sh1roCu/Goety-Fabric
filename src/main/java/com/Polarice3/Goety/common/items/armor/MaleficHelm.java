@@ -79,7 +79,7 @@ public class MaleficHelm extends ArmorItem implements ISoulDiscount, IPersist, I
     @Override
     public int getSoulDiscount(EquipmentSlot equipmentSlot, ItemStack stack) {
         if (this.isNotBroken(stack)) {
-            return 2;
+            return 5;
         } else {
             return 0;
         }

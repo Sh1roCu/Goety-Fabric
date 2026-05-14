@@ -296,7 +296,8 @@ public class CuriosFinder {
         return (hasWitchSet(livingEntity) && ItemConfig.WitchSetWitchNeutral.get())
                 || (hasWarlockRobe(livingEntity) && ItemConfig.WarlockRobeWitchNeutral.get())
                 || (hasNetherRobe(livingEntity) && ItemConfig.NetherRobeWitchNeutral.get())
-                || (hasUnholyRobe(livingEntity) || hasUnholyHat(livingEntity));
+                || (hasUnholyRobe(livingEntity) || hasUnholyHat(livingEntity))
+                || ItemHelper.hasMaleficHelm(livingEntity);
     }
 
     public static boolean hasWitchSet(LivingEntity livingEntity) {
