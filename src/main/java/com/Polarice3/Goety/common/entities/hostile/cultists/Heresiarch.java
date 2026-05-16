@@ -17,10 +17,12 @@ import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.common.network.server.SRepositionPacket;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.config.MainConfig;
+import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.*;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -62,6 +64,7 @@ import java.util.Objects;
 
 public class Heresiarch extends Cultist {
     private static final EntityDataAccessor<Integer> ANIM_STATE = SynchedEntityData.defineId(Heresiarch.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> START_TELEPORTING = SynchedEntityData.defineId(Heresiarch.class, EntityDataSerializers.BOOLEAN);
     public static String IDLE = "idle";
     public static String BLESS = "bless";
     public static String SUMMON = "summon";
@@ -80,7 +83,7 @@ public class Heresiarch extends Cultist {
     public int meleeCool;
     public int fightTick;
     public int aboutToTeleport = 0;
-    public boolean startTeleporting;
+    public float runeScale, prevRuneScale;
     private final ModServerBossInfo bossInfo;
     public AnimationState idleAnimationState = new AnimationState();
     public AnimationState blessAnimationState = new AnimationState();
@@ -91,10 +94,24 @@ public class Heresiarch extends Cultist {
     public AnimationState meleeAnimationState = new AnimationState();
     public AnimationState chantAnimationState = new AnimationState();
 
+    public final List<Pair<Vec3, ModelSnapshot>> trailSnapshots = new ArrayList<>(50);
+    public float lastTrailTick = 0;
+
+    public boolean shouldAddTrailSnapshot() {
+        if (!MobsConfig.HeresiarchAfterImage.get()) {
+            return false;
+        }
+        return Mth.degreesDifferenceAbs(getYRot(), yBodyRot) < 45
+                && Mth.degreesDifferenceAbs(getYRot(), yBodyRotO) < 45
+                && Mth.degreesDifferenceAbs(yBodyRot, yBodyRotO) < 45
+                && this.isStartTeleporting();
+    }
+
     public Heresiarch(EntityType<? extends Cultist> type, Level worldIn) {
         super(type, worldIn);
         this.bossInfo = new ModServerBossInfo(this, BossEvent.BossBarColor.RED, false, false);
         this.xpReward = 99;
+        this.noCulling = true;
     }
 
     @Override
@@ -146,6 +163,7 @@ public class Heresiarch extends Cultist {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIM_STATE, 0);
+        this.entityData.define(START_TELEPORTING, false);
     }
 
     @Override
@@ -233,6 +251,14 @@ public class Heresiarch extends Cultist {
     @Nullable
     public AbstractObsidianMonolith getMonolith() {
         return this.monolith;
+    }
+
+    public void setStartTeleporting(boolean startTeleporting) {
+        this.entityData.set(START_TELEPORTING, startTeleporting);
+    }
+
+    public boolean isStartTeleporting() {
+        return this.entityData.get(START_TELEPORTING);
     }
 
     public void setAnimationState(String input) {
@@ -385,6 +411,13 @@ public class Heresiarch extends Cultist {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
         this.bossInfo.setVisible(!this.isCurrentAnimation(CHANT));
         if (this.level.isClientSide) {
+            this.prevRuneScale = this.runeScale;
+            if (this.isCurrentAnimation(Heresiarch.BARRAGE)) {
+                this.runeScale += 0.3F;
+            } else {
+                this.runeScale -= 0.2F;
+            }
+            this.runeScale = Mth.clamp(this.runeScale, 0, 1);
             this.idleAnimationState.animateWhen((this.isCurrentAnimation(IDLE) || this.isCurrentAnimation(INSPECT)) && !this.walkAnimation.isMoving(), this.tickCount);
         }
     }
@@ -441,14 +474,14 @@ public class Heresiarch extends Cultist {
                     this.setMonolith(null);
                 }
             }
-            if (this.startTeleporting) {
+            if (this.isStartTeleporting()) {
                 ++this.aboutToTeleport;
                 int time = MobUtil.healthIsHalved(this) ? 30 : 60;
                 if (this.aboutToTeleport >= time && !this.isCurrentAnimation(MELEE)) {
                     if (this.getTarget() != null) {
                         this.teleport();
                     }
-                    this.startTeleporting = false;
+                    this.setStartTeleporting(false);
                 }
             } else {
                 if (this.aboutToTeleport > 0) {
@@ -480,6 +513,11 @@ public class Heresiarch extends Cultist {
             itementity.setExtendedLifetime();
         }
 
+    }
+
+    @Override
+    protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
+        return 2.25F;
     }
 
     protected void teleport() {
@@ -622,7 +660,7 @@ public class Heresiarch extends Cultist {
 
         @Override
         public boolean canUse() {
-            return this.getTarget() != null && this.heresiarch.hasLineOfSight(this.getTarget()) && !this.heresiarch.startTeleporting && this.heresiarch.isCurrentAnimation(IDLE);
+            return this.getTarget() != null && this.heresiarch.hasLineOfSight(this.getTarget()) && !this.heresiarch.isStartTeleporting() && this.heresiarch.isCurrentAnimation(IDLE);
         }
 
         @Override
@@ -657,7 +695,7 @@ public class Heresiarch extends Cultist {
         public void stop() {
             super.stop();
             this.heresiarch.setAnimationState(IDLE);
-            this.heresiarch.startTeleporting = true;
+            this.heresiarch.setStartTeleporting(true);
         }
     }
 
@@ -676,7 +714,7 @@ public class Heresiarch extends Cultist {
                     }
                 }
             }
-            return this.heresiarch.startTeleporting
+            return this.heresiarch.isStartTeleporting()
                     && this.heresiarch.aboutToTeleport > 0
                     && this.heresiarch.isCurrentAnimation(IDLE);
         }
@@ -707,7 +745,7 @@ public class Heresiarch extends Cultist {
 
         @Override
         public boolean canUse() {
-            if (this.heresiarch.startTeleporting || this.heresiarch.isCurrentAnimation(IDLE)) {
+            if (this.heresiarch.isStartTeleporting() || this.heresiarch.isCurrentAnimation(IDLE)) {
                 if (this.heresiarch.meleeCool <= 0) {
                     if (this.getTarget() != null) {
                         return this.heresiarch.isWithinMeleeAttackRange(this.getTarget());
@@ -758,7 +796,7 @@ public class Heresiarch extends Cultist {
             this.meleeTick = 0;
             this.heresiarch.meleeCool = MathHelper.secondsToTicks(5);
             this.heresiarch.setAnimationState(IDLE);
-            this.heresiarch.startTeleporting = true;
+            this.heresiarch.setStartTeleporting(true);
         }
     }
 

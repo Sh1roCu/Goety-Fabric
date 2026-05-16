@@ -296,6 +296,7 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.CRONE, CroneModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MOD_WITCH, ModWitchModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HERESIARCH, HeresiarchModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HERESIARCH_SHADOW, HeresiarchModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.APOSTLE, ApostleModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.APOSTLE_SHADE, ApostleShadeRenderer.ApostleShadeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.ZOMBIE_VILLAGER_SERVANT, VillagerServantModel::createBodyLayer);

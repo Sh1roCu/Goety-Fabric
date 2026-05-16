@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
-import cn.sh1rocu.goety.api.extension.IEntityAdditionalSpawnData;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ModEntityType;
@@ -8,14 +7,15 @@ import com.Polarice3.Goety.config.SpellConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MathHelper;
 import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.Goety.utils.TrailEffect;
 import com.Polarice3.Goety.utils.WandUtil;
+import com.mojang.math.Axis;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -25,11 +25,18 @@ import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 public class SurgingOrb extends SpellHurtingProjectile {
     public static final EntityDataAccessor<Boolean> DATA_ORANGE = SynchedEntityData.defineId(SurgingOrb.class, EntityDataSerializers.BOOLEAN);
     public boolean staff = false;
+    public float clientScale, prevClientScale;
+
+    public TrailEffect trailA = new TrailEffect(0.05F, 1.75F);
+    public TrailEffect trailB = new TrailEffect(0.05F, 1.75F);
+    public TrailEffect trailC = new TrailEffect(0.05F, 1.75F);
 
     public SurgingOrb(EntityType<? extends AbstractHurtingProjectile> p_36833_, Level p_36834_) {
         super(p_36833_, p_36834_);
@@ -84,6 +91,23 @@ public class SurgingOrb extends SpellHurtingProjectile {
         super.tick();
         if (this.tickCount >= MathHelper.secondsToTicks(10)) {
             this.discard();
+        }
+        if (this.level.isClientSide) {
+            this.prevClientScale = this.clientScale;
+            this.clientScale += 0.2F;
+            this.clientScale = Mth.clamp(this.clientScale, 0, 1);
+            if (tickCount > 5) {
+                Vec3 oldPos = new Vec3(xOld, yOld, zOld);
+                Matrix4f transform = new Matrix4f();
+                transform.rotate(Axis.YP.rotationDegrees(-MathHelper.positionToYaw(this.getDeltaMovement()) - 90));
+                transform.rotate(Axis.XP.rotationDegrees(-MathHelper.positionToPitch(this.getDeltaMovement())));
+                Vector4f a = transform.transform(new Vector4f(Mth.cos(tickCount / 4.0F) * 0.15F, Mth.sin(tickCount / 4.0F) * 0.15F, 0.0F, 1.0F));
+                Vector4f b = transform.transform(new Vector4f(Mth.cos(tickCount / 4.0F + Mth.TWO_PI / 3) * 0.15F, Mth.sin(tickCount / 4.0F + Mth.TWO_PI / 3) * 0.15F, 0.0F, 1.0F));
+                Vector4f c = transform.transform(new Vector4f(Mth.cos(tickCount / 4.0F + 2 * Mth.TWO_PI / 3) * 0.15F, Mth.sin(tickCount / 4.0F + 2 * Mth.TWO_PI / 3) * 0.15F, 0.0F, 1.0F));
+                trailA.update(oldPos.add(a.x(), a.y() + this.getBbHeight() / 2, a.z()));
+                trailB.update(oldPos.add(b.x(), b.y() + this.getBbHeight() / 2, b.z()));
+                trailC.update(oldPos.add(c.x(), c.y() + this.getBbHeight() / 2, c.z()));
+            }
         }
     }
 
@@ -142,10 +166,5 @@ public class SurgingOrb extends SpellHurtingProjectile {
     @Override
     protected boolean shouldBurn() {
         return false;
-    }
-
-    @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return IEntityAdditionalSpawnData.getEntitySpawningPacket(this);
     }
 }
