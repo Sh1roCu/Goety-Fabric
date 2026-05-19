@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "patchouli:shapeless_book_recipe",
   "ingredients": [
     {
       "item": "minecraft:book"
@@ -8,13 +8,7 @@
       "tag": "goety:black_book_craft"
     }
   ],
-  "result": {
-    "item": "patchouli:guide_book",
-    "nbt": {
-      "patchouli:book": "goety:black_book"
-    },
-    "count": 1
-  },
+  "book": "goety:black_book",
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",

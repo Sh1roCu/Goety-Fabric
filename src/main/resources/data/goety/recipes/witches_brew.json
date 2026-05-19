@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "patchouli:shapeless_book_recipe",
   "ingredients": [
     {
       "item": "minecraft:book"
@@ -11,13 +11,7 @@
       "tag": "forge:mushrooms"
     }
   ],
-  "result": {
-    "item": "patchouli:guide_book",
-    "nbt": {
-      "patchouli:book": "goety:witches_brew"
-    },
-    "count": 1
-  },
+  "book": "goety:witches_brew",
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
