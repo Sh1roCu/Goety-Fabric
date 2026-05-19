@@ -62,6 +62,7 @@
     "common.PotionSlotMixin",
     "common.ServerLevelMixin",
     "common.ServerLevelMixin$EntityCallbacksMixin",
+    "common.ShapedRecipeMixin",
     "common.ShulkerBulletMixin",
     "common.ShulkerMixin",
     "common.SpiderMixin",
