@@ -63,7 +63,7 @@ public class FocusBag extends TrinketItem {
 
                     @Override
                     public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-
+                        buf.writeItem(itemstack);
                     }
                 };
                 playerIn.openMenu(provider);

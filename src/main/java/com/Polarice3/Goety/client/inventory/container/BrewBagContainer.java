@@ -18,7 +18,8 @@ public class BrewBagContainer extends AbstractContainerMenu {
     private final ItemStack stack;
 
     public static BrewBagContainer createContainerClientSide(int id, Inventory inventory, FriendlyByteBuf buffer) {
-        return new BrewBagContainer(id, inventory, new BrewBagItemHandler(ItemStack.EMPTY), ItemStack.EMPTY);
+        ItemStack stack = buffer.readItem();
+        return new BrewBagContainer(id, inventory, new BrewBagItemHandler(stack), stack);
     }
 
     public BrewBagContainer(int id, Inventory playerInventory, BrewBagItemHandler handler, ItemStack stack) {

@@ -16,7 +16,7 @@ public class SoulItemContainer extends AbstractContainerMenu {
 
     public static SoulItemContainer createContainerClientSide(int id, Inventory inventory, FriendlyByteBuf buffer) {
         InteractionHand hand = buffer.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-        return new SoulItemContainer(id, inventory, new SoulUsingItemHandler(ItemStack.EMPTY), ItemStack.EMPTY, hand);
+        return new SoulItemContainer(id, inventory, new SoulUsingItemHandler(ItemStack.EMPTY), buffer.readItem(), hand);
     }
 
     public SoulItemContainer(int id, Inventory playerInventory, SoulUsingItemHandler handler, ItemStack stack, InteractionHand hand) {

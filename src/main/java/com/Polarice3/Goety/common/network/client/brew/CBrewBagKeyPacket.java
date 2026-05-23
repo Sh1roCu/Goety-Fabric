@@ -35,7 +35,7 @@ public class CBrewBagKeyPacket {
                     MenuProvider provider = new ExtendedScreenHandlerFactory() {
                         @Override
                         public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-
+                            buf.writeItem(stack);
                         }
 
                         @Override

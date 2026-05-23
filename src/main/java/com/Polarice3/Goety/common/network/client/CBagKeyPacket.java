@@ -36,7 +36,7 @@ public class CBagKeyPacket {
                     MenuProvider provider = new ExtendedScreenHandlerFactory() {
                         @Override
                         public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-
+                            buf.writeItem(stack);
                         }
 
                         @Override
@@ -54,7 +54,7 @@ public class CBagKeyPacket {
                         provider = new ExtendedScreenHandlerFactory() {
                             @Override
                             public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-
+                                buf.writeItem(stack);
                             }
 
                             @Override

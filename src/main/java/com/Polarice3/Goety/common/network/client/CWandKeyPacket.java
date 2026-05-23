@@ -38,6 +38,7 @@ public class CWandKeyPacket {
                         @Override
                         public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
                             buf.writeBoolean(playerEntity.getUsedItemHand() == InteractionHand.MAIN_HAND);
+                            buf.writeItem(stack);
                         }
 
                         @Override
@@ -58,6 +59,7 @@ public class CWandKeyPacket {
                         @Override
                         public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
                             buf.writeBoolean(playerEntity.getUsedItemHand() == InteractionHand.OFF_HAND);
+                            buf.writeItem(stack2);
                         }
 
                         @Override

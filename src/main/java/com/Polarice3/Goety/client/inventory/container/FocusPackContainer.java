@@ -13,7 +13,8 @@ public class FocusPackContainer extends AbstractContainerMenu {
     private final ItemStack stack;
 
     public static FocusPackContainer createContainerClientSide(int id, Inventory inventory, FriendlyByteBuf buffer) {
-        return new FocusPackContainer(id, inventory, new FocusBagItemHandler(ItemStack.EMPTY, 21), ItemStack.EMPTY);
+        ItemStack stack = buffer.readItem();
+        return new FocusPackContainer(id, inventory, new FocusBagItemHandler(stack, 21), stack);
     }
 
     public FocusPackContainer(int id, Inventory playerInventory, FocusBagItemHandler handler, ItemStack stack) {
