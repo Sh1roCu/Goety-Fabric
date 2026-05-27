@@ -505,6 +505,7 @@ public class Goety {
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.FIRETHORN_BERRIES, 0.3F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.TALL_SIENNA_GRASS.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.LARGE_SIENNA_FERN.asItem(), 0.5F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.SIENNA_VINE.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.SNAP_FUNGUS, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.ROTTEN_SAPLING.asItem(), 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_SAPLING.asItem(), 0.65F);
@@ -616,6 +617,7 @@ public class Goety {
         FabricDefaultAttributeRegistry.register(ModEntityType.BOUND_STORM_CASTER, BoundStormCaster.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.HAUNTED_ARMOR_SERVANT, HauntedArmorServant.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.HAUNTED_SKULL, HauntedSkull.setCustomAttributes().build());
+        FabricDefaultAttributeRegistry.register(ModEntityType.SPRITE, SpriteMob.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.BURNING_HOGLIN, BurningHoglin.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.DOPPELGANGER, Doppelganger.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.MINI_GHAST, MiniGhast.setCustomAttributes().build());

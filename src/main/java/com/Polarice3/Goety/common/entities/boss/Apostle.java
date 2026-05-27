@@ -176,6 +176,7 @@ public class Apostle extends SpellCastingCultist implements RangedAttackMob, Sho
     public double prevX;
     public double prevY;
     public double prevZ;
+    public RandomSource apostleRandom = RandomSource.create();
     public Vec3 toTeleportPos = null;
     public DamageSource deathBlow = this.damageSources().generic();
     public NetherSpreaderUtil netherSpreaderUtil = NetherSpreaderUtil.createLevelSpreader();
@@ -980,13 +981,13 @@ public class Apostle extends SpellCastingCultist implements RangedAttackMob, Sho
                     final double startZ = this.getZ();
                     final LivingEntity target = this.getTarget();
                     final Level level = this.level;
+                    final RandomSource randomSource = this.apostleRandom;
 
                     this.prevX = startX;
                     this.prevY = this.getY();
                     this.prevZ = startZ;
 
                     this.pendingTeleportSearch = CompletableFuture.supplyAsync(() -> {
-                        final RandomSource randomSource = ((LevelAccessor) level).goety$threadSafeRandom();
                         for (int i = 0; i < 128; ++i) {
                             double d3 = startX + (randomSource.nextDouble() - 0.5D) * 32.0D;
                             double d4 = startY;
@@ -1041,13 +1042,13 @@ public class Apostle extends SpellCastingCultist implements RangedAttackMob, Sho
                     final double selfY = this.getY();
                     final double selfZ = this.getZ();
                     final Level level = this.level;
+                    final RandomSource randomSource = this.apostleRandom;
 
                     this.prevX = selfX;
                     this.prevY = selfY;
                     this.prevZ = selfZ;
 
                     this.pendingTeleportSearch = CompletableFuture.supplyAsync(() -> {
-                        final RandomSource randomSource = ((LevelAccessor) level).goety$threadSafeRandom();
                         Vec3 vec3 = new Vec3(selfX - targetX, selfY * 0.5D - targetY, selfZ - targetZ).normalize();
                         double d0 = 16.0D;
                         for (int i = 0; i < 128; ++i) {

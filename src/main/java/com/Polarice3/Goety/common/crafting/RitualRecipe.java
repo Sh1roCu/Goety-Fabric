@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +40,8 @@ public class RitualRecipe extends ModShapelessRecipe {
     private final TagKey<EntityType<?>> entityToConvert;
     private final EntityType<?> entityToSummon;
     private final EntityType<?> entityToConvertInto;
+    private final TagKey<Structure> structureTag;
+    private final String structureName;
     private final Enchantment enchantment;
     private final int xpLevelCost;
     private final int duration;
@@ -52,6 +55,7 @@ public class RitualRecipe extends ModShapelessRecipe {
                         ItemStack result, EntityType<?> entityToSummon, EntityType<?> entityToConvertInto, Ingredient activationItem, NonNullList<Ingredient> input, int duration, int summonLife, int pSoulCost,
                         TagKey<EntityType<?>> entityToSacrifice, String entityToSacrificeDisplayName,
                         TagKey<EntityType<?>> entityToConvert, String entityToConvertDisplayName,
+                        TagKey<Structure> structureTag, String structureName,
                         Enchantment enchantment, int xpLevelCost, String research) {
         super(id, group, CraftingBookCategory.MISC, result, input);
         this.craftType = pCraftType;
@@ -68,6 +72,8 @@ public class RitualRecipe extends ModShapelessRecipe {
         this.entityToSacrificeDisplayName = entityToSacrificeDisplayName;
         this.entityToConvert = entityToConvert;
         this.entityToConvertDisplayName = entityToConvertDisplayName;
+        this.structureTag = structureTag;
+        this.structureName = structureName;
         this.enchantment = enchantment;
         this.xpLevelCost = xpLevelCost;
         this.research = research;
@@ -161,7 +167,15 @@ public class RitualRecipe extends ModShapelessRecipe {
         return this.entityToConvertDisplayName;
     }
 
-    public Enchantment getEnchantment() {
+    public TagKey<Structure> getStructureTag() {
+        return this.structureTag;
+    }
+
+    public String getStructureName() {
+        return this.structureName;
+    }
+
+    public Enchantment getEnchantment(){
         return this.enchantment;
     }
 
@@ -231,7 +245,15 @@ public class RitualRecipe extends ModShapelessRecipe {
             if (json.has("entity_to_convert_into")) {
                 entityToConvertInto = BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(GsonHelper.getAsString(json, "entity_to_convert_into")));
             }
-            if (json.has("enchantment")) {
+            TagKey<Structure> structureTag = null;
+            String structureName = "";
+            if (json.has("structure_to_locate")){
+                var tagRL = new ResourceLocation(GsonHelper.getAsString(json.getAsJsonObject("structure_to_locate"), "tag"));
+                structureTag = TagKey.create(Registries.STRUCTURE, tagRL);
+
+                structureName = json.getAsJsonObject("structure_to_locate").get("display_name").getAsString();
+            }
+            if (json.has("enchantment")){
                 enchantment = BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(GsonHelper.getAsString(json, "enchantment")));
                 xpLevelCost = GsonHelper.getAsInt(json, "xpLevelCost", 0);
             }
@@ -241,7 +263,8 @@ public class RitualRecipe extends ModShapelessRecipe {
             return new RitualRecipe(recipeId, group, craftType, ritualType,
                     result, entityToSummon, entityToConvertInto, activationItem, ingredients, duration,
                     summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName,
-                    entityToConvert, entityToConvertDisplayName, enchantment, xpLevelCost, research);
+                    entityToConvert, entityToConvertDisplayName, structureTag, structureName,
+                    enchantment, xpLevelCost, research);
         }
 
         private static NonNullList<Ingredient> itemsFromJson(JsonArray pIngredientArray) {
@@ -300,6 +323,14 @@ public class RitualRecipe extends ModShapelessRecipe {
                 entityToConvertInto = BuiltInRegistries.ENTITY_TYPE.get(buffer.readResourceLocation());
             }
 
+            TagKey<Structure> structureTag = null;
+            String structureName = "";
+            if (buffer.readBoolean()) {
+                var tagRL = buffer.readResourceLocation();
+                structureTag = TagKey.create(Registries.STRUCTURE, tagRL);
+                structureName = buffer.readUtf();
+            }
+
             Enchantment enchantment = null;
             int xpLevelCost = 0;
             if (buffer.readBoolean() && buffer.readBoolean()) {
@@ -312,7 +343,7 @@ public class RitualRecipe extends ModShapelessRecipe {
             }
 
             return new RitualRecipe(recipe.getId(), recipe.getGroup(), craftType, ritualType, recipe.getResultItem(null), entityToSummon, entityToConvertInto,
-                    activationItem, recipe.getIngredients(), duration, summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName, entityToConvert, entityToConvertDisplayName, enchantment, xpLevelCost, research);
+                    activationItem, recipe.getIngredients(), duration, summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName, entityToConvert, entityToConvertDisplayName, structureTag, structureName, enchantment, xpLevelCost, research);
         }
 
         @Override
@@ -344,6 +375,11 @@ public class RitualRecipe extends ModShapelessRecipe {
             buffer.writeBoolean(recipe.entityToConvertInto != null);
             if (recipe.entityToConvertInto != null) {
                 buffer.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(recipe.entityToConvertInto));
+            }
+            buffer.writeBoolean(recipe.structureTag != null);
+            if (recipe.structureTag != null) {
+                buffer.writeResourceLocation(recipe.structureTag.location());
+                buffer.writeUtf(recipe.structureName);
             }
             buffer.writeBoolean(recipe.enchantment != null);
             if (recipe.enchantment != null) {

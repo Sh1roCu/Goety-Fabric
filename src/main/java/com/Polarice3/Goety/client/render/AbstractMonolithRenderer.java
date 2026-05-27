@@ -27,7 +27,7 @@ public abstract class AbstractMonolithRenderer<T extends AbstractMonolith> exten
 
     @Override
     public void render(T pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        float f = Math.min(AbstractMonolith.getEmergingTime(), pEntity.getAge());
+        float f = Math.min(pEntity.localEmergingTime(), pEntity.getAge());
         pMatrixStack.pushPose();
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(pEntity.getYRot()));
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);

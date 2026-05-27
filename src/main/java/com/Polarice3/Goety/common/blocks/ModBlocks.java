@@ -98,7 +98,7 @@ public class ModBlocks {
     public static final Block SOUL_CANDLESTICK = register("soul_candlestick", SoulCandlestickBlock::new);
     public static final Block WITCH_POLE = register("witch_pole", WitchPoleBlock::new);
     public static final Block BREWING_CAULDRON = register("witch_cauldron", BrewCauldronBlock::new);
-    public static final Block CRYSTAL_BALL = register("crystal_ball", CrystalBallBlock::new, true, LootTableType.EMPTY);
+    public static final Block CRYSTAL_BALL = register("crystal_ball", CrystalBallBlock::new, true);
     public static final Block HAUNTED_MIRROR = register("haunted_mirror", HauntedMirrorBlock::new);
     public static final Block HAUNTED_JUG = register("haunted_jug", HauntedJugBlock::new, false);
     public static final Block MAGIC_THORN = register("magic_thorn", MagicThornBlock::new, true, LootTableType.EMPTY);
@@ -143,6 +143,7 @@ public class ModBlocks {
     public static final Block SIENNA_FERN = register("sienna_fern", SiennaGrassBlock::new, true, LootTableType.EMPTY);
     public static final Block LARGE_SIENNA_FERN = register("large_sienna_fern", LargeSiennaPlantBlock::new, true, LootTableType.EMPTY);
     public static final Block WINDSWEPT_DEAD_BUSH = register("windswept_dead_bush", WindsweptDeadBushBlock::new, true, LootTableType.EMPTY);
+    public static final Block SIENNA_VINE = register("sienna_vine", () -> new VineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).replaceable().noCollission().randomTicks().strength(0.2F).sound(SoundType.VINE).ignitedByLava().pushReaction(PushReaction.DESTROY)), true, LootTableType.EMPTY);
 
     public static final Block FIRETHORN = register("firethorn", FirethornBushBlock::new, false, LootTableType.EMPTY);
 

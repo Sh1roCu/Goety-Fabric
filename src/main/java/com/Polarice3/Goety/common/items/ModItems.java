@@ -355,6 +355,7 @@ public class ModItems {
     public static final Item THUNDERBOLT_FOCUS = register("thunderbolt_focus", () -> new MagicFocus(new ThunderboltSpell()));
     public static final Item ELECTROCUTE_FOCUS = register("electrocute_focus", () -> new MagicFocus(new ElectroOrbSpell()));
     public static final Item SURGING_FOCUS = register("surging_focus", () -> new MagicFocus(new SurgingSpell()));
+    public static final Item SPRIGHTLY_FOCUS = register("sprightly_focus", () -> new MagicFocus(new SpriteSpell()));
     public static final Item MONSOON_FOCUS = register("monsoon_focus", () -> new MagicFocus(new MonsoonSpell()));
     public static final Item DISCHARGE_FOCUS = register("discharge_focus", () -> new MagicFocus(new DischargeSpell()));
     public static final Item BOLTING_FOCUS = register("bolting_focus", () -> new MagicFocus(new BoltingSpell()));

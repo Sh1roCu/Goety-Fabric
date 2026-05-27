@@ -5,6 +5,7 @@ import cn.sh1rocu.goety.api.extension.IEntityPersistentData;
 import cn.sh1rocu.goety.mixin.accessor.MobAccessor;
 import cn.sh1rocu.goety.mixin.accessor.VillagerAccessor;
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.api.entities.IChunkLoader;
 import com.Polarice3.Goety.api.entities.IHiding;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.entities.ally.IServant;
@@ -53,6 +54,7 @@ import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
 import com.Polarice3.Goety.common.research.ResearchList;
+import com.Polarice3.Goety.common.world.data.ChunkLoadData;
 import com.Polarice3.Goety.common.world.structures.ModStructureTags;
 import com.Polarice3.Goety.compat.iron.IronAttributes;
 import com.Polarice3.Goety.compat.iron.IronLoaded;
@@ -120,10 +122,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -422,6 +421,18 @@ public class ModEvents {
         // RaidAdditions.addRaiders();
         ILLAGER_SPAWN_MAP.put(serverWorld, new IllagerSpawner());
         WIGHT_SPAWN_MAP.put(serverWorld, new WightSpawner());
+        ChunkLoadData data = ChunkLoadData.get(serverWorld);
+        data.getPositions().forEach((pos, radius) -> {
+            ChunkPos chunkPos = new ChunkPos(pos);
+            serverWorld.getChunkSource().addRegionTicket(
+                    ModTicketTypes.BLOCK, chunkPos, radius, pos);
+            serverWorld.getServer().execute(() -> {
+                BlockEntity be = serverWorld.getBlockEntity(pos);
+                if (!(be instanceof IChunkLoader)) {
+                    data.removePosition(pos);
+                }
+            });
+        });
     }
 
     public static void worldUnload(MinecraftServer server, ServerLevel serverWorld) {
@@ -580,7 +591,7 @@ public class ModEvents {
         LivingEntity livingEntity = event.getEntity();
         if (livingEntity != null && livingEntity.isAlive()) {
             if (!MobUtil.isSpellCasting(livingEntity)) {
-                if (MiscCapHelper.getClientTargetID(livingEntity) != 0) {
+                if (MiscCapHelper.getClientTargetID(livingEntity) > 0) {
                     MiscCapHelper.setClientTargetID(livingEntity, 0);
                 }
             }
@@ -1471,7 +1482,7 @@ public class ModEvents {
     }
 
     public static void addVillagerTrade() {
-        ModTradeUtil.addVillagerTrades(VillagerProfession.CARTOGRAPHER, 3, new ModTradeUtil.TreasureMapForEmeralds(14, ModStructureTags.CRYPT, "filled_map.goety.crypt", MapDecoration.Type.MANSION, 12, 10));
+        ModTradeUtil.addVillagerTrades(VillagerProfession.CARTOGRAPHER, 3, new ModTradeUtil.TreasureMapForEmeralds(14, ModTags.Structures.CRYPT_EXPLORER, "filled_map.goety.crypt", MapDecoration.Type.MANSION, 12, 10));
     }
 
     public static void addWanderTrade() {
@@ -1482,10 +1493,10 @@ public class ModEvents {
         });
 
         TradeOfferHelper.registerWanderingTraderOffers(2, rareTrades -> {
-            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModStructureTags.OMINOUS_BLACKSMITH, "filled_map.goety.ominous_blacksmith", MapDecoration.Type.TARGET_X, 12, 10));
-            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModStructureTags.WIND_SHRINE, "filled_map.goety.wind_shrine", MapDecoration.Type.TARGET_X, 12, 10));
-            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModStructureTags.BLIGHTED_SHACK, "filled_map.goety.blighted_shack", MapDecoration.Type.MANSION, 12, 10));
-            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModStructureTags.RUINED_MONASTERY, "filled_map.goety.ruined_monastery", MapDecoration.Type.MANSION, 12, 10));
+            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModTags.Structures.OMINOUS_BLACKSMITH, "filled_map.goety.ominous_blacksmith", MapDecoration.Type.TARGET_X, 12, 10));
+            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModTags.Structures.WIND_SHRINE, "filled_map.goety.wind_shrine", MapDecoration.Type.TARGET_X, 12, 10));
+            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModTags.Structures.BLIGHTED_SHACK, "filled_map.goety.blighted_shack", MapDecoration.Type.MANSION, 12, 10));
+            rareTrades.add(new ModTradeUtil.TreasureMapForEmeralds(8, ModTags.Structures.RUINED_MONASTERY, "filled_map.goety.ruined_monastery", MapDecoration.Type.MANSION, 12, 10));
         });
     }
 

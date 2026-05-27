@@ -20,7 +20,7 @@ public class PedestalBlockEntity extends RitualBlockEntity {
 
         @Override
         public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
-            if (PedestalBlockEntity.this.isLocked()) {
+            if (PedestalBlockEntity.this.isLocked() || resource.isBlank()) {
                 return 0;
             } else {
                 return super.insert(resource, maxAmount, transaction);

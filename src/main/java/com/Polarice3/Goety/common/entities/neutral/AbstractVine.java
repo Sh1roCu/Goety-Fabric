@@ -37,6 +37,7 @@ public abstract class AbstractVine extends AbstractMonolith {
     public static final EntityDataAccessor<Boolean> PERPETUAL = SynchedEntityData.defineId(AbstractVine.class, EntityDataSerializers.BOOLEAN);
     public int warmupDelayTicks;
     public int activeTick = 0;
+    public int proximityTick = 0;
     public boolean proximity = false;
 
     public AbstractVine(EntityType<? extends Owned> type, Level worldIn) {
@@ -53,6 +54,7 @@ public abstract class AbstractVine extends AbstractMonolith {
     public void addAdditionalSaveData(CompoundTag p_31485_) {
         super.addAdditionalSaveData(p_31485_);
         p_31485_.putInt("ActiveTick", this.activeTick);
+        p_31485_.putInt("ProximityTick", this.proximityTick);
         p_31485_.putInt("Warmup", this.warmupDelayTicks);
         p_31485_.putBoolean("Proximity", this.proximity);
         p_31485_.putBoolean("Perpetual", this.isPerpetual());
@@ -63,6 +65,9 @@ public abstract class AbstractVine extends AbstractMonolith {
         super.readAdditionalSaveData(p_31474_);
         if (p_31474_.contains("ActiveTick")) {
             this.activeTick = p_31474_.getInt("ActiveTick");
+        }
+        if (p_31474_.contains("ProximityTick")) {
+            this.proximityTick = p_31474_.getInt("ProximityTick");
         }
         if (p_31474_.contains("Warmup")) {
             this.warmupDelayTicks = p_31474_.getInt("Warmup");
@@ -218,7 +223,7 @@ public abstract class AbstractVine extends AbstractMonolith {
                 }
                 if (flag) {
                     if (this.proximity) {
-                        this.proximity = false;
+                        this.proximityTick = 20;
                     }
                     ++this.activeTick;
                     this.level.broadcastEntityEvent(this, (byte) 6);
@@ -240,6 +245,18 @@ public abstract class AbstractVine extends AbstractMonolith {
                     }
                     if (this.getAge() <= 0) {
                         this.discard();
+                    }
+                }
+            } else {
+                if (!this.level.isClientSide) {
+                    if (this.proximity) {
+                        if (this.proximityTick > 0) {
+                            if (!this.hasTarget() && this.getAge() >= this.localEmergingTime()) {
+                                --this.proximityTick;
+                            }
+                        } else {
+                            this.burrowThenHold();
+                        }
                     }
                 }
             }
@@ -286,7 +303,21 @@ public abstract class AbstractVine extends AbstractMonolith {
         this.diggingParticles();
     }
 
-    public void diggingParticles() {
+    public void burrowThenHold() {
+        if (this.getAge() == this.localEmergingTime()) {
+            this.burrow();
+        }
+        if (this.getAge() > 0) {
+            this.setAge(this.getAge() - this.getAgeSpeed());
+            this.level.broadcastEntityEvent(this, (byte) 5);
+        } else {
+            this.activeTick = 0;
+            this.level.broadcastEntityEvent(this, (byte) 7);
+            this.setActivate(false);
+        }
+    }
+
+    public void diggingParticles(){
         if (this.level instanceof ServerLevel serverLevel) {
             BlockPos blockPos = BlockPos.containing(this.getX(), this.getY() - 1.0F, this.getZ());
             BlockParticleOption option = new BlockParticleOption(ParticleTypes.BLOCK, serverLevel.getBlockState(blockPos));
@@ -306,6 +337,8 @@ public abstract class AbstractVine extends AbstractMonolith {
     public void handleEntityEvent(byte pId) {
         if (pId == 6) {
             ++this.activeTick;
+        } else if (pId == 7){
+            this.activeTick = 0;
         } else {
             super.handleEntityEvent(pId);
         }

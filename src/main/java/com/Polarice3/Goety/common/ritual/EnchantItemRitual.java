@@ -2,8 +2,6 @@ package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.player.Player;
@@ -83,12 +81,9 @@ public class EnchantItemRitual extends Ritual {
         EnchantmentInstance enchantmentInstance = new EnchantmentInstance(this.recipe.getEnchantment(), 1);
         if (result.getItem() instanceof BookItem) {
             result = EnchantedBookItem.createForEnchantment(enchantmentInstance);
-            activationItem.shrink(1);
             var handler = tileEntity.itemStackHandler;
-            try (Transaction tx = Transaction.openOuter()) {
-                handler.insert(ItemVariant.of(result), result.getCount(), tx);
-                tx.commit();
-            }
+            activationItem.shrink(1);
+            handler.setStackInSlot(0, result);
         } else {
             if (map.containsKey(this.recipe.getEnchantment())) {
                 for (Enchantment enchantment : map.keySet()) {

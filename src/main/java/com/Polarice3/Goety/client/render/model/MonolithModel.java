@@ -22,14 +22,14 @@ public class MonolithModel<T extends AbstractMonolith> extends EntityModel<T> {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entity.isEmerging() || entity.isDescending()) {
-            this.monolith.y = (AbstractMonolith.getEmergingTime()) - limbSwing;
-        } else {
-            this.monolith.y = 0;
-        }
-    }
+	@Override
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		if (entity.isEmerging() || entity.isDescending()) {
+			this.monolith.y = entity.localEmergingTime() - limbSwing;
+		} else {
+			this.monolith.y = 0;
+		}
+	}
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

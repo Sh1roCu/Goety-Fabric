@@ -10,8 +10,6 @@ import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
 import com.Polarice3.Goety.common.entities.ModEntityType;
-import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
 import com.Polarice3.Goety.common.research.ResearchList;
 import com.Polarice3.Goety.common.ritual.EnchantItemRitual;
 import com.Polarice3.Goety.common.ritual.Ritual;
@@ -29,6 +27,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,13 +39,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoulFireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
@@ -61,6 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEventListener, SidedStorageBlockEntity {
     public long lastChangeTime;
@@ -98,6 +96,10 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
     public int currentTime;
     public int structureTime;
     public int convertTime;
+    public BlockPos findStructurePos = null;
+    @Nullable
+    public CompletableFuture<BlockPos> pendingStructureSearch = null;
+    public boolean structureSearchFailed = false;
     public boolean showArea;
 
     public DarkAltarBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -138,7 +140,7 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
     @Override
     public void saveAdditional(CompoundTag compound) {
         if (this.getCurrentRitualRecipe() != null) {
-            if (this.consumedIngredients.size() > 0) {
+            if (!this.consumedIngredients.isEmpty()) {
                 ListTag list = new ListTag();
                 for (ItemStack stack : this.consumedIngredients) {
                     list.add(stack.save(new CompoundTag()));
@@ -168,6 +170,9 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
         if (compound.contains("experienceTaken")) {
             this.experienceTaken = compound.getInt("experienceTaken");
         }
+        if (compound.contains("findStructure")) {
+            this.findStructurePos = NbtUtils.readBlockPos(compound.getCompound("findStructure"));
+        }
         if (compound.contains("showArea")) {
             this.showArea = compound.getBoolean("showArea");
         }
@@ -188,6 +193,9 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
         compound.putInt("structureTime", this.structureTime);
         compound.putInt("convertTime", this.convertTime);
         compound.putInt("experienceTaken", this.experienceTaken);
+        if (this.findStructurePos != null) {
+            compound.put("findStructure", NbtUtils.writeBlockPos(this.findStructurePos));
+        }
         compound.putBoolean("showArea", this.showArea);
         return compound;
     }
@@ -235,6 +243,10 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
                                         .warn("Could not restore remainingAdditionalIngredients during tick - world seems to be null. Will attempt again next tick.");
                                 return;
                             }
+                        }
+
+                        if (recipe.getRitual().isPending(this)) {
+                            return;
                         }
 
                         if (!recipe.getRitual().isValid(this.level, this.worldPosition, this, this.castingPlayer,
@@ -462,8 +474,11 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
     }
 
     public void removeItem(@Nullable LivingEntity livingEntity) {
+        if (this.level == null) {
+            return;
+        }
         ItemStack itemStack = itemStackHandler.getStackInSlot(0);
-        if (itemStack != null && !itemStack.isEmpty()) {
+        if (itemStack != ItemStack.EMPTY) {
             boolean flag = false;
             long extracted;
             var variant = itemStackHandler.getVariantInSlot(0);
@@ -493,20 +508,15 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
                         itemStack1);
             }
         }
-        this.currentRitualRecipe = null;
-        this.castingPlayerId = null;
-        this.castingPlayer = null;
-        this.currentTime = 0;
-        this.sacrificeProvided = false;
-        if (this.remainingAdditionalIngredients != null)
-            this.remainingAdditionalIngredients.clear();
-        this.consumedIngredients.clear();
-        this.structureTime = 0;
+        this.clearRitual();
         this.setChanged();
         this.markNetworkDirty();
     }
 
     public void startRitual(Player player, ItemStack activationItem, RitualRecipe ritualRecipe) {
+        if (this.level == null) {
+            return;
+        }
         if (!this.level.isClientSide) {
             this.currentRitualRecipe = ritualRecipe;
             this.castingPlayerId = player.getUUID();
@@ -528,31 +538,15 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
     }
 
     public void stopRitual(boolean finished) {
+        if (this.level == null) {
+            return;
+        }
         if (!this.level.isClientSide) {
             RitualRecipe recipe = this.getCurrentRitualRecipe();
             if (recipe != null && this.castingPlayer != null) {
                 if (finished) {
                     ItemStack activationItem = itemStackHandler.getStackInSlot(0);
                     recipe.getRitual().finish(this.level, this.worldPosition, this, this.castingPlayer, activationItem);
-                    if (recipe.getEntityToSummon() == ModEntityType.SUMMON_APOSTLE) {
-                        if (this.level instanceof ServerLevel serverLevel) {
-                            ModNetwork.sendToALL(serverLevel.getServer(), SPlayWorldSoundPacket.ID,
-                                    SPlayWorldSoundPacket.encode(this.worldPosition, SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), 1.0F, 1.0F));
-                            Warden.applyDarknessAround(serverLevel, Vec3.atCenterOf(this.worldPosition), null, 32);
-                        }
-                        for (int i = -8; i <= 8; ++i) {
-                            for (int j = -8; j <= 8; ++j) {
-                                for (int k = -8; k <= 8; ++k) {
-                                    BlockPos blockpos1 = this.worldPosition.offset(i, j, k);
-                                    BlockState blockstate = this.level.getBlockState(blockpos1);
-                                    if (blockstate.getBlock() instanceof SoulFireBlock) {
-                                        this.level.destroyBlock(blockpos1, false);
-                                        this.level.levelEvent(null, 1009, blockpos1, 0);
-                                    }
-                                }
-                            }
-                        }
-                    }
                 } else {
                     recipe.getRitual().interrupt(this.level, this.worldPosition, this, this.castingPlayer,
                             itemStackHandler.getStackInSlot(0));
@@ -568,6 +562,17 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
                     }
                 }
             }
+            this.clearRitual();
+            this.setChanged();
+            this.markNetworkDirty();
+        }
+    }
+
+    public void clearRitual() {
+        if (this.level == null) {
+            return;
+        }
+        if (!this.level.isClientSide) {
             this.currentRitualRecipe = null;
             this.castingPlayerId = null;
             this.castingPlayer = null;
@@ -579,8 +584,12 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
             this.consumedIngredients.clear();
             this.structureTime = 0;
             this.experienceTaken = 0;
-            this.setChanged();
-            this.markNetworkDirty();
+            this.findStructurePos = null;
+            if (this.pendingStructureSearch != null) {
+                this.pendingStructureSearch.cancel(true);
+                this.pendingStructureSearch = null;
+            }
+            this.structureSearchFailed = false;
         }
     }
 
@@ -628,7 +637,7 @@ public class DarkAltarBlockEntity extends PedestalBlockEntity implements GameEve
         if (this.level == null) {
             this.remainingAdditionalIngredients = null;
         } else {
-            if (this.consumedIngredients.size() > 0) {
+            if (!this.consumedIngredients.isEmpty()) {
                 this.remainingAdditionalIngredients = Ritual.getRemainingAdditionalIngredients(
                         this.getCurrentRitualRecipe().getIngredients(), this.consumedIngredients);
             } else {

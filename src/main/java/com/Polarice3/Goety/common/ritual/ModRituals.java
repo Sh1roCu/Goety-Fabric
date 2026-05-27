@@ -52,6 +52,10 @@ public class ModRituals {
             register("teleport",
                     () -> new ModRitualFactory(TeleportRitual::new));
 
+    public static final ModRitualFactory LOCATE =
+            register("locate",
+                    () -> new ModRitualFactory(LocateRitual::new));
+
     public static void init() {
 
     }

@@ -107,6 +107,9 @@ public class ServantSpawnEggs {
     public static final ServantSpawnEggItem HAUNTED_SKULL_SPAWN_EGG = ModItems.register("haunted_skull_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.HAUNTED_SKULL, 0x8fe2e3, 0x505050, egg()));
 
+    public static final ServantSpawnEggItem SPRITE_SPAWN_EGG = ModItems.register("sprite_spawn_egg",
+            () -> new ServantSpawnEggItem(ModEntityType.SPRITE, 0x725f00, 0xbfd5ff, egg()));
+
     public static final ServantSpawnEggItem MINI_GHAST_SPAWN_EGG = ModItems.register("mini_ghast_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.MINI_GHAST, 0xe4e2e2, 0xddb5b7, egg()));
 

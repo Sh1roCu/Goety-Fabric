@@ -378,6 +378,7 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.VIZIER_CLONE, VizierCloneModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.IRK, IrkModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MINION, MinionModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SPRITE, SpriteMobModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HAUNTED_SKULL, HauntedSkullModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HAUNTED_SKULL_FIRELESS, HauntedSkullModel::createFirelessLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SKULL_LORD, SkullLordModel::createBodyLayer);
@@ -656,6 +657,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.BOUND_STORM_CASTER, BoundStormCasterRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HAUNTED_ARMOR_SERVANT, HauntedArmorRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HAUNTED_SKULL, HauntedSkullRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.SPRITE, SpriteMobRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BURNING_HOGLIN, BurningHoglinRenderer::new);
         EntityRendererRegistry.register(ModEntityType.DOPPELGANGER, (render) -> new DoppelgangerRenderer(render, false));
         EntityRendererRegistry.register(ModEntityType.MINI_GHAST, MiniGhastRenderer::new);
@@ -798,7 +800,7 @@ public class ClientInitEvents {
                 (state, lightReader, pos, color) ->
                         lightReader != null && pos != null ?
                                 BiomeColors.getAverageFoliageColor(lightReader, pos) :
-                                FoliageColor.getDefaultColor(), ModBlocks.HARDENED_LEAVES, ModBlocks.ROTTEN_LEAVES, ModBlocks.WINDSWEPT_LEAVES, ModBlocks.PINE_LEAVES);
+                                FoliageColor.getDefaultColor(), ModBlocks.HARDENED_LEAVES, ModBlocks.ROTTEN_LEAVES);
     }
 
     private static void colorItem() {
@@ -810,7 +812,7 @@ public class ClientInitEvents {
         ColorProviderRegistry.ITEM.register((itemStack, i) -> {
             BlockState blockstate = ((BlockItem) itemStack.getItem()).getBlock().defaultBlockState();
             return ColorProviderRegistry.BLOCK.get(blockstate.getBlock()).getColor(blockstate, null, null, i);
-        }, ModBlocks.HARDENED_LEAVES, ModBlocks.ROTTEN_LEAVES, ModBlocks.WINDSWEPT_LEAVES, ModBlocks.PINE_LEAVES);
+        }, ModBlocks.HARDENED_LEAVES, ModBlocks.ROTTEN_LEAVES);
     }
 
     public static BakedModel modelBake(BakedModel bakedModel, ModelModifier.AfterBake.Context context) {

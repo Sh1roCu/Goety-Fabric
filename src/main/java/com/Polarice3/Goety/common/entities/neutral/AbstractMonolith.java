@@ -132,13 +132,17 @@ public abstract class AbstractMonolith extends Owned {
         return 60.0F;
     }
 
+    public float localEmergingTime() {
+        return getEmergingTime();
+    }
+
     public boolean isEmerging() {
-        return this.getAge() < getEmergingTime() && !this.isActivate();
+        return this.getAge() < this.localEmergingTime() && !this.isActivate();
     }
 
     @Override
     public boolean isDescending() {
-        return this.getAge() < getEmergingTime() && this.isActivate();
+        return this.getAge() < this.localEmergingTime() && this.isActivate();
     }
 
     @Override
@@ -254,7 +258,7 @@ public abstract class AbstractMonolith extends Owned {
 
     @Override
     public EntityDimensions getDimensions(Pose p_33113_) {
-        float i = (this.getAge() / getEmergingTime());
+        float i = (this.getAge() / this.localEmergingTime());
         EntityDimensions entitydimensions = super.getDimensions(p_33113_);
         return entitydimensions.scale(1, i);
     }
