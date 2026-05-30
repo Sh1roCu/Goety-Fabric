@@ -59,9 +59,9 @@ import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -310,7 +310,7 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
             }
         }
         if (this.getSpell(stack) instanceof ITouchSpell touchSpells) {
-            if (this.canCastTouch(stack, player.level, player)) {
+            if (this.canCastTouch(stack, player.level, player, target)) {
                 if (player.level instanceof ServerLevel serverLevel) {
                     touchSpells.touchResult(serverLevel, player, target, stack, WandUtil.getStats(player, touchSpells));
                 }
@@ -318,6 +318,7 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);
+
     }
 
     @Override
@@ -414,7 +415,7 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
                 if (spell2 instanceof IBlockSpell blockSpell) {
                     if (player.level instanceof ServerLevel serverLevel) {
                         if (blockSpell.rightBlock(serverLevel, player, blockpos, pContext.getClickedFace(), WandUtil.getStats(player, blockSpell))) {
-                            if (this.canCastTouch(stack, level, player)) {
+                            if (this.canCastTouch(stack, level, player, null)) {
                                 blockSpell.blockResult(serverLevel, player, stack, blockpos, pContext.getClickedFace(), WandUtil.getStats(player, blockSpell));
                             }
                             return InteractionResult.SUCCESS;
@@ -734,11 +735,16 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
         }
     }
 
-    public boolean canCastTouch(ItemStack stack, Level worldIn, LivingEntity caster) {
+    public boolean canCastTouch(ItemStack stack, Level worldIn, LivingEntity caster, @Nullable LivingEntity target) {
         Player playerEntity = (Player) caster;
-        if (!worldIn.isClientSide) {
+        if (worldIn instanceof ServerLevel serverLevel) {
             ISpell spell = GoetyEventFactory.onTouchBasedSpell(caster, stack, this.getSpell(stack));
             if (spell != null && !this.cannotCast(caster, stack, spell)) {
+                if (spell instanceof ITouchSpell touchSpell) {
+                    if (!touchSpell.targetConditions(serverLevel, caster, target, stack, WandUtil.getStats(caster, touchSpell))) {
+                        return false;
+                    }
+                }
                 if (playerEntity.isCreative()) {
                     if (!spell.hasCustomCooldown(caster, stack, IWand.getFocus(stack), spell.spellCooldown(playerEntity))) {
                         SEHelper.addCooldown(playerEntity, IWand.getFocus(stack).getItem(), spell.spellCooldown(playerEntity));

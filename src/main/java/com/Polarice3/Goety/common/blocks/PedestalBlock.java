@@ -1,9 +1,11 @@
 package com.Polarice3.Goety.common.blocks;
 
-import cn.sh1rocu.goety.util.transfer.ItemStackHandler;
 import com.Polarice3.Goety.common.blocks.entities.PedestalBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -71,14 +73,17 @@ public class PedestalBlock extends BaseEntityBlock implements SimpleWaterloggedB
                         ItemStack itemStack = handler.getStackInSlot(0);
                         if (itemStack.isEmpty()) {
                             if (!pedestal.isLocked()) {
-                                try (Transaction tx = Transaction.openOuter()) {
-                                    var itemVariant = ItemVariant.of(heldItem);
-                                    int before = heldItem.getCount();
-                                    long inserted = handler.insert(itemVariant, before, tx);
-                                    player.setItemInHand(hand, inserted > 0 ? itemVariant.toStack(before - (int) inserted) : ItemStack.EMPTY);
-                                    tx.commit();
+                                if (!heldItem.isEmpty()) {
+                                    try (Transaction tx = Transaction.openOuter()) {
+                                        var itemVariant = ItemVariant.of(heldItem);
+                                        int before = heldItem.getCount();
+                                        int inserted = (int) handler.insert(itemVariant, before, tx);
+                                        tx.commit();
+                                        int leftover = before - inserted;
+                                        player.setItemInHand(hand, leftover > 0 ? itemVariant.toStack(leftover) : ItemStack.EMPTY);
+                                        world.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
+                                    }
                                 }
-                                world.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
                             } else {
                                 world.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1, 1);
                             }
@@ -87,15 +92,18 @@ public class PedestalBlock extends BaseEntityBlock implements SimpleWaterloggedB
                                 try (Transaction tx = Transaction.openOuter()) {
                                     var itemVariant = ItemVariant.of(itemStack);
                                     long extracted = handler.extract(itemVariant, 64, tx);
-                                    player.setItemInHand(hand, extracted > 0 ? itemVariant.toStack((int) extracted) : ItemStack.EMPTY);
                                     tx.commit();
+                                    player.setItemInHand(hand, extracted > 0 ? itemVariant.toStack((int) extracted) : ItemStack.EMPTY);
                                 }
                             } else {
                                 try (Transaction tx = Transaction.openOuter()) {
                                     var itemVariant = ItemVariant.of(itemStack);
                                     long extracted = handler.extract(itemVariant, 64, tx);
-                                    PlayerInventoryStorage.of(player).offerOrDrop(itemVariant, extracted, tx);
                                     tx.commit();
+                                    if (extracted > 0) {
+                                        PlayerInventoryStorage.of(player).offerOrDrop(itemVariant, extracted, tx);
+                                    }
+
                                 }
                             }
                             world.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 1, 1);
@@ -113,16 +121,19 @@ public class PedestalBlock extends BaseEntityBlock implements SimpleWaterloggedB
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity tileentity = pLevel.getBlockEntity(pPos);
             if (tileentity instanceof PedestalBlockEntity pedestalBlockEntity) {
-                dropInventoryItems(tileentity.getLevel(), tileentity.getBlockPos(), pedestalBlockEntity.itemStackHandler);
+                var storage = ItemStorage.SIDED.find(pLevel, pPos, pState, pedestalBlockEntity, null);
+                if (storage != null) {
+                    dropInventoryItems(tileentity.getLevel(), tileentity.getBlockPos(), storage);
+                }
             }
 
             super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
         }
     }
 
-    public static void dropInventoryItems(Level worldIn, BlockPos pos, ItemStackHandler itemHandler) {
-        for (int i = 0; i < itemHandler.getSlotCount(); i++) {
-            Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+    public static void dropInventoryItems(Level worldIn, BlockPos pos, Storage<ItemVariant> itemHandler) {
+        for (StorageView<ItemVariant> view : itemHandler.nonEmptyViews()) {
+            Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), view.getResource().toStack((int) view.getAmount()));
         }
     }
 

@@ -96,6 +96,7 @@ public class BoneSpiderServant extends SpiderServant implements RangedAttackMob 
                 }
             }
         }
+        super.onSyncedDataUpdated(accessor);
     }
 
     @Override
