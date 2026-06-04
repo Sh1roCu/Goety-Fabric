@@ -45,6 +45,8 @@ public class ModEnchantments {
     public static final Enchantment VELOCITY = register("velocity",
             () -> new VelocityEnchantment(Enchantment.Rarity.UNCOMMON, EquipmentSlot.MAINHAND));
 
+    public static final Enchantment ROYALTY = register("royalty",
+            () -> new RoyaltyEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
     public static void init() {
 
     }

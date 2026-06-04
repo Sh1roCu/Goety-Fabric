@@ -26,6 +26,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
@@ -189,6 +190,15 @@ public class HereticServant extends CultistServant implements IHeretic {
     @Override
     public SoundEvent getCelebrateSound() {
         return ModSounds.HERETIC_CELEBRATE;
+    }
+
+    @Override
+    protected ResourceLocation getDefaultLootTable() {
+        if (this.isNatural()){
+            return ModEntityType.HERETIC.getDefaultLootTable();
+        } else {
+            return super.getDefaultLootTable();
+        }
     }
 
     public void setChanting(boolean chanting) {

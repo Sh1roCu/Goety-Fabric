@@ -474,6 +474,7 @@ public class ClientInitEvents {
         BlockEntityRenderers.register(ModBlockEntities.MANDALA, MandalaRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.OMINOUS_STATUE, OminousStatueRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.OMINOUS_BRAZIER_STATUE, OminousBrazierStatueRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.THRONE, ModBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.TALL_SKULL, TallSkullBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.REDSTONE_GOLEM_SKULL, RedstoneGolemSkullBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.GRAVE_GOLEM_SKULL, GraveGolemSkullBlockEntityRenderer::new);

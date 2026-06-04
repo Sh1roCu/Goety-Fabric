@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -278,6 +279,14 @@ public class PillagerServant extends AbstractIllagerServant implements CrossbowA
         super.die(pCause);
     }
 
+    @Override
+    protected ResourceLocation getDefaultLootTable() {
+        if (this.isNatural()){
+            return EntityType.PILLAGER.getDefaultLootTable();
+        } else {
+            return super.getDefaultLootTable();
+        }
+    }
     @Override
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);

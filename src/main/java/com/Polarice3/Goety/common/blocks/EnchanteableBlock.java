@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.api.blocks.IEnchanteableBlock;
 import com.Polarice3.Goety.api.blocks.IEnchantedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
@@ -7,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,35 +16,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public abstract class EnchanteableBlock extends BaseEntityBlock {
+public abstract class EnchanteableBlock extends BaseEntityBlock implements IEnchanteableBlock {
 
     protected EnchanteableBlock(Properties p_49224_) {
         super(p_49224_);
-    }
-
-    public void setEnchantments(ItemStack itemStack, BlockEntity tileEntity) {
-        IEnchantedBlock devourerBlockEntity = (IEnchantedBlock) tileEntity;
-        Map<Enchantment, Integer> enchantments = devourerBlockEntity.getEnchantments();
-        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            Integer integer = entry.getValue();
-            if (integer < 0) {
-                enchantments.remove(enchantment);
-            } else {
-                enchantments.put(enchantment, integer);
-            }
-        }
-        EnchantmentHelper.setEnchantments(enchantments, itemStack);
-    }
-
-    @Override
-    public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
-        ItemStack itemStack = new ItemStack(this);
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof IEnchantedBlock) {
-            this.setEnchantments(itemStack, tileEntity);
-        }
-        return itemStack;
     }
 
     @Override

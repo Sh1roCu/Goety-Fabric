@@ -275,16 +275,16 @@ public class ModBlocks {
     public static final Block FROSTY_CARPET_INNER_CORNER = register("frosty_carpet_inner_corner", () ->
             new FancyCarpetBlock(DyeColor.BLUE, BlockBehaviour.Properties.copy(Blocks.BLUE_CARPET)));
 
-    public static final Block SHADE_THRONE = register("shade_throne", () -> new StoneThroneBlock(ShadeStoneProperties().noOcclusion()));
-    public static final Block STONE_THRONE = register("stone_throne", () -> new StoneThroneBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
-    public static final Block DEEPSLATE_THRONE = register("deepslate_throne", () -> new StoneThroneBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS).noOcclusion()));
-    public static final Block OMINOUS_THRONE = register("ominous_throne", () -> new StoneThroneBlock(ominousStoneProperties().noOcclusion()));
-    public static final Block BLACKSTONE_THRONE = register("blackstone_throne", () -> new StoneThroneBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE).noOcclusion()));
-    public static final Block HIGHROCK_THRONE = register("highrock_throne", () -> new StoneThroneBlock(HighrockProperties().noOcclusion()));
-    public static final Block MARBLE_THRONE = register("marble_throne", () -> new StoneThroneBlock(MarbleProperties().noOcclusion()));
+    public static final Block SHADE_THRONE = enchantedRegister("shade_throne", () -> new StoneThroneBlock(ShadeStoneProperties().noOcclusion()));
+    public static final Block STONE_THRONE = enchantedRegister("stone_throne", () -> new StoneThroneBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
+    public static final Block DEEPSLATE_THRONE = enchantedRegister("deepslate_throne", () -> new StoneThroneBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_BRICKS).noOcclusion()));
+    public static final Block OMINOUS_THRONE = enchantedRegister("ominous_throne", () -> new StoneThroneBlock(ominousStoneProperties().noOcclusion()));
+    public static final Block BLACKSTONE_THRONE = enchantedRegister("blackstone_throne", () -> new StoneThroneBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE).noOcclusion()));
+    public static final Block HIGHROCK_THRONE = enchantedRegister("highrock_throne", () -> new StoneThroneBlock(HighrockProperties().noOcclusion()));
+    public static final Block MARBLE_THRONE = enchantedRegister("marble_throne", () -> new StoneThroneBlock(MarbleProperties().noOcclusion()));
 
-    public static final Block ROYAL_THRONE = register("royal_throne", () -> new RoyalThroneBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_RED).noOcclusion()));
-    public static final Block FROSTED_THRONE = register("frosted_throne", () -> new RoyalThroneBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BLUE).noOcclusion()));
+    public static final Block ROYAL_THRONE = enchantedRegister("royal_throne", () -> new RoyalThroneBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_RED).noOcclusion()));
+    public static final Block FROSTED_THRONE = enchantedRegister("frosted_throne", () -> new RoyalThroneBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BLUE).noOcclusion()));
 
     public static final Block CREEPER_TOTEM = register("creeper_totem", () ->
             new ToweringBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
@@ -1232,6 +1232,11 @@ public class ModBlocks {
     public static final PlushieBlock PLUSHIE_3 = curioIsterRegister("plushie_3", () -> new PlushieBlock(3));
     public static final PlushieBlock PLUSHIE_4 = curioIsterRegister("plushie_4", () -> new PlushieBlock(4));
     public static final PlushieBlock PLUSHIE_5 = curioIsterRegister("plushie_5", () -> new PlushieBlock(5));
+    public static final PlushieBlock PLUSHIE_6 = curioIsterRegister("plushie_6", () -> new PlushieBlock(6));
+    public static final PlushieBlock PLUSHIE_7 = curioIsterRegister("plushie_7", () -> new PlushieBlock(7));
+    public static final PlushieBlock PLUSHIE_8 = curioIsterRegister("plushie_8", () -> new PlushieBlock(8));
+    public static final PlushieBlock PLUSHIE_9 = curioIsterRegister("plushie_9", () -> new PlushieBlock(9));
+    public static final PlushieBlock PLUSHIE_10 = curioIsterRegister("plushie_10", () -> new PlushieBlock(10));
 
     //Custom Items
     public static final Item SNAP_WARTS_ITEM = ModItems.register("snap_warts",

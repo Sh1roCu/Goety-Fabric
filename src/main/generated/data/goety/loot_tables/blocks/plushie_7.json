@@ -11,16 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "block": "goety:ominous_throne",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
-            }
-          ],
-          "name": "goety:ominous_throne"
+          "name": "goety:plushie_7"
         }
       ],
       "rolls": 1.0

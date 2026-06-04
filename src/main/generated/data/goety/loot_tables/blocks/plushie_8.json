@@ -11,16 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "block": "goety:frosted_throne",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
-            }
-          ],
-          "name": "goety:frosted_throne"
+          "name": "goety:plushie_8"
         }
       ],
       "rolls": 1.0

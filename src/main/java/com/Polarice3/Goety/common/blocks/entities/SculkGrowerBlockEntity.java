@@ -106,7 +106,7 @@ public class SculkGrowerBlockEntity extends ModBlockEntity implements IEnchanted
     public void scanTotalPlants() {
         if (this.level != null) {
             this.totalPlantPos.clear();
-            int distance = 4 + this.enchantments.getOrDefault(ModEnchantments.RADIUS, 0);
+            int distance = 4 + this.getEnchantments().getOrDefault(ModEnchantments.RADIUS, 0);
             int y = distance / 2;
             for (int i = -distance; i <= distance; ++i) {
                 for (int j = -y; j <= y; ++j) {
@@ -132,7 +132,7 @@ public class SculkGrowerBlockEntity extends ModBlockEntity implements IEnchanted
     public void findPlants() {
         if (this.level != null && this.level instanceof ServerLevel serverLevel) {
             this.growablePlantPos.clear();
-            int distance = 5 + this.enchantments.getOrDefault(ModEnchantments.RADIUS, 0);
+            int distance = 5 + this.getEnchantments().getOrDefault(ModEnchantments.RADIUS, 0);
             int x = serverLevel.random.nextInt(distance) * (serverLevel.random.nextBoolean() ? -1 : 1);
             int y = distance / 2;
             int z = serverLevel.random.nextInt(distance) * (serverLevel.random.nextBoolean() ? -1 : 1);
@@ -150,8 +150,8 @@ public class SculkGrowerBlockEntity extends ModBlockEntity implements IEnchanted
     public void growPlants() {
         if (this.level != null && this.level instanceof ServerLevel serverLevel) {
             if (!this.growablePlantPos.isEmpty()) {
-                int potency = 1 + this.enchantments.getOrDefault(ModEnchantments.POTENCY, 0);
-                if (!MainConfig.SculkGrowerPotency.get()) {
+                int potency = 1 + this.getEnchantments().getOrDefault(ModEnchantments.POTENCY, 0);
+                if (!MainConfig.SculkGrowerPotency.get()){
                     potency = 1;
                 }
                 int random = serverLevel.random.nextInt(this.growablePlantPos.size());
@@ -189,8 +189,8 @@ public class SculkGrowerBlockEntity extends ModBlockEntity implements IEnchanted
         if (this.level == null) {
             return false;
         }
-        int potency = 1 + this.enchantments.getOrDefault(ModEnchantments.POTENCY, 0);
-        if (!MainConfig.SculkGrowerPotency.get()) {
+        int potency = 1 + this.getEnchantments().getOrDefault(ModEnchantments.POTENCY, 0);
+        if (!MainConfig.SculkGrowerPotency.get()){
             potency = 1;
         }
         int cost = MainConfig.SculkGrowerCost.get() * potency;

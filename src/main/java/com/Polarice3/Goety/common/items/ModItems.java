@@ -451,6 +451,7 @@ public class ModItems {
     public static final Item HUNTERS_BOW = register("hunters_bow", HuntersBowItem::new);
     //    public static final Item REVOLVER_CROSSBOW = register("revolver_crossbow", RevolverCrossbowItem::new);
     public static final Item IRON_ICE_AXE = register("iron_ice_axe", () -> new IceAxeItem(Tiers.IRON));
+    public static final Item REINFORCED_ICE_AXE = register("reinforced_ice_axe", () -> new IceAxeItem(Tiers.IRON, new Item.Properties().durability(600)));
     public static final Item DIAMOND_ICE_AXE = register("diamond_ice_axe", () -> new IceAxeItem(Tiers.DIAMOND));
     public static final Item PHILOSOPHERS_MACE = register("philosophers_mace", PhilosophersMaceItem::new);
     public static final Item DARK_SWORD = register("dark_sword", ModToolItems.DarkSwordItem::new);

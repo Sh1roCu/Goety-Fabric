@@ -11,16 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "block": "goety:stone_throne",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
-            }
-          ],
-          "name": "goety:stone_throne"
+          "name": "goety:plushie_6"
         }
       ],
       "rolls": 1.0

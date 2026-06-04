@@ -58,7 +58,7 @@ public class SculkDevourerBlockEntity extends OwnedBlockEntity implements GameEv
     @Override
     public int getListenerRadius() {
         int radius = 8;
-        radius *= this.enchantments.getOrDefault(ModEnchantments.RADIUS, 0) + 1;
+        radius *= this.getEnchantments().getOrDefault(ModEnchantments.RADIUS, 0) + 1;
         return radius;
     }
 
@@ -71,7 +71,7 @@ public class SculkDevourerBlockEntity extends OwnedBlockEntity implements GameEv
                     if (!livingentity.wasExperienceConsumed() && this.getPlayer() != null && SEHelper.getSoulsContainer(this.getPlayer())) {
                         int i = livingentity.getExperienceReward();
                         if (livingentity.shouldDropExperience() && i > 0) {
-                            i *= this.enchantments.getOrDefault(ModEnchantments.SOUL_EATER, 0) + 1;
+                            i *= this.getEnchantments().getOrDefault(ModEnchantments.SOUL_EATER, 0) + 1;
                             SEHelper.increaseSouls(this.getPlayer(), i);
                         }
 

@@ -24,6 +24,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallbac
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -107,6 +108,7 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         ClientTickEvents.START_CLIENT_TICK.register(ClientEvents::targetMonocleEvents);
         ClientPlayConnectionEvents.DISCONNECT.register(ClientEvents::logOff);
         ServerLivingEntityEvents.AFTER_DEATH.register(ClientEvents::onDying);
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(ClientEvents::onRecipesUpdated);
     }
 
     @Override

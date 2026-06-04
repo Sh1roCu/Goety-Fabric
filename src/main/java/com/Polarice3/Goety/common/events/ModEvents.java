@@ -5,12 +5,12 @@ import cn.sh1rocu.goety.api.extension.IEntityPersistentData;
 import cn.sh1rocu.goety.mixin.accessor.MobAccessor;
 import cn.sh1rocu.goety.mixin.accessor.VillagerAccessor;
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.api.blocks.IEnchanteableBlock;
 import com.Polarice3.Goety.api.entities.IChunkLoader;
 import com.Polarice3.Goety.api.entities.IHiding;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.blocks.EnchanteableBlock;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.blocks.ModChestBlock;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
@@ -55,7 +55,6 @@ import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
 import com.Polarice3.Goety.common.research.ResearchList;
 import com.Polarice3.Goety.common.world.data.ChunkLoadData;
-import com.Polarice3.Goety.common.world.structures.ModStructureTags;
 import com.Polarice3.Goety.compat.iron.IronAttributes;
 import com.Polarice3.Goety.compat.iron.IronLoaded;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
@@ -584,14 +583,14 @@ public class ModEvents {
                         Advancement advancement4 = serverPlayer.getServer().getAdvancements().getAdvancement(Goety.location("goety/read_buried_and_bygone_scroll"));
                         if (advancement4 != null) {
                             AdvancementProgress advancementProgress4 = serverPlayer.getAdvancements().getOrStartProgress(advancement4);
-                            if (!advancementProgress4.isDone()){
+                            if (!advancementProgress4.isDone()) {
                                 Advancement advancement1 = serverPlayer.getServer().getAdvancements().getAdvancement(Goety.location("goety/unlock_necromancer"));
                                 Advancement advancement2 = serverPlayer.getServer().getAdvancements().getAdvancement(Goety.location("goety/read_bygone_scroll"));
                                 if (advancement1 != null && advancement2 != null) {
                                     AdvancementProgress advancementProgress1 = serverPlayer.getAdvancements().getOrStartProgress(advancement1);
                                     AdvancementProgress advancementProgress2 = serverPlayer.getAdvancements().getOrStartProgress(advancement2);
-                                    if (advancementProgress1.isDone() && advancementProgress2.isDone()){
-                                        for(String s : advancementProgress4.getRemainingCriteria()) {
+                                    if (advancementProgress1.isDone() && advancementProgress2.isDone()) {
+                                        for (String s : advancementProgress4.getRemainingCriteria()) {
                                             serverPlayer.getAdvancements().award(advancement4, s);
                                         }
                                     }
@@ -920,8 +919,8 @@ public class ModEvents {
                             }
                         }
                     }
-                    if (state.getBlock() instanceof EnchanteableBlock enchanteableBlock) {
-                        enchanteableBlock.playerDestroy(player.level, player, pos, state, world.getBlockEntity(pos), fakeItem);
+                    if (state.getBlock() instanceof IEnchanteableBlock) {
+                        state.getBlock().playerDestroy(player.level, player, pos, state, world.getBlockEntity(pos), fakeItem);
                     } else {
                         Block.dropResources(state, player.level, pos, null, player, fakeItem);
                     }
@@ -946,8 +945,8 @@ public class ModEvents {
                             }
                         }
                     }
-                    if (state.getBlock() instanceof EnchanteableBlock enchanteableBlock) {
-                        enchanteableBlock.playerDestroy(player.level, player, pos, state, world.getBlockEntity(pos), fakeItem);
+                    if (state.getBlock() instanceof IEnchanteableBlock) {
+                        state.getBlock().playerDestroy(player.level, player, pos, state, world.getBlockEntity(pos), fakeItem);
                     } else {
                         Block.dropResources(state, player.level, pos, null, player, fakeItem);
                     }

@@ -24,6 +24,7 @@ import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ally.GuardianServant;
 import com.Polarice3.Goety.common.entities.ally.Leapleaf;
 import com.Polarice3.Goety.common.entities.ally.golem.SquallGolem;
+import com.Polarice3.Goety.common.entities.ally.illager.CrusherServant;
 import com.Polarice3.Goety.common.entities.ally.illager.StormCasterServant;
 import com.Polarice3.Goety.common.entities.ally.illager.WindCallerServant;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
@@ -97,6 +98,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.CloseableResourceManager;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -815,7 +818,7 @@ public class ClientEvents {
             heartX = 70;
         } else if (player.hasEffect(GoetyEffects.SPASMS)) {
             heartX = 34;
-        } else if (player.hasEffect(GoetyEffects.NECROSIS)){
+        } else if (player.hasEffect(GoetyEffects.NECROSIS)) {
             heartX = 88;
         }
         float absorptionRemaining = (float) absorption;
@@ -1314,5 +1317,9 @@ public class ClientEvents {
                 humanoidModel.copyPropertiesTo(model);
             }
         }
+    }
+
+    public static void onRecipesUpdated(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
+        CrusherServant.invalidateRecipeCache();
     }
 }

@@ -11,16 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "block": "goety:shade_throne",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
-            }
-          ],
-          "name": "goety:shade_throne"
+          "name": "goety:plushie_9"
         }
       ],
       "rolls": 1.0
