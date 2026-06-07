@@ -1103,6 +1103,21 @@ public class EnderKeeper extends AbstractEnderling implements Enemy {
     }
 
     @Override
+    protected void onBelowWorld() {
+        BlockPos blockPos = null;
+        if (this.getBoundPos() != null) {
+            blockPos = this.getBoundPos();
+        } else if (this.lastSafePosition != null) {
+            blockPos = this.lastSafePosition;
+        }
+        if (blockPos != null) {
+            this.ownedTeleport(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        } else {
+            super.onBelowWorld();
+        }
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
 
@@ -1160,17 +1175,6 @@ public class EnderKeeper extends AbstractEnderling implements Enemy {
                     if (blockPos.getY() > 1) {
                         this.lastSafePosition = blockPos;
                     }
-                }
-            }
-            if (this.getY() <= this.level.getMinBuildHeight()) {
-                BlockPos blockPos = null;
-                if (this.getBoundPos() != null) {
-                    blockPos = this.getBoundPos();
-                } else if (this.lastSafePosition != null) {
-                    blockPos = this.lastSafePosition;
-                }
-                if (blockPos != null) {
-                    this.ownedTeleport(blockPos.getX(), blockPos.getY(), blockPos.getZ());
                 }
             }
             float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -1589,7 +1593,7 @@ public class EnderKeeper extends AbstractEnderling implements Enemy {
     @Override
     public void servantTick() {
         if (this.isGuardingArea()) {
-            if (this.distanceToSqr(this.vec3BoundPos()) > Mth.square(64.0F) && this.getTarget() == null) {
+            if (this.distanceToSqr(this.vec3BoundPos()) > Mth.square(64.0F) && this.getTarget() == null || (this.vec3BoundPos().y - this.getY() > 12.0F)) {
                 Vec3 vec3 = this.vec3BoundPos();
                 this.teleportOut();
                 if (this.ownedTeleport(vec3.x, vec3.y, vec3.z)) {

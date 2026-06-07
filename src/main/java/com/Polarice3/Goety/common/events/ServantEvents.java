@@ -74,13 +74,13 @@ public class ServantEvents {
             if (mob.getTarget() instanceof IOwned owned) {
                 if (mob.getType().is(ModTags.EntityTypes.IGNORE_SERVANTS)) {
                     if (owned.getTrueOwner() != null) {
-                        if (mob.canAttack(owned.getTrueOwner()) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(owned.getTrueOwner())) {
+                        if (!owned.getTrueOwner().isDeadOrDying() && mob.canAttack(owned.getTrueOwner()) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(owned.getTrueOwner())) {
                             mob.setLastHurtByMob(owned.getTrueOwner());
                             mob.setTarget(owned.getTrueOwner());
                         }
                     }
                 }
-                if (mob.getTarget().isDeadOrDying() || !EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(mob.getTarget())) {
+                if (mob.getTarget() != null && (mob.getTarget().isDeadOrDying() || !EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(mob.getTarget()))) {
                     mob.setTarget(null);
                 }
             }
