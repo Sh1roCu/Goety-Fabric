@@ -2,7 +2,7 @@
   "replace": false,
   "__comment": "entities that cannot get Goety's Stunned effect.",
   "values": [
-    "#forge:bosses",
+    "#c:bosses",
     "#goety:mini_bosses",
     "#goety:powerful_servants",
     "goety:squall_golem"

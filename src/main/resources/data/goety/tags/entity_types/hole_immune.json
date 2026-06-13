@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#forge:bosses",
+    "#c:bosses",
     "goety:endersent",
     "minecraft:warden"
   ]
