@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally.undead.skeleton;
 
 import cn.sh1rocu.goety.util.ProjectileUtil;
+import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.common.entities.ai.CreatureCrossbowAttackGoal;
 import com.Polarice3.Goety.common.entities.ai.path.ModWaterPathNavigation;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
@@ -31,9 +32,7 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -45,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 public class SunkenSkeletonServant extends AbstractSkeletonServant implements CrossbowAttackMob {
+    private final CreatureBowAttackGoal<SunkenSkeletonServant> bowGoal = new CreatureBowAttackGoal<>(this, 1.0D, 20, 13.0F);
     private final CreatureCrossbowAttackGoal<SunkenSkeletonServant> crossbowAttackGoal = new CreatureCrossbowAttackGoal<>(this, 1.0D, 13.0F);
     private static final EntityDataAccessor<Boolean> IS_CHARGING_CROSSBOW = SynchedEntityData.defineId(SunkenSkeletonServant.class, EntityDataSerializers.BOOLEAN);
     private boolean searchingForLand;
@@ -101,11 +101,16 @@ public class SunkenSkeletonServant extends AbstractSkeletonServant implements Cr
 
     @Override
     public void reassessWeaponGoal() {
-        if (!this.level.isClientSide) {
+        if (this.level != null && !this.level.isClientSide) {
             this.goalSelector.removeGoal(this.meleeGoal);
-            this.goalSelector.removeGoal(this.crossbowAttackGoal);
-            ItemStack itemstack = this.getMainHandItem();
-            if (itemstack.getItem() instanceof CrossbowItem) {
+            this.goalSelector.removeGoal(this.bowGoal);
+            ItemStack itemstack = this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof ProjectileWeaponItem));
+            if (itemstack.getItem() instanceof BowItem) {
+                int i = 20;
+
+                this.bowGoal.setMinAttackInterval(i);
+                this.goalSelector.addGoal(3, this.bowGoal);
+            } else if (itemstack.getItem() instanceof CrossbowItem) {
                 this.goalSelector.addGoal(3, this.crossbowAttackGoal);
             } else {
                 this.goalSelector.addGoal(3, this.meleeGoal);

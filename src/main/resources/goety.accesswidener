@@ -3,6 +3,7 @@ accessWidener v2 named
 accessible field net/minecraft/world/entity/Entity dimensions Lnet/minecraft/world/entity/EntityDimensions;
 accessible field net/minecraft/world/entity/Entity nextStep F
 accessible field net/minecraft/world/entity/Entity invulnerable Z
+accessible method net/minecraft/world/entity/item/FallingBlockEntity fall (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/entity/item/FallingBlockEntity;
 accessible field net/minecraft/world/entity/Entity level Lnet/minecraft/world/level/Level;
 extendable method net/minecraft/world/entity/Entity collide (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
 

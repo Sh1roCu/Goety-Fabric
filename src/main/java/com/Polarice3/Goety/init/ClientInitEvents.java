@@ -273,6 +273,7 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.VOID_SHOCK, VoidShockModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.VOID_SHOCK_BOMB, VoidShockBombModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SCATTER_MINE, ScatterMineModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SMACK_STONE, SmackStoneModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.BLAST_FUNGUS, BlastFungusModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.WEB_SHOT, WebShotModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SOUL_BOMB, SoulBombModel::createBodyLayer);
@@ -546,6 +547,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.BLAST_FUNGUS, BlastFungusRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BERSERK_FUNGUS, BerserkFungusRenderer::new);
         EntityRendererRegistry.register(ModEntityType.PYROCLAST, PyroclastRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.SMACK_STONE, SmackStoneRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MAGMA_BOMB, MagmaBombRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BLOSSOM_BALL, BlossomBallRenderer::new);
         EntityRendererRegistry.register(ModEntityType.WEB_SHOT, WebShotRenderer::new);

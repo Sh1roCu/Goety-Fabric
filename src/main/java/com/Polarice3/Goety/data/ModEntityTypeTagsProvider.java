@@ -166,6 +166,7 @@ public class ModEntityTypeTagsProvider extends FabricTagProvider.EntityTypeTagPr
                 ModEntityType.SHIELD_DEBRIS,
                 ModEntityType.ILL_BOMB,
                 ModEntityType.SCATTER_BOMB,
+                ModEntityType.SMACK_STONE,
                 ModEntityType.SCYTHE,
                 ModEntityType.SWORD,
                 ModEntityType.ICE_SPIKE,

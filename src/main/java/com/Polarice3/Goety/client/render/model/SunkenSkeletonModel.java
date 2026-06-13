@@ -10,8 +10,9 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 
 public class SunkenSkeletonModel<T extends Owned> extends HumanoidModel<T> {
@@ -41,7 +42,7 @@ public class SunkenSkeletonModel<T extends Owned> extends HumanoidModel<T> {
         this.rightArmPose = ArmPose.EMPTY;
         this.leftArmPose = ArmPose.EMPTY;
         ItemStack itemstack = pEntity.getItemInHand(InteractionHand.MAIN_HAND);
-        if (itemstack.getItem() == Items.BOW && pEntity.isAggressive()) {
+        if (itemstack.getItem() instanceof BowItem && pEntity.isAggressive()) {
             if (pEntity.getMainArm() == HumanoidArm.RIGHT) {
                 this.rightArmPose = ArmPose.BOW_AND_ARROW;
             } else {
@@ -49,7 +50,7 @@ public class SunkenSkeletonModel<T extends Owned> extends HumanoidModel<T> {
             }
         }
         if (pEntity.isAggressive()) {
-            if (itemstack.getItem() == Items.CROSSBOW) {
+            if (itemstack.getItem() instanceof CrossbowItem) {
                 if (pEntity.getMainArm() == HumanoidArm.RIGHT) {
                     this.rightArmPose = ArmPose.CROSSBOW_HOLD;
                     if (pEntity.isChargingCrossbow()) {

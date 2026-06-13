@@ -4,11 +4,14 @@ import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.common.blocks.CursedCageBlock;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.config.ItemConfig;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.Trinket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +28,7 @@ import java.util.List;
 /**
  * Learned how to make Totem of Souls gain Soul Energy from codes by @Ipsis
  */
-public class TotemOfSouls extends Item implements ITotem {
+public class TotemOfSouls extends Item implements ITotem, Trinket {
     public int maxSouls;
 
     public TotemOfSouls(int maxSouls) {
@@ -136,6 +139,11 @@ public class TotemOfSouls extends Item implements ITotem {
         } else {
             return InteractionResult.PASS;
         }
+    }
+
+    @Override
+    public boolean canEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        return true;
     }
 
     @Override

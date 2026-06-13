@@ -416,22 +416,25 @@ public class ModEvents {
     private static final Map<ServerLevel, WightSpawner> WIGHT_SPAWN_MAP = new HashMap<>();
 
     public static void worldLoad(MinecraftServer server, ServerLevel serverWorld) {
-        // See: EnumRaiser.java
         // RaidAdditions.addRaiders();
         ILLAGER_SPAWN_MAP.put(serverWorld, new IllagerSpawner());
         WIGHT_SPAWN_MAP.put(serverWorld, new WightSpawner());
         ChunkLoadData data = ChunkLoadData.get(serverWorld);
+        List<BlockPos> toRemove = new ArrayList<>();
         data.getPositions().forEach((pos, radius) -> {
             ChunkPos chunkPos = new ChunkPos(pos);
             serverWorld.getChunkSource().addRegionTicket(
                     ModTicketTypes.BLOCK, chunkPos, radius, pos);
-            serverWorld.getServer().execute(() -> {
-                BlockEntity be = serverWorld.getBlockEntity(pos);
-                if (!(be instanceof IChunkLoader)) {
-                    data.removePosition(pos);
-                }
-            });
+            BlockEntity be = serverWorld.getBlockEntity(pos);
+            if (!(be instanceof IChunkLoader)) {
+                toRemove.add(pos);
+            }
         });
+        if (!toRemove.isEmpty()) {
+            for (BlockPos blockPos : toRemove) {
+                data.removePosition(blockPos);
+            }
+        }
     }
 
     public static void worldUnload(MinecraftServer server, ServerLevel serverWorld) {

@@ -320,6 +320,10 @@ public abstract class AbstractSkeletonServant extends Summoned implements Ranged
         return this.isFullyFrozen();
     }
 
+    public boolean canUseBow() {
+        return true;
+    }
+
     @Override
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
@@ -344,7 +348,7 @@ public abstract class AbstractSkeletonServant extends Summoned implements Ranged
             }
             if (!(pPlayer.getOffhandItem().getItem() instanceof IWand)) {
                 if (this.canHaveWeapon()) {
-                    if (item instanceof SwordItem || (item instanceof BowItem && !(this instanceof CrossbowAttackMob))) {
+                    if (item instanceof SwordItem || (item instanceof BowItem && this.canUseBow())) {
                         this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                         this.setItemSlot(EquipmentSlot.MAINHAND, itemstack.copyWithCount(1));
                         this.dropEquipment(EquipmentSlot.MAINHAND, itemstack2);
