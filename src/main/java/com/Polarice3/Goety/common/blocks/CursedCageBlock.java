@@ -37,7 +37,7 @@ public class CursedCageBlock extends BaseEntityBlock {
 
     public CursedCageBlock() {
         super(Properties.of()
-                .mapColor(MapColor.STONE)
+                .mapColor(MapColor.METAL)
                 .strength(5.0F)
                 .sound(SoundType.METAL)
                 .requiresCorrectToolForDrops()

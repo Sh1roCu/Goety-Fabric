@@ -142,11 +142,6 @@ public class TotemOfSouls extends Item implements ITotem, Trinket {
     }
 
     @Override
-    public boolean canEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        return true;
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.getTag() != null) {

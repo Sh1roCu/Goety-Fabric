@@ -5,6 +5,9 @@ import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.blocks.SoulMenderBlock;
 import com.Polarice3.Goety.config.MainConfig;
 import com.Polarice3.Goety.utils.MathHelper;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,13 +16,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Clearable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -73,11 +78,15 @@ public class SoulMenderBlockEntity extends ModBlockEntity implements Clearable, 
                                 this.level.playSound(null, this.getBlockPos(), SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 1.0F + this.level.random.nextFloat(), this.level.random.nextFloat() * 0.7F + 0.3F);
                             }
                         } else {
-                            BlockPos blockpos = this.getBlockPos();
-                            Containers.dropItemStack(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), this.itemStack);
+                            ItemStack finished = this.itemStack.copy();
                             this.itemStack.shrink(1);
                             this.finishParticles();
                             this.markUpdated();
+                            if (!this.tryDepositItem(finished)) {
+                                BlockPos blockpos = this.getBlockPos();
+                                Vec3 vec3 = Vec3.atCenterOf(blockpos);
+                                dropItemStack(this.level, vec3.x, vec3.y, vec3.z, finished);
+                            }
                         }
                     } else if (this.itemStack.isDamaged()) {
                         if (this.level.getGameTime() % (MathHelper.secondsToTicks(MainConfig.SoulMenderSeconds.get().floatValue()) + 1) == 0) {
@@ -88,14 +97,65 @@ public class SoulMenderBlockEntity extends ModBlockEntity implements Clearable, 
                             this.level.playSound(null, this.getBlockPos(), SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 1.0F + this.level.random.nextFloat(), this.level.random.nextFloat() * 0.7F + 0.3F);
                         }
                     } else {
-                        BlockPos blockpos = this.getBlockPos();
-                        Containers.dropItemStack(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), this.itemStack);
+                        ItemStack finished = this.itemStack.copy();
                         this.itemStack.shrink(1);
                         this.finishParticles();
                         this.markUpdated();
+                        if (!this.tryDepositItem(finished)) {
+                            BlockPos blockpos = this.getBlockPos();
+                            Vec3 vec3 = Vec3.atCenterOf(blockpos);
+                            dropItemStack(this.level, vec3.x, vec3.y, vec3.z, finished);
+                        }
                     }
                 }
             }
+        }
+    }
+
+    public boolean tryDepositItem(ItemStack stack) {
+        if (this.level == null || this.level.isClientSide) {
+            return false;
+        }
+
+        for (Direction direction : Direction.values()) {
+            if (direction == Direction.DOWN) {
+                continue;
+            }
+
+            BlockPos neighborPos = this.getBlockPos().relative(direction);
+            BlockEntity neighbor = this.level.getBlockEntity(neighborPos);
+            if (neighbor == null) {
+                continue;
+            }
+
+            var handler = ItemStorage.SIDED.find(this.level, neighborPos, direction.getOpposite());
+
+            if (handler == null) {
+                continue;
+            }
+
+            long inserted;
+            try (Transaction tx = Transaction.openOuter()) {
+                inserted = handler.insert(ItemVariant.of(stack), stack.getCount(), tx);
+                tx.commit();
+            }
+
+            if (inserted == stack.getCount()) {
+                stack.setCount(0);
+                return true;
+            } else if (inserted < stack.getCount()) {
+                stack.setCount((int) (stack.getCount() - inserted));
+            }
+        }
+
+        return false;
+    }
+
+    public static void dropItemStack(Level level, double pX, double pY, double pZ, ItemStack stack) {
+        while (!stack.isEmpty()) {
+            ItemEntity itementity = new ItemEntity(level, pX, pY, pZ, stack.split(1));
+            itementity.setDeltaMovement(0.0D, level.random.triangle(0.2D, 0.11485000171139836D), 0.0D);
+            level.addFreshEntity(itementity);
         }
     }
 

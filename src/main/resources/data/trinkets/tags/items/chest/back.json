@@ -17,11 +17,10 @@
     "goety:nether_robe",
     "goety:nether_robe_warped",
     "goety:unholy_robe",
-    "goety:necro_cape",
-    "goety:nameless_cape",
     "goety:witch_robe",
     "goety:witch_robe_hedge",
     "goety:warlock_robe",
-    "goety:warlock_robe_dark"
+    "goety:warlock_robe_dark",
+    "goety:eternal_cauldron"
   ]
 }

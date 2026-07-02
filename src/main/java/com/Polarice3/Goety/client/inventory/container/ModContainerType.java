@@ -23,6 +23,9 @@ public class ModContainerType {
     public static final ExtendedScreenHandlerType<BrewBagContainer> BREW_BAG = register("brew_bag",
             () -> new ExtendedScreenHandlerType<>(BrewBagContainer::createContainerClientSide));
 
+    public static final ExtendedScreenHandlerType<EternalCauldronContainer> ETERNAL_CAULDRON = register("eternal_cauldron",
+            () -> new ExtendedScreenHandlerType<>(EternalCauldronContainer::createContainerClientSide));
+
     public static final ExtendedScreenHandlerType<DarkAnvilMenu> DARK_ANVIL = register("dark_anvil",
             () -> new ExtendedScreenHandlerType<>(DarkAnvilMenu::new));
 

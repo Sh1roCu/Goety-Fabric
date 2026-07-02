@@ -2,11 +2,12 @@ package com.Polarice3.Goety.compat.jade;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.init.ModTags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Enemy;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -26,7 +27,11 @@ public enum HostileIndicatorProvider implements IEntityComponentProvider, IServe
     public void appendServerData(CompoundTag data, EntityAccessor accessor) {
         Entity entity = accessor.getEntity();
         if (entity instanceof IOwned owned) {
-            if (owned.getTrueOwner() == null && owned.isHostile() && !(owned instanceof Enemy)) {
+            if (owned.getTrueOwner() == null
+                    && owned.isHostile()
+                    && !owned.isNatural()
+                    && !(entity.getType().is(ModTags.EntityTypes.MINI_BOSSES)
+                    && !(entity.getType().is(ConventionalEntityTypeTags.BOSSES)))) {
                 data.putInt("IsHostile", 1);
             }
         }

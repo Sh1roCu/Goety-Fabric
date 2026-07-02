@@ -31,6 +31,11 @@ public class ModRecipeSerializer {
     public static final RecipeSerializer<BrazierRecipe> BRAZIER = registerSerializer("brazier",
             () -> BrazierRecipe.SERIALIZER);
 
+    public static final RecipeType<CauldronRecipe> CAULDRON_TYPE = registerRecipeType("cauldron");
+
+    public static final RecipeSerializer<CauldronRecipe> CAULDRON = registerSerializer("cauldron",
+            () -> CauldronRecipe.SERIALIZER);
+
     public static final RecipeType<BrewingRecipe> BREWING_TYPE = registerRecipeType("brewing");
 
     public static final RecipeSerializer<BrewingRecipe> BREWING = registerSerializer("brewing",

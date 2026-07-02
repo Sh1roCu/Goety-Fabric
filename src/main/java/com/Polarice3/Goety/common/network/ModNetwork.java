@@ -71,6 +71,7 @@ public class ModNetwork {
         ClientPlayNetworking.registerGlobalReceiver(SRepositionPacket.ID, SRepositionPacket::consume);
         ClientPlayNetworking.registerGlobalReceiver(SInstaLookPacket.ID, SInstaLookPacket::consume);
         ClientPlayNetworking.registerGlobalReceiver(SStaffParticlePacket.ID, SStaffParticlePacket::consume);
+        ClientPlayNetworking.registerGlobalReceiver(SInstaLookAtPacket.ID, SInstaLookAtPacket::consume);
 
     }
 
@@ -104,6 +105,7 @@ public class ModNetwork {
         ServerPlayNetworking.registerGlobalReceiver(CPrisonerMinePacket.ID, CPrisonerMinePacket::consume);
         ServerPlayNetworking.registerGlobalReceiver(CActivateCurioKeyPacket.ID, CActivateCurioKeyPacket::consume);
         ServerPlayNetworking.registerGlobalReceiver(CDismissServantsPacket.ID, CDismissServantsPacket::consume);
+        ServerPlayNetworking.registerGlobalReceiver(CBroomCollisionPacket.ID, CBroomCollisionPacket::consume);
     }
 
     public static void sendTo(Player player, ResourceLocation channel, FriendlyByteBuf buf) {

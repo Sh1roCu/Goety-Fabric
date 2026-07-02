@@ -1,0 +1,30 @@
+{
+  "type": "goety:cauldron",
+  "soulCost": 0,
+  "color": 12482654,
+  "take_with": {
+    "item": "minecraft:bowl"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:red_mushroom"
+    },
+    {
+      "item": "minecraft:brown_mushroom"
+    }
+  ],
+  "result": {
+    "item": "minecraft:mushroom_stew"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:all_mods_loaded",
+        "values": [
+          "goety_revelation"
+        ]
+      }
+    }
+  ]
+}

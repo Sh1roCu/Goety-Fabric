@@ -3,6 +3,7 @@ package com.Polarice3.Goety.client.render;
 import com.Polarice3.Goety.client.render.model.DarkRobeModel;
 import com.Polarice3.Goety.client.render.model.GloveModel;
 import com.Polarice3.Goety.common.items.ModItems;
+import com.Polarice3.Goety.common.items.curios.EternalCauldronItem;
 import com.Polarice3.Goety.common.items.curios.UnholyHatItem;
 import com.Polarice3.Goety.config.ItemConfig;
 import com.Polarice3.Goety.utils.CuriosFinder;
@@ -21,6 +22,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -68,6 +70,11 @@ public class WearRenderer implements TrinketRenderer {
         } else if (Objects.equals(this.texture, TrinketsRenderer.render("unholy_hat_halo.png"))) {
             if (MobUtil.healthIsHalved(livingEntity)) {
                 return TrinketsRenderer.render("unholy_hat_halo_red.png");
+            }
+        } else if (Objects.equals(this.texture, TrinketsRenderer.render("eternal_cauldron.png"))){
+            ItemStack itemStack = CuriosFinder.findCurio(livingEntity, ModItems.ETERNAL_CAULDRON);
+            if (EternalCauldronItem.getBottle(itemStack).isEmpty()) {
+                return TrinketsRenderer.render("eternal_cauldron_empty.png");
             }
         }
         return texture;

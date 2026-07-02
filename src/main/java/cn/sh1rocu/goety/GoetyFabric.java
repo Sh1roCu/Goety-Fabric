@@ -13,9 +13,9 @@ import com.Polarice3.Goety.common.events.spell.CastMagicEvent;
 import com.Polarice3.Goety.common.events.spell.CastingMagicEvent;
 import com.Polarice3.Goety.common.items.brew.BrewBag;
 import com.Polarice3.Goety.common.items.brew.WitchStaff;
+import com.Polarice3.Goety.common.items.curios.EternalCauldronItem;
 import com.Polarice3.Goety.common.items.magic.FocusBag;
 import com.Polarice3.Goety.common.items.magic.FocusPack;
-import com.Polarice3.Goety.init.RaidAdditions;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
@@ -78,6 +78,9 @@ public class GoetyFabric implements ModInitializer {
             }
             if (item instanceof WitchStaff witchStaff) {
                 return witchStaff.initCapabilities(itemStack);
+            }
+            if (item instanceof EternalCauldronItem eternalCauldron){
+                return eternalCauldron.initCapabilities(itemStack);
             }
             return null;
         });

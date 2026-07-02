@@ -440,7 +440,7 @@ public class Goety {
                         if (blockState.is(ModBlocks.BREWING_CAULDRON)) {
                             if (blockState.getValue(BrewCauldronBlock.LEVEL) == 3) {
                                 if (source.getLevel().getBlockEntity(blockpos) instanceof BrewCauldronBlockEntity blockEntity) {
-                                    blockEntity.reset();
+                                    blockEntity.fullReset();
                                 }
                                 this.setSuccess(source.getLevel().setBlockAndUpdate(blockpos, blockState.setValue(BrewCauldronBlock.LEVEL, 0)));
                                 return new ItemStack(Items.WATER_BUCKET);
@@ -459,6 +459,8 @@ public class Goety {
         StrippableBlockRegistry.register(ModBlocks.PINE_LOG, ModBlocks.STRIPPED_PINE_LOG);
         StrippableBlockRegistry.register(ModBlocks.PINE_WOOD, ModBlocks.STRIPPED_PINE_WOOD);
 
+//        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.HENBANE.getId(), ModBlocks.POTTED_HENBANE);
+//        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.DEADLY_NIGHTSHADE.getId(), ModBlocks.POTTED_DEADLY_NIGHTSHADE);
 //        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.SIENNA_GRASS.getId(), ModBlocks.POTTED_SIENNA_GRASS);
 //        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.SIENNA_FERN.getId(), ModBlocks.POTTED_SIENNA_FERN);
 //        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.WINDSWEPT_DEAD_BUSH.getId(), ModBlocks.POTTED_WINDSWEPT_DEAD_BUSH);
@@ -506,6 +508,8 @@ public class Goety {
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.TALL_SIENNA_GRASS.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.LARGE_SIENNA_FERN.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.SIENNA_VINE.asItem(), 0.5F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.HENBANE_SEEDS, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(ModItems.HENBANE_FLOWER, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.SNAP_FUNGUS, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.ROTTEN_SAPLING.asItem(), 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_SAPLING.asItem(), 0.65F);

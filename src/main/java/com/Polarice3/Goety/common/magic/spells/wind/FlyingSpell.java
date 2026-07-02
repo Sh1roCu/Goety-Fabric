@@ -60,10 +60,10 @@ public class FlyingSpell extends EverChargeSpell {
     }
 
     @Override
-    public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
-        double power = 0.5D;
-        if (rightStaff(staff)) {
-            power = 1.0D;
+    public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat){
+        double power = SpellConfig.FlyingPower.get();
+        if (rightStaff(staff)){
+            power *= 2.0D;
         }
         int potency = spellStat.getPotency();
         if (WandUtil.enchantedFocus(caster)) {

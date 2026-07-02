@@ -70,6 +70,7 @@ public class TrinketsRenderer {
         TrinketRendererRegistry.registerRenderer(ModItems.TARGETING_MONOCLE, new WearRenderer(render("targeting_monocle.png"), () -> new MiscCuriosModel(bakeLayer(ModModelLayer.MONOCLE))));
         TrinketRendererRegistry.registerRenderer(ModItems.GRAVE_GLOVE, new WearRenderer(render("grave_glove.png"), () -> new GloveModel(bakeLayer(ModModelLayer.GLOVE))));
         TrinketRendererRegistry.registerRenderer(ModItems.THRASH_GLOVE, new WearRenderer(render("thrash_glove.png"), () -> new GloveModel(bakeLayer(ModModelLayer.GLOVE))));
+        TrinketRendererRegistry.registerRenderer(ModItems.ETERNAL_CAULDRON, new WearRenderer(render("eternal_cauldron.png"), () -> new EternalCauldronModel(bakeLayer(ModModelLayer.ETERNAL_CAULDRON))));
         ModItems.ITEMS.forEach(item -> {
             if (item instanceof BlockItem blockItem) {
                 if (blockItem.getBlock() instanceof PlushieBlock) {

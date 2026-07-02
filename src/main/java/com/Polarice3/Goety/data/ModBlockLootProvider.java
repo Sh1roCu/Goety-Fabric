@@ -1,8 +1,6 @@
 package com.Polarice3.Goety.data;
 
-import com.Polarice3.Goety.common.blocks.LayerBlock;
-import com.Polarice3.Goety.common.blocks.ModBlocks;
-import com.Polarice3.Goety.common.blocks.SnapWartsBlock;
+import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.common.items.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
@@ -85,31 +83,43 @@ public class ModBlockLootProvider extends FabricBlockLootTableProvider {
         LootItemCondition.Builder lootbuilder = LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.SNAP_WARTS).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnapWartsBlock.AGE, 2));
         LootItemCondition.Builder lootbuilder1 = LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.SNAP_WARTS).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SnapWartsBlock.AGE, 1));
         this.add(ModBlocks.SNAP_WARTS, createSnapWartDrops(ModBlocks.SNAP_WARTS, ModItems.SNAP_FUNGUS, ModBlocks.SNAP_WARTS_ITEM, lootbuilder, lootbuilder1));
-        this.add(ModBlocks.FIRETHORN, (p_249159_) -> this.applyExplosionDecay(p_249159_, LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FIRETHORN).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_3, 3))).add(LootItem.lootTableItem(ModBlocks.FIRETHORN_BERRIES)).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 3.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))).withPool(LootPool.lootPool().when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FIRETHORN).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_3, 2))).add(LootItem.lootTableItem(ModBlocks.FIRETHORN_BERRIES)).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)))));
-        this.add(ModBlocks.COBBLED_DIRT, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().add(AlternativesEntry.alternatives(
-                LootItem.lootTableItem(ModBlocks.COBBLED_DIRT).when(HAS_SILK_TOUCH),
-                LootItem.lootTableItem(Items.COBBLESTONE).when(HAS_PICKAXE),
-                LootItem.lootTableItem(Items.DIRT).when(HAS_SHOVEL),
-                applyExplosionCondition(ModBlocks.COBBLED_DIRT, LootItem.lootTableItem(ModBlocks.COBBLED_DIRT))))));
-        this.add(ModBlocks.SNOWY_DIRT, (block) -> createSingleItemTableWithSilkTouch(block, Blocks.DIRT));
-        this.add(ModBlocks.COBBLED_DARK_DIRT, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().add(AlternativesEntry.alternatives(
-                LootItem.lootTableItem(ModBlocks.COBBLED_DARK_DIRT).when(HAS_SILK_TOUCH),
-                LootItem.lootTableItem(Items.COBBLESTONE).when(HAS_PICKAXE),
-                LootItem.lootTableItem(ModBlocks.DARK_DIRT).when(HAS_SHOVEL),
-                applyExplosionCondition(ModBlocks.COBBLED_DARK_DIRT, LootItem.lootTableItem(ModBlocks.COBBLED_DARK_DIRT))))));
-        this.add(ModBlocks.SNOWY_DARK_DIRT, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.DARK_DIRT));
-        this.add(ModBlocks.FORBIDDEN_GRASS, (block) -> createSingleItemTableWithSilkTouch(block, Blocks.DIRT));
-        this.add(ModBlocks.END_GROWTH_BLOCK, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.END_ROCK));
-        this.add(ModBlocks.CHORUS_GRASS_BLOCK, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_END_STONE_BLOCK));
-        this.add(ModBlocks.RED_MOSS_SILTSTONE, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_SILTSTONE_BLOCK));
-        this.add(ModBlocks.RED_MOSS_HIGHROCK, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.HIGHROCK_BLOCK));
-        this.add(ModBlocks.RED_MOSS_DIRT, (block) -> createSingleItemTableWithSilkTouch(block, Blocks.DIRT));
-        this.add(ModBlocks.SPIDER_NEST, (block) -> createSingleItemTableWithSilkTouch(block, Items.STRING, UniformGenerator.between(4.0F, 8.0F)));
-        this.add(ModBlocks.SMOOTH_SILTSTONE_BLOCK, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_SILTSTONE_BLOCK));
-        this.add(ModBlocks.OMINOUS_STONE_BLOCK, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_OMINOUS_STONE_BLOCK));
-        this.add(ModBlocks.END_STONE_SLATE_BLOCK, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.COBBLED_END_STONE_BLOCK));
+        LootItemCondition.Builder lootitemcondition$builder1 = LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.HENBANE).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(HenbaneBlock.AGE, 3));
+        this.add(ModBlocks.HENBANE, this.createCropDrops(ModBlocks.HENBANE, ModItems.HENBANE_FLOWER, ModBlocks.HENBANE_SEEDS, lootitemcondition$builder1));
+        LootItemCondition.Builder lootitemcondition$builder2 = LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.DEADLY_NIGHTSHADE).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(NightshadeBlock.AGE, 3));
+        this.add(ModBlocks.DEADLY_NIGHTSHADE, this.createCropDrops(ModBlocks.DEADLY_NIGHTSHADE, ModItems.NIGHTSHADE_BLOSSOM, ModBlocks.NIGHTSHADE_SEEDS, lootitemcondition$builder2));
+        this.add(ModBlocks.FIRETHORN, (p_249159_) -> {
+            return this.applyExplosionDecay(p_249159_, LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FIRETHORN).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_3, 3))).add(LootItem.lootTableItem(ModBlocks.FIRETHORN_BERRIES)).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 3.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))).withPool(LootPool.lootPool().when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FIRETHORN).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_3, 2))).add(LootItem.lootTableItem(ModBlocks.FIRETHORN_BERRIES)).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
+        });
+        this.add(ModBlocks.COBBLED_DIRT, (block) -> {
+           return LootTable.lootTable().withPool(LootPool.lootPool().add(AlternativesEntry.alternatives(
+                    LootItem.lootTableItem(ModBlocks.COBBLED_DIRT).when(HAS_SILK_TOUCH),
+                    LootItem.lootTableItem(Items.COBBLESTONE).when(HAS_PICKAXE),
+                    LootItem.lootTableItem(Items.DIRT).when(HAS_SHOVEL),
+                    applyExplosionCondition(ModBlocks.COBBLED_DIRT, LootItem.lootTableItem(ModBlocks.COBBLED_DIRT)))));
+        });
+        this.add(ModBlocks.SNOWY_DIRT, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, Blocks.DIRT));
+        this.add(ModBlocks.COBBLED_DARK_DIRT, (block) -> {
+            return LootTable.lootTable().withPool(LootPool.lootPool().add(AlternativesEntry.alternatives(
+                    LootItem.lootTableItem(ModBlocks.COBBLED_DARK_DIRT).when(HAS_SILK_TOUCH),
+                    LootItem.lootTableItem(Items.COBBLESTONE).when(HAS_PICKAXE),
+                    LootItem.lootTableItem(ModBlocks.DARK_DIRT).when(HAS_SHOVEL),
+                    applyExplosionCondition(ModBlocks.COBBLED_DARK_DIRT, LootItem.lootTableItem(ModBlocks.COBBLED_DARK_DIRT)))));
+        });
+        this.add(ModBlocks.SNOWY_DARK_DIRT, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.DARK_DIRT));
+        this.add(ModBlocks.FORBIDDEN_GRASS, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, Blocks.DIRT));
+        this.add(ModBlocks.END_GROWTH_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.END_ROCK));
+        this.add(ModBlocks.CHORUS_GRASS_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_END_STONE_BLOCK));
+        this.add(ModBlocks.RED_MOSS_SILTSTONE, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_SILTSTONE_BLOCK));
+        this.add(ModBlocks.RED_MOSS_HIGHROCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.HIGHROCK_BLOCK));
+        this.add(ModBlocks.RED_MOSS_DIRT, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, Blocks.DIRT));
+        this.add(ModBlocks.SPIDER_NEST, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, Items.STRING, UniformGenerator.between(4.0F, 8.0F)));
+        this.add(ModBlocks.SMOOTH_SILTSTONE_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_SILTSTONE_BLOCK));
+        this.add(ModBlocks.OMINOUS_STONE_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_OMINOUS_STONE_BLOCK));
+        this.add(ModBlocks.END_STONE_SLATE_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_END_STONE_BLOCK));
         this.dropOther(ModBlocks.COBBLED_OMINOUS_STONE_PATH_BLOCK, ModBlocks.COBBLED_OMINOUS_STONE_BLOCK);
         this.dropWhenSilkTouch(ModBlocks.SCULK_RELAY);
+        this.dropPottedContents(ModBlocks.POTTED_HENBANE);
+        this.dropPottedContents(ModBlocks.POTTED_DEADLY_NIGHTSHADE);
         this.dropPottedContents(ModBlocks.POTTED_SIENNA_GRASS);
         this.dropPottedContents(ModBlocks.POTTED_SIENNA_FERN);
         this.dropPottedContents(ModBlocks.POTTED_WINDSWEPT_DEAD_BUSH);
@@ -120,49 +130,112 @@ public class ModBlockLootProvider extends FabricBlockLootTableProvider {
         this.dropPottedContents(ModBlocks.POTTED_WINDSWEPT_SAPLING);
         this.dropPottedContents(ModBlocks.POTTED_PINE_SAPLING);
         this.dropPottedContents(ModBlocks.POTTED_CHORUS_SAPLING);
-        this.add(ModBlocks.JADE_ORE, (block) -> createOreDrop(block, ModItems.JADE));
-        this.add(ModBlocks.ROTTEN_LEAVES, (block) -> createRottenLeavesDrops(block, ModBlocks.ROTTEN_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
-        this.add(ModBlocks.ROTTEN_BOOKSHELF, (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
-        this.add(ModBlocks.WINDSWEPT_LEAVES, (block) -> createLeavesDrops(block, ModBlocks.WINDSWEPT_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
-        this.add(ModBlocks.WINDSWEPT_BOOKSHELF, (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
-        this.add(ModBlocks.PINE_LEAVES, (block) -> createLeavesDrops(block, ModBlocks.PINE_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
-        this.add(ModBlocks.PINE_BOOKSHELF, (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
-        this.add(ModBlocks.CHORUS_LEAVES, (block) -> createChorusLeavesDrops(block, ModBlocks.CHORUS_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
-        this.add(ModBlocks.CHORUS_BLOSSOM_LEAVES, (block) -> createLeavesDrops(block, ModBlocks.CHORUS_BLOSSOM_VINES, NORMAL_LEAVES_STICK_CHANCES));
-        this.add(ModBlocks.CHORUS_BOOKSHELF, (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
-        this.add(ModBlocks.CORRUPT_CHORUS_BOOKSHELF, (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
-        this.add(ModBlocks.CRYPT_BOOKSHELF, (block) -> createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F)));
-        this.add(ModBlocks.SKULL_PILE, (block) -> createSingleItemTableWithSilkTouch(block, Items.BONE, UniformGenerator.between(3.0F, 6.0F)));
+        this.add(ModBlocks.JADE_ORE, (p_124076_) -> {
+            return createOreDrop(p_124076_, ModItems.JADE);
+        });
+        this.add(ModBlocks.ROTTEN_LEAVES, (p_124094_) -> {
+            return createRottenLeavesDrops(p_124094_, ModBlocks.ROTTEN_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES);
+        });
+        this.add(ModBlocks.ROTTEN_BOOKSHELF, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BOOK, ConstantValue.exactly(3.0F));
+        });
+        this.add(ModBlocks.WINDSWEPT_LEAVES, (p_124094_) -> {
+            return createLeavesDrops(p_124094_, ModBlocks.WINDSWEPT_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES);
+        });
+        this.add(ModBlocks.WINDSWEPT_BOOKSHELF, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BOOK, ConstantValue.exactly(3.0F));
+        });
+        this.add(ModBlocks.PINE_LEAVES, (p_124094_) -> {
+            return createLeavesDrops(p_124094_, ModBlocks.PINE_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES);
+        });
+        this.add(ModBlocks.PINE_BOOKSHELF, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BOOK, ConstantValue.exactly(3.0F));
+        });
+        this.add(ModBlocks.CHORUS_LEAVES, (p_124094_) -> {
+            return createChorusLeavesDrops(p_124094_, ModBlocks.CHORUS_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES);
+        });
+        this.add(ModBlocks.CHORUS_BLOSSOM_LEAVES, (p_124094_) -> {
+            return createLeavesDrops(p_124094_, ModBlocks.CHORUS_BLOSSOM_VINES, NORMAL_LEAVES_STICK_CHANCES);
+        });
+        this.add(ModBlocks.CHORUS_BOOKSHELF, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BOOK, ConstantValue.exactly(3.0F));
+        });
+        this.add(ModBlocks.CORRUPT_CHORUS_BOOKSHELF, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BOOK, ConstantValue.exactly(3.0F));
+        });
+        this.add(ModBlocks.CRYPT_BOOKSHELF, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BOOK, ConstantValue.exactly(3.0F));
+        });
+        this.add(ModBlocks.SKULL_PILE, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.BONE, UniformGenerator.between(3.0F, 6.0F));
+        });
         this.add(ModBlocks.CRYPT_URN, createSilkTouchOnlyTable(ModBlocks.CRYPT_URN));
-        this.add(ModBlocks.CRYPT_CHEST, (block) -> createSingleItemTableWithSilkTouch(block, ModBlocks.CRYPT_STONE_BLOCK, UniformGenerator.between(2.0F, 4.0F)));
-        this.add(ModBlocks.LOFTY_CHEST, (block) -> createSingleItemTableWithSilkTouch(block, Items.OBSIDIAN, UniformGenerator.between(2.0F, 4.0F)));
-        this.add(ModBlocks.SPIDER_SAC, (block) -> createSingleItemTableWithSilkTouch(block, Items.STRING, UniformGenerator.between(2.0F, 4.0F)));
+        this.add(ModBlocks.CRYPT_CHEST, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, ModBlocks.CRYPT_STONE_BLOCK, UniformGenerator.between(2.0F, 4.0F));
+        });
+        this.add(ModBlocks.LOFTY_CHEST, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.OBSIDIAN, UniformGenerator.between(2.0F, 4.0F));
+        });
+        this.add(ModBlocks.SPIDER_SAC, (p_124233_) -> {
+            return createSingleItemTableWithSilkTouch(p_124233_, Items.STRING, UniformGenerator.between(2.0F, 4.0F));
+        });
         this.add(ModBlocks.STASH_URN, createSilkTouchOnlyTable(ModBlocks.STASH_URN));
         this.add(ModBlocks.SIENNA_GRASS, this::createGrassDrops);
-        this.add(ModBlocks.TALL_SIENNA_GRASS, (block) -> createDoublePlantWithSeedDrops(block, ModBlocks.SIENNA_GRASS));
+        this.add(ModBlocks.TALL_SIENNA_GRASS, (p_124233_) -> {
+            return createDoublePlantWithSeedDrops(p_124233_, ModBlocks.SIENNA_GRASS);
+        });
         this.add(ModBlocks.SIENNA_FERN, this::createGrassDrops);
-        this.add(ModBlocks.LARGE_SIENNA_FERN, (block) -> createDoublePlantWithSeedDrops(block, ModBlocks.SIENNA_FERN));
-        this.add(ModBlocks.WINDSWEPT_DEAD_BUSH, (block) -> createShearsDispatchTable(block, this.applyExplosionDecay(block, LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))));
-        this.add(ModBlocks.SIENNA_VINE, (p_124233_) -> createShearsOnlyDrop(ModBlocks.SIENNA_VINE));
-        this.add(ModBlocks.CHORUS_VINE, (block) -> createShearsOnlyDrop(ModBlocks.CHORUS_VINE));
-        this.add(ModBlocks.END_GRASS_SPROUT, (block) -> createShearsOnlyDrop(ModBlocks.END_GRASS_SPROUT));
-        this.add(ModBlocks.END_GRASS, (block) -> createShearsOnlyDrop(ModBlocks.END_GRASS));
-        this.add(ModBlocks.TALL_END_GRASS, (block) -> createShearsOnlyDrop(ModBlocks.TALL_END_GRASS));
-        this.add(ModBlocks.CHORUS_TALL_GRASS, (block) -> createShearsOnlyDrop(ModBlocks.CHORUS_TALL_GRASS));
-        this.add(ModBlocks.CHORUS_FERN_SPROUT, (block) -> createShearsOnlyDrop(ModBlocks.CHORUS_FERN_SPROUT));
-        this.add(ModBlocks.CHORUS_FERN, (block) -> createShearsOnlyDrop(ModBlocks.CHORUS_FERN));
-        this.add(ModBlocks.LARGE_CHORUS_FERN, (block) -> createDoublePlantShearsDrop(ModBlocks.LARGE_CHORUS_FERN));
+        this.add(ModBlocks.LARGE_SIENNA_FERN, (p_124233_) -> {
+            return createDoublePlantWithSeedDrops(p_124233_, ModBlocks.SIENNA_FERN);
+        });
+        this.add(ModBlocks.WINDSWEPT_DEAD_BUSH, (p_249226_) -> {
+            return createShearsDispatchTable(p_249226_, this.applyExplosionDecay(p_249226_, LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))));
+        });
+        this.add(ModBlocks.SIENNA_VINE, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.SIENNA_VINE);
+        });
+        this.add(ModBlocks.CHORUS_VINE, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.CHORUS_VINE);
+        });
+        this.add(ModBlocks.END_GRASS_SPROUT, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.END_GRASS_SPROUT);
+        });
+        this.add(ModBlocks.END_GRASS, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.END_GRASS);
+        });
+        this.add(ModBlocks.TALL_END_GRASS, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.TALL_END_GRASS);
+        });
+        this.add(ModBlocks.CHORUS_TALL_GRASS, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.CHORUS_TALL_GRASS);
+        });
+        this.add(ModBlocks.CHORUS_FERN_SPROUT, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.CHORUS_FERN_SPROUT);
+        });
+        this.add(ModBlocks.CHORUS_FERN, (p_124233_) -> {
+            return createShearsOnlyDrop(ModBlocks.CHORUS_FERN);
+        });
+        this.add(ModBlocks.LARGE_CHORUS_FERN, (p_124233_) -> {
+            return createDoublePlantShearsDrop(ModBlocks.LARGE_CHORUS_FERN);
+        });
         this.addNetherVinesDropTable(ModBlocks.END_GROWTH_VINES, ModBlocks.END_GROWTH_VINES_PLANT);
         this.add(ModBlocks.VOID_BARREL, this::createVoidBarrelConditionTable);
         this.dropOther(ModBlocks.VOID_CAULDRON, Blocks.CAULDRON.asItem());
         this.dropOther(ModBlocks.END_MUD_CAULDRON, Blocks.CAULDRON.asItem());
-        this.add(ModBlocks.DETRITUS_DUST, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(),
-                (p_252097_) -> LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_252097_.intValue())))).when(HAS_NO_SILK_TOUCH), AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(),
-                (p_251216_) -> p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.DETRITUS) : LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_))))))));
-        this.add(ModBlocks.END_SOIL_DEBRIS, (block) ->
-                LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(),
-                        (p_252097_) -> LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_252097_.intValue())))).when(HAS_NO_SILK_TOUCH), AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(),
-                        (p_251216_) -> p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.END_SOIL) : LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_))))))));
+        this.add(ModBlocks.DETRITUS_DUST, (p_251108_) -> {
+            return LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_252097_) -> {
+                return LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_252097_.intValue())));
+            }).when(HAS_NO_SILK_TOUCH), AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_251216_) -> {
+                return p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.DETRITUS) : LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_)));
+            }))));
+        });
+        this.add(ModBlocks.END_SOIL_DEBRIS, (p_251108_) -> {
+            return LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_252097_) -> {
+                return LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_252097_.intValue())));
+            }).when(HAS_NO_SILK_TOUCH), AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_251216_) -> {
+                return p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.END_SOIL) : LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_)));
+            }))));
+        });
     }
 
     protected LootTable.Builder createRottenLeavesDrops(Block p_124264_, Block p_124265_, float... p_124266_) {

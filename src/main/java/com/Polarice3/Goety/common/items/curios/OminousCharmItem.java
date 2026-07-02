@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.items.curios;
 
 import com.Polarice3.Goety.api.items.curios.IActivatable;
-import dev.emi.trinkets.api.SlotReference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +8,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -39,21 +37,25 @@ public class OminousCharmItem extends SingleStackItem implements IActivatable {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (itemstack.is(this)) {
-            if (player.hasEffect(MobEffects.BAD_OMEN)) {
-                MobEffectInstance instance = player.getEffect(MobEffects.BAD_OMEN);
-                if (instance != null) {
-                    increaseOmenLevel(itemstack, instance.getAmplifier() + 1);
-                    level.playSound(null, player, SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    player.removeEffect(MobEffects.BAD_OMEN);
+        if (player.isCrouching() && equipItem(player, itemstack)) {
+            return InteractionResultHolder.success(itemstack);
+        } else {
+            if (itemstack.is(this)) {
+                if (player.hasEffect(MobEffects.BAD_OMEN)) {
+                    MobEffectInstance instance = player.getEffect(MobEffects.BAD_OMEN);
+                    if (instance != null) {
+                        increaseOmenLevel(itemstack, instance.getAmplifier() + 1);
+                        level.playSound(null, player, SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        player.removeEffect(MobEffects.BAD_OMEN);
+                        return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
+                    }
+                } else if (hasOmen(itemstack)) {
+                    MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.BAD_OMEN, 120000, getOmenAmount(itemstack) - 1, false, false, true);
+                    player.addEffect(mobeffectinstance);
+                    level.playSound(null, player, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    setOmenLevel(itemstack, 0);
                     return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
                 }
-            } else if (hasOmen(itemstack)) {
-                MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.BAD_OMEN, 120000, getOmenAmount(itemstack) - 1, false, false, true);
-                player.addEffect(mobeffectinstance);
-                level.playSound(null, player, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
-                setOmenLevel(itemstack, 0);
-                return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
             }
         }
         return super.use(level, player, hand);
@@ -88,11 +90,6 @@ public class OminousCharmItem extends SingleStackItem implements IActivatable {
     public void onCraftedBy(ItemStack pStack, Level pLevel, Player pPlayer) {
         CompoundTag compound = pStack.getOrCreateTag();
         compound.putInt(OMEN_LEVEL, 0);
-    }
-
-    @Override
-    public boolean canEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        return false;
     }
 
     @Override

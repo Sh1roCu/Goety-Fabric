@@ -37,11 +37,6 @@ public class BrewBag extends TrinketItem {
         stack.inventoryTick(entity.level, entity, -1, false);
     }
 
-    @Override
-    public boolean canEquip(ItemStack stack, SlotReference slotContext, LivingEntity livingEntity) {
-        return livingEntity.isCrouching();
-    }
-
     @Nonnull
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {

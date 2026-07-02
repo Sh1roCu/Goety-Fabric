@@ -218,20 +218,7 @@ public abstract class AbstractVine extends AbstractMonolith {
                     this.discard();
                 }
             } else {
-                boolean flag;
-                if (this.proximity) {
-                    flag = this.hasTarget();
-                } else {
-                    flag = true;
-                }
-                if (flag) {
-                    if (this.proximity) {
-                        this.proximityTick = 20;
-                    }
-                    ++this.activeTick;
-                    this.level.broadcastEntityEvent(this, (byte) 6);
-                    this.burst();
-                }
+                this.startBursting();
             }
         }
         if (!this.isEmerging()) {
@@ -299,7 +286,24 @@ public abstract class AbstractVine extends AbstractMonolith {
         }
     }
 
-    public void burst() {
+    public void startBursting() {
+        boolean flag;
+        if (this.proximity){
+            flag = this.hasTarget();
+        } else {
+            flag = true;
+        }
+        if (flag) {
+            if (this.proximity) {
+                this.proximityTick = 20;
+            }
+            ++this.activeTick;
+            this.level.broadcastEntityEvent(this, (byte) 6);
+            this.burst();
+        }
+    }
+
+    public void burst(){
         if (this.activeTick == 1) {
             this.diggingParticles();
         }

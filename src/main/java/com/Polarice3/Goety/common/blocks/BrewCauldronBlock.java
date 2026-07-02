@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -95,6 +96,7 @@ public class BrewCauldronBlock extends BaseEntityBlock {
     protected static final VoxelShape SHAPE = Shapes.or(BODY, TOP, BOTTOM);
     public static final IntegerProperty LEVEL = ModStateProperties.LEVEL_BREW;
     public static final BooleanProperty FAILED = ModStateProperties.FAILED;
+    public static final BooleanProperty CRAFTING = ModStateProperties.CRAFTING;
 
     public BrewCauldronBlock() {
         super(Properties.of()
@@ -102,7 +104,7 @@ public class BrewCauldronBlock extends BaseEntityBlock {
                 .requiresCorrectToolForDrops()
                 .strength(2.0F)
                 .noOcclusion());
-        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0).setValue(FAILED, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0).setValue(FAILED, Boolean.FALSE).setValue(CRAFTING, Boolean.FALSE));
     }
 
     @Override
@@ -124,8 +126,30 @@ public class BrewCauldronBlock extends BaseEntityBlock {
             boolean taglock = stack.getItem() instanceof TaglockKit && TaglockKit.hasEntity(stack);
             boolean playSound = false;
             if (!pLevel.isClientSide) {
-                if (bucket || waterBucket || apple || taglock || glassBottle || waterBottle || waystone || ladle) {
-                    int targetLevel = cauldron.getTargetLevel(stack, pPlayer);
+                int targetLevel = cauldron.getTargetLevel(stack, pPlayer);
+                if (cauldron.mode == BrewCauldronBlockEntity.Mode.CRAFTED) {
+                    if (targetLevel > -1) {
+                        Ingredient takeWith = cauldron.getRecipe().getTakeWith();
+                        ItemStack bottle = null;
+                        boolean flag = stack.isEmpty();
+                        if (!takeWith.isEmpty()) {
+                            flag = takeWith.test(stack);
+                        }
+                        if (flag) {
+                            if (stack.is(Items.GLASS_BOTTLE)) {
+                                SEHelper.increaseBottling(pPlayer);
+                            }
+                            bottle = cauldron.getCraftedItem();
+                        }
+                        if (bottle != null) {
+                            ItemHelper.addAndConsumeItem(pPlayer, pHand, bottle);
+                            playSound = true;
+                        }
+                        if (targetLevel == 0) {
+                            cauldron.mode = cauldron.reset();
+                        }
+                    }
+                } else if (bucket || waterBucket || apple || taglock || glassBottle || waterBottle || waystone || ladle) {
                     if (targetLevel > -1) {
                         if (bucket) {
                             ItemHelper.addAndConsumeItem(pPlayer, pHand, ItemHelper.fill(Fluids.WATER, stack.copyWithCount(1), ContainerItemContext.forPlayerInteraction(pPlayer, pHand)), false);
@@ -202,6 +226,9 @@ public class BrewCauldronBlock extends BaseEntityBlock {
                             } else if (cauldron.mode == BrewCauldronBlockEntity.Mode.COMPLETED) {
                                 SEHelper.increaseBottling(pPlayer);
                                 bottle = cauldron.getBrew();
+                            } else if (cauldron.mode == BrewCauldronBlockEntity.Mode.CRAFTED) {
+                                SEHelper.increaseBottling(pPlayer);
+                                bottle = cauldron.getCraftedItem();
                             } else if (cauldron.mode == BrewCauldronBlockEntity.Mode.FAILED) {
                                 bottle = new ItemStack(ModItems.REFUSE_BOTTLE);
                             }
@@ -213,16 +240,18 @@ public class BrewCauldronBlock extends BaseEntityBlock {
                             ItemHelper.addAndConsumeItem(pPlayer, pHand, new ItemStack(Items.GLASS_BOTTLE));
                             playSound = true;
                         } else if (ladle) {
-                            cauldron.brew();
+                            cauldron.brew(pPlayer);
                         }
                         if (targetLevel == 0) {
                             cauldron.mode = cauldron.reset();
                         }
-                        pLevel.setBlockAndUpdate(pPos, pState.setValue(ModStateProperties.LEVEL_BREW, targetLevel));
-                        if (playSound) {
-                            pLevel.playSound(null, pPos, bucket ? SoundEvents.BUCKET_FILL : waterBucket ? SoundEvents.BUCKET_EMPTY : glassBottle ? SoundEvents.BOTTLE_FILL : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        }
                     }
+                }
+                if (pState.getValue(ModStateProperties.LEVEL_BREW) != targetLevel) {
+                    pLevel.setBlockAndUpdate(pPos, pState.setValue(ModStateProperties.LEVEL_BREW, targetLevel));
+                }
+                if (playSound) {
+                    pLevel.playSound(null, pPos, bucket ? SoundEvents.BUCKET_FILL : waterBucket ? SoundEvents.BUCKET_EMPTY : glassBottle ? SoundEvents.BOTTLE_FILL : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
                 cauldron.markUpdated();
             }
@@ -273,6 +302,9 @@ public class BrewCauldronBlock extends BaseEntityBlock {
                         pLevel.playSound(null, pPos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.33F, 1.0F);
                         ItemStack stack = itemEntity.getItem();
                         ItemStack remain = stack.getRecipeRemainder();
+                        if (stack.is(Items.POWDER_SNOW_BUCKET)) {
+                            remain = new ItemStack(Items.BUCKET);
+                        }
                         if (remain != null) {
                             ItemEntity remainder = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 1, pPos.getZ() + 0.5, remain);
                             remainder.setDeltaMovement(Vec3.ZERO);
@@ -305,7 +337,7 @@ public class BrewCauldronBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(LEVEL, FAILED);
+        pBuilder.add(LEVEL, FAILED, CRAFTING);
     }
 
     @Override

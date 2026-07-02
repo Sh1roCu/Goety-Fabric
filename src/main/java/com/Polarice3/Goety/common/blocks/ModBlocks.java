@@ -137,6 +137,8 @@ public class ModBlocks {
 
     //Plants
     public static final Block SNAP_WARTS = register("snap_warts", SnapWartsBlock::new, false, LootTableType.EMPTY);
+    public static final Block HENBANE = register("henbane", HenbaneBlock::new, false, LootTableType.EMPTY);
+    public static final Block DEADLY_NIGHTSHADE = register("deadly_nightshade", NightshadeBlock::new, false, LootTableType.EMPTY);
 
     public static final Block SIENNA_GRASS = register("sienna_grass", SiennaGrassBlock::new, true, LootTableType.EMPTY);
     public static final Block TALL_SIENNA_GRASS = register("tall_sienna_grass", LargeSiennaPlantBlock::new, true, LootTableType.EMPTY);
@@ -147,6 +149,10 @@ public class ModBlocks {
 
     public static final Block FIRETHORN = register("firethorn", FirethornBushBlock::new, false, LootTableType.EMPTY);
 
+    public static final Block POTTED_HENBANE = register("potted_henbane", () ->
+            new FlowerPotBlock(ModBlocks.HENBANE, Block.Properties.of().pushReaction(PushReaction.DESTROY).noOcclusion().instabreak()), false, LootTableType.EMPTY);
+    public static final Block POTTED_DEADLY_NIGHTSHADE = register("potted_deadly_nightshade", () ->
+            new FlowerPotBlock(ModBlocks.DEADLY_NIGHTSHADE, Block.Properties.of().pushReaction(PushReaction.DESTROY).noOcclusion().instabreak()), false, LootTableType.EMPTY);
     public static final Block POTTED_SIENNA_GRASS = register("potted_sienna_grass", () ->
             new FlowerPotBlock(ModBlocks.SIENNA_GRASS, Block.Properties.of().pushReaction(PushReaction.DESTROY).lightLevel(l -> 4).noOcclusion().instabreak()), false, LootTableType.EMPTY);
     public static final Block POTTED_SIENNA_FERN = register("potted_sienna_fern", () ->
@@ -234,6 +240,8 @@ public class ModBlocks {
     public static final Block STEEP_SCONCE = register("steep_sconce", SteepSconceBlock::new);
     public static final Block JADE_LIGHT = register("jade_light", JadeLightBlock::new);
     public static final Block PINE_LANTERN = register("pine_lantern", PineLanternBlock::new);
+    public static final Block JADE_CRYSTAL_LAMP = register("jade_crystal_lamp", JadeCrystalLamp::new);
+    public static final Block HALF_JADE_CRYSTAL_LAMP = register("half_jade_crystal_lamp", HalfJadeCrystalLamp::new);
     public static final Block NECROTIC_GOLD_CANDLESTICK = register("necrotic_gold_candlestick", () -> new NecroticCandlestick(BlockBehaviour.Properties.of().sound(SoundType.METAL).instabreak().mapColor(MapColor.GOLD).pushReaction(PushReaction.DESTROY)), false);
     public static final Block WALL_NECROTIC_GOLD_CANDLESTICK = register("wall_necrotic_gold_candlestick", () -> new WallNecroticCandlestick(BlockBehaviour.Properties.of().sound(SoundType.METAL).instabreak().mapColor(MapColor.GOLD).pushReaction(PushReaction.DESTROY)), false);
     public static final Block IRON_DUNGEON_CHAIN = register("iron_dungeon_chain", () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).mapColor(MapColor.STONE).noOcclusion()));
@@ -643,10 +651,18 @@ public class ModBlocks {
     public static final Block PINE_SAPLING = register("pine_sapling", () -> redMossSapling(new PineTree()));
     public static final Block POTTED_PINE_SAPLING = register("potted_pine_sapling", () ->
             new FlowerPotBlock(ModBlocks.PINE_SAPLING, Block.Properties.of().pushReaction(PushReaction.DESTROY).noOcclusion().instabreak().ignitedByLava()), false, LootTableType.EMPTY);
+    public static final Block SNOWY_PINE_PILLAR = register("snowy_pine_pillar",
+            () -> new ThinPillarBlock(Block.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava().noOcclusion()));
+    public static final Block PINE_FIREWOOD = register("pine_firewood",
+            () -> new FirewoodBlock(true, Block.Properties.of().mapColor(MapColor.COLOR_BROWN).lightLevel(litBlockEmission(15)).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava().noOcclusion()));
 
     //Steep
     public static final Block STEEP_PLANKS = register("steep_planks",
             () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final Block DENSE_STEEP_PLANKS = register("dense_steep_planks",
+            () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(3.0F, 5.0F).sound(SoundType.WOOD)));
+    public static final Block DENSE_BANDED_STEEP_PLANKS = register("dense_banded_steep_planks",
+            () -> new DBSPlanksBlock(Block.Properties.copy(DENSE_STEEP_PLANKS)));
     public static final Block STEEP_WOOD = register("steep_wood",
             () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
     public static final Block STEEP_WOOD_SLAB = registerSlabs("steep_wood_slab",
@@ -675,6 +691,7 @@ public class ModBlocks {
     public static final Block RIMMED_STEEP_WALL_BLOCK = registerWalls("rimmed_steep_wall", RIMMED_STEEP_WOOD);
     public static final Block STEEP_LAMP = register("steep_lamp",
             () -> new LampBlock(Block.Properties.copy(STEEP_WOOD)));
+    public static final Block STEEP_FIREWOOD = register("steep_firewood", () -> new SteepFirewoodBlock(Block.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).lightLevel(litBlockEmission(15)).noOcclusion().dynamicShape()));
 
     //Sky Wood
     public static final Block SKY_WOOD_PLANKS = register("sky_wood_planks",
@@ -848,6 +865,7 @@ public class ModBlocks {
     public static final Block MOSSY_CRAG_PAVEMENT_BLOCK = register("mossy_crag_pavement", CragBlock::new);
     public static final Block MOSSY_CRAG_PAVEMENT_HEAVY_BLOCK = register("mossy_crag_pavement_heavy", CragBlock::new);
     public static final Block SILT_STUDDED_CRAG_TILES_BLOCK = register("silt_studded_crag_tiles", CragBlock::new);
+    public static final Block BRACED_CRAG_TILE_PILLAR = register("braced_crag_tile_pillar", () -> new DoubleCubeBlock(CragProperties()));
 
     //Highrock
     public static final Block HIGHROCK_BLOCK = register("highrock", HighrockBlock::new);
@@ -1244,6 +1262,10 @@ public class ModBlocks {
     //Custom Items
     public static final Item SNAP_WARTS_ITEM = ModItems.register("snap_warts",
             () -> new ItemNameBlockItem(ModBlocks.SNAP_WARTS, (new Item.Properties())));
+    public static final Item HENBANE_SEEDS = ModItems.register("henbane_seeds",
+            () -> new ItemNameBlockItem(ModBlocks.HENBANE, (new Item.Properties())));
+    public static final Item NIGHTSHADE_SEEDS = ModItems.register("nightshade_seeds",
+            () -> new ItemNameBlockItem(ModBlocks.DEADLY_NIGHTSHADE, (new Item.Properties())));
     public static final Item FIRETHORN_BERRIES = ModItems.register("firethorn_berries",
             () -> new ItemNameBlockItem(ModBlocks.FIRETHORN, (new Item.Properties().food(Foods.SWEET_BERRIES))));
     public static final Item IRON_DUNGEON_TORCH_ITEM = ModItems.register("iron_dungeon_torch",

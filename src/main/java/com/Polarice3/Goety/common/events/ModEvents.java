@@ -50,6 +50,7 @@ import com.Polarice3.Goety.common.items.curios.WarlockGarmentItem;
 import com.Polarice3.Goety.common.items.equipment.DarkScytheItem;
 import com.Polarice3.Goety.common.items.equipment.IceAxeItem;
 import com.Polarice3.Goety.common.items.equipment.PhilosophersMaceItem;
+import com.Polarice3.Goety.common.items.equipment.SickleItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
@@ -124,6 +125,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
@@ -896,67 +898,87 @@ public class ModEvents {
         }
     }
 
-    public static boolean onBreakingBlock(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
-        if (player.getMainHandItem().getItem() instanceof PhilosophersMaceItem) {
-            if (state.getBlock().getDescriptionId().contains("nether_gold")) {
+    public static boolean onBreakingBlock(Level world, Player player, BlockPos pos, BlockState blockState, @Nullable BlockEntity blockEntity) {
+        Block block = blockState.getBlock();
+        ItemStack tool = player.getMainHandItem();
+        if (tool.getItem() instanceof PhilosophersMaceItem) {
+            if (block.getDescriptionId().contains("nether_gold")) {
                 if (!player.level.isClientSide) {
                     Block.dropResources(Blocks.GOLD_ORE.defaultBlockState(), player.level, pos, null, player, player.getMainHandItem());
-                    state.getBlock().playerWillDestroy(player.level, pos, state, player);
+                    block.playerWillDestroy(player.level, pos, blockState, player);
                     player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                    ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
+                    ItemHelper.hurtAndBreak(tool, 1, player);
                     return false;
                 }
             }
         }
-        if (player.getMainHandItem().getItem() instanceof DarkScytheItem) {
-            ItemStack scythe = player.getMainHandItem();
-            if (state.getBlock().getDescriptionId().contains("sculk") && state.is(BlockTags.MINEABLE_WITH_HOE)) {
+        if (tool.getItem() instanceof DarkScytheItem) {
+            if (block.getDescriptionId().contains("sculk") && blockState.is(BlockTags.MINEABLE_WITH_HOE)) {
                 if (!player.level.isClientSide) {
                     ItemStack fakeItem = new ItemStack(Items.DIAMOND_HOE);
                     fakeItem.enchant(Enchantments.SILK_TOUCH, 1);
-                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(scythe);
+                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(tool);
                     if (!map1.isEmpty()) {
-                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(scythe).keySet()) {
+                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(tool).keySet()) {
                             if (enchantment != Enchantments.SILK_TOUCH) {
                                 fakeItem.enchant(enchantment, map1.get(enchantment));
                             }
                         }
                     }
-                    if (state.getBlock() instanceof IEnchanteableBlock) {
-                        state.getBlock().playerDestroy(player.level, player, pos, state, world.getBlockEntity(pos), fakeItem);
+                    if (block instanceof IEnchanteableBlock) {
+                        block.playerDestroy(player.level, player, pos, blockState, blockEntity, fakeItem);
                     } else {
-                        Block.dropResources(state, player.level, pos, null, player, fakeItem);
+                        Block.dropResources(blockState, player.level, pos, null, player, fakeItem);
                     }
-                    player.level.levelEvent(player, 2001, pos, Block.getId(state));
+                    player.level.levelEvent(player, 2001, pos, Block.getId(blockState));
                     player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
                     return false;
                 }
             }
         }
-        if (player.getMainHandItem().getItem() instanceof IceAxeItem) {
-            ItemStack iceAxe = player.getMainHandItem();
-            if (state.is(BlockTags.ICE)) {
+        if (tool.getItem() instanceof IceAxeItem) {
+            if (blockState.is(BlockTags.ICE)) {
                 if (!player.level.isClientSide) {
                     ItemStack fakeItem = new ItemStack(Items.IRON_PICKAXE);
                     fakeItem.enchant(Enchantments.SILK_TOUCH, 1);
-                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(iceAxe);
+                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(tool);
                     if (!map1.isEmpty()) {
-                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(iceAxe).keySet()) {
+                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(tool).keySet()) {
                             if (enchantment != Enchantments.SILK_TOUCH) {
                                 fakeItem.enchant(enchantment, map1.get(enchantment));
                             }
                         }
                     }
-                    if (state.getBlock() instanceof IEnchanteableBlock) {
-                        state.getBlock().playerDestroy(player.level, player, pos, state, world.getBlockEntity(pos), fakeItem);
+                    if (block instanceof IEnchanteableBlock) {
+                        block.playerDestroy(player.level, player, pos, blockState, world.getBlockEntity(pos), fakeItem);
                     } else {
-                        Block.dropResources(state, player.level, pos, null, player, fakeItem);
+                        Block.dropResources(blockState, player.level, pos, null, player, fakeItem);
                     }
-                    state.getBlock().playerWillDestroy(player.level, pos, state, player);
+                    block.playerWillDestroy(player.level, pos, blockState, player);
                     player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
                     return false;
+                }
+            }
+        }
+        if (tool.getItem() instanceof SickleItem) {
+            if (!EnchantmentHelper.hasSilkTouch(tool)) {
+                if (player.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+                    if (block instanceof TallGrassBlock || blockState.is(Blocks.TALL_GRASS) || blockState.is(Blocks.LARGE_FERN)) {
+                        if (!player.level.isClientSide) {
+                            if (player.level.getRandom().nextFloat() < 0.125F) {
+                                int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+                                int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
+                                Block.popResource(player.level, pos, new ItemStack(ModBlocks.HENBANE_SEEDS, count));
+                            }
+                            if (player.level.getRandom().nextFloat() < 0.1F) {
+                                int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+                                int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
+                                Block.popResource(player.level, pos, new ItemStack(ModBlocks.NIGHTSHADE_SEEDS, count));
+                            }
+                        }
+                    }
                 }
             }
         }

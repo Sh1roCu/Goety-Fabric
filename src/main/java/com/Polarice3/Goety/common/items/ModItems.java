@@ -40,9 +40,12 @@ import com.Polarice3.Goety.common.research.ResearchList;
 import com.Polarice3.Goety.config.ItemConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.init.ModTags;
+import com.Polarice3.Goety.utils.MathHelper;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
 
@@ -131,9 +134,13 @@ public class ModItems {
     public static final Item WARTFUL_EGG = register("wartful_egg", WartlingEggItem::new);
     public static final Item RED_MOSS_GROWTH = register("red_moss_growth", RedMossGrowthItem::new);
     public static final Item CHORUS_GROWTH = register("chorus_growth", ChorusGrowthItem::new);
+    public static final Item HENBANE_FLOWER = register("henbane_flower", () -> new Item(new Item.Properties().food(ModFoods.HENBANE)));
+    public static final Item NIGHTSHADE_BLOSSOM = register("nightshade_blossom", () -> new Item(new Item.Properties().food(ModFoods.NIGHTSHADE)));
     public static final Item QUICK_GROWING_SEED = register("quick_growing_seed", () -> new QuickGrowSeedItem(false));
     public static final Item POISON_QUILL_SEED = register("poison_quill_seed", () -> new QuickGrowSeedItem(true));
     public static final Item REFUSE_BOTTLE = register("refuse_bottle", RefuseBottleItem::new);
+    public static final Item RESILIENCE_LOTION = register("resilience_lotion", () -> new UnguentItem(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MathHelper.minutesToTicks(3))));
+    public static final Item FLYING_OINTMENT = register("flying_ointment", FlyingOintmentItem::new);
     public static final Item ILL_BOMB = register("ill_bomb", IllBombItem::new);
     public static final Item OMINOUS_SHACKLES = register("ominous_shackles", OminousShacklesItem::new);
     public static final Item CRYPTIC_EYE = register("cryptic_eye", CrypticEyeItem::new);
@@ -190,6 +197,8 @@ public class ModItems {
 
     public static final Item CORRUPT_CHORUS_BOAT = register("corrupt_chorus_boat", () -> new ModBoatItem(false, ModBoat.Type.CORRUPT_CHORUS, (new Item.Properties()).stacksTo(1)));
     public static final Item CORRUPT_CHORUS_CHEST_BOAT = register("corrupt_chorus_chest_boat", () -> new ModBoatItem(true, ModBoat.Type.CORRUPT_CHORUS, (new Item.Properties()).stacksTo(1)));
+
+    public static final Item HAUNTED_BROOM = register("haunted_broom", HauntedBroomItem::new);
 
     public static final Item HAUNTED_ARMOR_STAND = register("haunted_armor_stand", HauntedArmorStandItem::new);
     public static final Item HAUNTED_PAINTING = register("haunted_painting", HauntedPaintingItem::new);
@@ -249,6 +258,7 @@ public class ModItems {
     public static final SingleStackItem NETHER_ROBE = register("nether_robe", NetherRobeItem::new);
     public static final SingleStackItem NETHER_ROBE_WARPED = register("nether_robe_warped", NetherRobeItem::new);
     public static final SingleStackItem UNHOLY_ROBE = register("unholy_robe", UnholyRobeItem::new);
+    public static final SingleStackItem ETERNAL_CAULDRON = register("eternal_cauldron", EternalCauldronItem::new);
     public static final SingleStackItem SEA_AMULET = register("sea_amulet", SeaAmuletItem::new);
     public static final SingleStackItem FELINE_AMULET = register("feline_amulet", SingleStackItem::new);
     public static final SingleStackItem ALARMING_CHARM = register("alarming_charm", SingleStackItem::new);
@@ -446,6 +456,7 @@ public class ModItems {
     public static final Item BONEHEAD_HAMMER = register("bonehead_hammer", BoneheadHammerItem::new);
     public static final Item STORMLANDER = register("stormlander", StormlanderItem::new);
     public static final Item FANGED_DAGGER = register("fanged_dagger", FangedDaggerItem::new);
+    public static final Item WICKED_BOLINE = register("wicked_boline", SickleItem::new);
     public static final Item EERIE_PICKAXE = register("eerie_pickaxe", EeriePickaxeItem::new);
     public static final Item RAMPAGING_AXE = register("rampaging_axe", RampagingAxeItem::new);
     public static final Item GRAVEROBBER_SHOVEL = register("graverobber_shovel", GraverobberShovelItem::new);

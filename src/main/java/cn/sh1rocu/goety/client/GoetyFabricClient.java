@@ -152,6 +152,7 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CRYSTAL_BALL, translucent);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CURSED_BARS_BLOCK, translucent);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CURSED_CAGE_BLOCK, cutout);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DEADLY_NIGHTSHADE, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.END_GRASS, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.END_GRASS_SPROUT, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.END_GROWTH_VINES, cutout);
@@ -163,7 +164,9 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HAUNTED_GLASS, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HAUNTED_GLASS_MOB, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HAUNTED_SAPLING, cutout);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HENBANE, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.JADE_LIGHT, cutout);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.JADE_CRYSTAL_LAMP, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_CHORUS_STALK, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.LARGE_SIENNA_FERN, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MAGIC_THORN, cutout);
@@ -183,6 +186,8 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_SIENNA_GRASS, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_WINDSWEPT_DEAD_BUSH, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_WINDSWEPT_SAPLING, cutout);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_DEADLY_NIGHTSHADE, cutout);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_HENBANE, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ROTTEN_DOOR, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ROTTEN_SAPLING, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ROTTEN_TRAPDOOR, cutout);
@@ -194,8 +199,10 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SIENNA_GRASS, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SIENNA_VINE, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SNAP_WARTS, translucent);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SNOWY_PINE_PILLAR, translucent);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SOUL_LIGHT_BLOCK, translucent);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.STEEP_SCONCE, cutout);
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.STEEP_FIREWOOD, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TALL_SIENNA_GRASS, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GOLD_CHANDELIER, cutout);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GOLD_DUNGEON_CHAIN, cutout);

@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.AvoidTargetGoal;
+import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.init.ModTags;
@@ -194,7 +195,7 @@ public class Maverick extends Cultist {
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource p_217055_, DifficultyInstance p_217056_) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.WICKED_BOLINE));
     }
 
     @Override

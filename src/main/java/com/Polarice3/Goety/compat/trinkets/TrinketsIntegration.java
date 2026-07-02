@@ -59,6 +59,7 @@ public class TrinketsIntegration implements ICompatable {
             .put(ModItems.UNHOLY_ROBE, "body")
             .put(ModItems.NECRO_CAPE, "back")
             .put(ModItems.NAMELESS_CAPE, "back")
+            .put(ModItems.ETERNAL_CAULDRON, "back")
             .put(ModItems.GRAVE_GLOVE, "hands")
             .put(ModItems.THRASH_GLOVE, "hands")
             .put(ModItems.TOTEM_OF_ROOTS, "charm")

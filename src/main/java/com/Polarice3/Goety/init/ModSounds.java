@@ -69,7 +69,7 @@ public class ModSounds {
     public static final SoundEvent MCD_HOGLIN_GALLOP = create("mcd_hoglin_gallop");
     public static final SoundEvent MCD_HOGLIN_STEP = create("mcd_hoglin_step");
     public static final SoundEvent MCD_HOGLIN_DEATH = create("mcd_hoglin_death");
-    
+
     public static final SoundEvent WIGHT_AMBIENT = create("wight_ambient");
     public static final SoundEvent WIGHT_HURT = create("wight_hurt");
     public static final SoundEvent WIGHT_SCREAM = create("wight_scream");
@@ -651,6 +651,7 @@ public class ModSounds {
     public static final SoundEvent FIRE_PROJECTILE_FLY = create("fire_projectile_fly");
     public static final SoundEvent TELEPORT_ORB_THROW = create("teleport_orb_throw");
     public static final SoundEvent SWIRLINGS = create("swirlings");
+    public static final SoundEvent POTION_DRINK = create("potion_drink");
     public static final SoundEvent VOID_TOUCHED_ACTIVATE = create("void_touched_activate");
     public static final SoundEvent VOID_TOUCHED_DEACTIVATE = create("void_touched_deactivate");
     public static final SoundEvent VOID_TOUCHED_LOOP = create("void_touched_loop");
@@ -693,6 +694,10 @@ public class ModSounds {
     public static final SoundEvent BLAST_FUNGUS_EXPLODE = create("blast_fungus_explode");
 
     public static final SoundEvent FUNGUS_EXPLOSION = create("fungus_explosion");
+
+    public static final SoundEvent BROOM_SWING = create("broom_swing");
+    public static final SoundEvent BROOM_BREAK = create("broom_break");
+    public static final SoundEvent BROOM_IMPACT = create("broom_impact");
 
     public static final SoundEvent FOCUS_PICK = create("focus_pick");
 

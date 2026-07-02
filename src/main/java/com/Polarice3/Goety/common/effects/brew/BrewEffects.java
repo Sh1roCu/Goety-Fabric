@@ -26,21 +26,20 @@ public class BrewEffects {
     private final Map<String, BrewEffect> effectIDs = Maps.newHashMap();
     private final Map<Item, BrewEffect> catalyst = Maps.newHashMap();
     private final Map<EntityType<?>, BrewEffect> sacrifice = Maps.newHashMap();
-    /**
-     * Made for external recipe viewers like Patchouli
-     */
+    /** Made for external recipe viewers like Patchouli */
     private final Map<String, ItemStack> catalystInverted = Maps.newHashMap();
     private final Map<String, EntityType<?>> sacrificeInverted = Maps.newHashMap();
     private final Map<Item, BrewModifier> modifiers = Maps.newHashMap();
 
     public BrewEffects() {
         //Modifiers
-        this.modifierRegister(new CapacityModifier(0), Items.NETHER_WART);
-        this.modifierRegister(new CapacityModifier(1), Items.CRIMSON_FUNGUS);
-        this.modifierRegister(new CapacityModifier(2), ModBlocks.SNAP_WARTS_ITEM);
+        this.modifierRegister(new CapacityModifier(0), ModItems.HENBANE_FLOWER);
+        this.modifierRegister(new CapacityModifier(1), Items.NETHER_WART);
+        this.modifierRegister(new CapacityModifier(2), ModItems.SNAP_FUNGUS);
         this.modifierRegister(new CapacityModifier(3), ModItems.MAGIC_EMERALD);
         this.modifierRegister(new CapacityModifier(4), ModItems.SOUL_EMERALD);
-        this.modifierRegister(new CapacityModifier(5), ModItems.SOUL_RUBY);
+        this.modifierRegister(new CapacityModifier(5), ModItems.WITHERED_MANUSCRIPT);
+        this.modifierRegister(new CapacityModifier(6), ModItems.SOUL_RUBY);
         this.modifierRegister(new BrewModifier(BrewModifier.DURATION, 0), Items.REDSTONE);
         this.modifierRegister(new BrewModifier(BrewModifier.DURATION, 1), Items.PRISMARINE);
         this.modifierRegister(new BrewModifier(BrewModifier.DURATION, 2), Items.CHORUS_FLOWER);
@@ -86,7 +85,7 @@ public class BrewEffects {
         this.register(new PotionBrewEffect(MobEffects.NIGHT_VISION, BrewConfig.NightVisionCost.get(), 3600), Items.GOLDEN_CARROT);
         this.register(new PotionBrewEffect(MobEffects.POISON, BrewConfig.PoisonCost.get(), 900), Items.SPIDER_EYE);
         this.register(new PotionBrewEffect(MobEffects.REGENERATION, BrewConfig.RegenerationCost.get(), 900), Items.GHAST_TEAR);
-        this.register(new PotionBrewEffect(MobEffects.DAMAGE_RESISTANCE, BrewConfig.ResistanceCost.get(), BrewConfig.ResistanceCapacity.get(), 1800), Items.SCUTE);
+        this.register(new PotionBrewEffect(MobEffects.DAMAGE_RESISTANCE, BrewConfig.ResistanceCost.get(), BrewConfig.ResistanceCapacity.get(), 1800), ModItems.RESILIENCE_LOTION);
         this.register(new PotionBrewEffect(MobEffects.SLOW_FALLING, BrewConfig.SlowFallingCost.get(), 1800), Items.PHANTOM_MEMBRANE);
         this.register(new PotionBrewEffect(MobEffects.MOVEMENT_SLOWDOWN, BrewConfig.SlownessCost.get(), 1800), Items.CHAIN);
         this.register(new PotionBrewEffect(MobEffects.MOVEMENT_SPEED, BrewConfig.SpeedCost.get(), 3600), Items.SUGAR);
