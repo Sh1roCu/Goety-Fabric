@@ -23,6 +23,7 @@
     "LivingEntityMixin",
     "PatrolSpawnerMixin",
     "PlayerMixin",
+    "ProjectileMixin",
     "RaiderMixin",
     "RaidMixin",
     "SensorMixin",

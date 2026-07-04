@@ -74,3 +74,5 @@ accessible class net/minecraft/server/commands/TeleportCommand$LookAt
 accessible method net/minecraft/world/damagesource/DamageSource <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;)V
 
 extendable class net/minecraft/world/item/enchantment/EnchantmentCategory
+
+accessible method net/minecraft/world/level/block/Block popExperience (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;I)V

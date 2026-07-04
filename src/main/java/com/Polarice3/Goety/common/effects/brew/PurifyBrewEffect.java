@@ -2,6 +2,8 @@ package com.Polarice3.Goety.common.effects.brew;
 
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPurifyEffectPacket;
+import com.Polarice3.Goety.init.ModTags;
+import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -32,11 +34,11 @@ public class PurifyBrewEffect extends BrewEffect {
     public void applyEntityEffect(LivingEntity pTarget, @Nullable Entity pSource, @Nullable Entity pIndirectSource, int pAmplifier) {
         if (!pTarget.level.isClientSide) {
             for (MobEffect mobEffect : BuiltInRegistries.MOB_EFFECT) {
-                boolean flag;
+                boolean flag = !EffectsUtil.is(mobEffect, ModTags.Effects.UNPURIFIABLE);
                 if (this.removeDebuff) {
-                    flag = !mobEffect.isBeneficial();
+                    flag &= !mobEffect.isBeneficial();
                 } else {
-                    flag = mobEffect.isBeneficial();
+                    flag &= mobEffect.isBeneficial();
                 }
                 if (flag /*&& !mobEffect.getCurativeItems().isEmpty()*/) {
                     pTarget.removeEffect(mobEffect);
