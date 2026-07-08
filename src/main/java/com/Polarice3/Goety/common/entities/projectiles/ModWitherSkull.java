@@ -21,6 +21,7 @@ import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -192,7 +193,7 @@ public class ModWitherSkull extends WitherSkull {
         HitResult.Type hitresult$type = pResult.getType();
         if (hitresult$type == HitResult.Type.ENTITY) {
             this.onHitEntity((EntityHitResult) pResult);
-            this.level().gameEvent(GameEvent.PROJECTILE_LAND, pResult.getLocation(), GameEvent.Context.of(this, null));
+            this.level().gameEvent(GameEvent.PROJECTILE_LAND, pResult.getLocation(), GameEvent.Context.of(this, (BlockState) null));
         } else if (hitresult$type == HitResult.Type.BLOCK) {
             BlockHitResult blockhitresult = (BlockHitResult) pResult;
             this.onHitBlock(blockhitresult);
@@ -204,7 +205,7 @@ public class ModWitherSkull extends WitherSkull {
             boolean flaming = this.getFiery() > 0;
             boolean loot = CuriosFinder.hasWanting(owner);
             Explosion.BlockInteraction explodeMode = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
-            if (this.getOwner() instanceof Player) {
+            if (owner instanceof Player || (owner instanceof IOwned iOwned && iOwned.getMasterOwner() instanceof Player)) {
                 explodeMode = SpellConfig.WitherSkullGriefing.get() ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
             }
             LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;

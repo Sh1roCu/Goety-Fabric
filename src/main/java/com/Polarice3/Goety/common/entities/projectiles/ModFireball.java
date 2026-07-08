@@ -165,7 +165,7 @@ public class ModFireball extends SmallFireball implements ISpellEntity {
             Entity entity = this.getOwner();
             if (this.isDangerous()) {
                 boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
-                if (entity instanceof Player || (entity instanceof IOwned iOwned && iOwned.getTrueOwner() instanceof Player)) {
+                if (entity instanceof Player || (entity instanceof IOwned iOwned && iOwned.getMasterOwner() instanceof Player)) {
                     flag = SpellConfig.FireballGriefing.get();
                 }
                 if (flag) {
