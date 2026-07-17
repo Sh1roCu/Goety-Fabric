@@ -95,6 +95,8 @@ public class Endersent extends AbstractEnderling implements Enemy {
     public int recentHitTime = 0;
     public int attackTick;
     public int deathTime = 0;
+    @Nullable
+    private LivingEntity savedTeleportTarget = null;
     private final ModServerBossInfo bossInfo;
     public List<MobEffectInstance> eyeEffects = new ArrayList<>();
     public DamageSource deathBlow = this.damageSources().generic();
@@ -784,6 +786,7 @@ public class Endersent extends AbstractEnderling implements Enemy {
                                     && this.recentHitTime > 0
                                     && this.level.getRandom().nextBoolean()
                                     && this.teleportCool <= 0) {
+                                this.savedTeleportTarget = this.getTarget();
                                 this.teleportHideTime = MathHelper.secondsToTicks(this.level.getRandom().nextIntBetweenInclusive(3, 5));
                                 this.setTeleporting(true);
                                 this.setAnimationState(TELEPORT_OUT);
@@ -793,6 +796,7 @@ public class Endersent extends AbstractEnderling implements Enemy {
                     if (this.isDeadlyEscape() && this.isCurrentAnimation(DEADLY_ESCAPE)) {
                         this.setTeleporting(false);
                         this.deadlyEscape();
+                        this.savedTeleportTarget = null;
                     } else if (this.isTeleporting()) {
                         this.setDeadlyEscape(false);
                         this.specialTeleport();
@@ -841,6 +845,9 @@ public class Endersent extends AbstractEnderling implements Enemy {
     }
 
     public void specialTeleport() {
+        if (this.getTarget() == null && this.savedTeleportTarget != null && this.savedTeleportTarget.isAlive()) {
+            this.setTarget(this.savedTeleportTarget);
+        }
         ++this.preHidingTime;
         this.getNavigation().stop();
         this.getMoveControl().strafe(0.0F, 0.0F);
@@ -907,6 +914,7 @@ public class Endersent extends AbstractEnderling implements Enemy {
             }
             this.teleportCool = MathHelper.secondsToTicks(5);
             this.setTeleporting(false);
+            this.savedTeleportTarget = null;
         }
         if (this.getTarget() != null) {
             if (!this.level.isClientSide) {
@@ -929,6 +937,7 @@ public class Endersent extends AbstractEnderling implements Enemy {
                 this.setAnimationState(TELEPORT_IN);
                 this.playSound(ModSounds.ENDERSENT_TELEPORT_SMASH, this.getSoundVolume(), this.getVoicePitch());
                 this.setTeleporting(false);
+                this.savedTeleportTarget = null;
             } else {
                 this.setAnimationState(IDLE);
             }

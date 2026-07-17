@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.init;
 
 import cn.sh1rocu.goety.api.event.EntityAddedLayerCallback;
-import cn.sh1rocu.goety.client.model.PerspectiveBakedModel;
 import cn.sh1rocu.goety.mixin.accessor.LivingEntityRendererAccessor;
 import cn.sh1rocu.goety.mixin.accessor.SheetsAccessor;
 import com.Polarice3.Goety.Goety;
@@ -28,7 +27,6 @@ import com.Polarice3.Goety.common.items.curios.OminousCharmItem;
 import com.Polarice3.Goety.common.items.magic.*;
 import com.Polarice3.Goety.common.items.revive.SoulJar;
 import com.google.common.base.Suppliers;
-import com.google.common.collect.Lists;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -57,21 +55,16 @@ import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -840,38 +833,11 @@ public class ClientInitEvents {
             return new FullLeavesModel(bakedModel);
         }
 
-        for (Pair<ModelResourceLocation, ResourceLocation> pair : PERSPECTIVE_MODEL_LIST) {
-            if (id instanceof ModelResourceLocation modelId && modelId.equals(pair.getLeft())) {
-                BakedModel newModel = context.baker().bake(pair.getRight(), context.settings());
-                if (newModel != null)
-                    return new PerspectiveBakedModel(newModel, bakedModel);
-            }
-        }
-
         return bakedModel;
     }
 
-    private static final List<Pair<ModelResourceLocation, ResourceLocation>> PERSPECTIVE_MODEL_LIST = Lists.newArrayList();
-
     public static void registerModels(ModelLoadingPlugin.Context plugin) {
         plugin.addModels(MagicShieldLayer.SHIELD);
-
-        addPerspectiveModel(ModItems.BLADE_OF_ENDER);
-        addPerspectiveModel(ModItems.BONEHEAD_HAMMER);
-        addPerspectiveModel(ModItems.GREAT_HAMMER);
-        addPerspectiveModel(ModItems.PHILOSOPHERS_MACE);
-        addPerspectiveModel(ModItems.STORMLANDER);
-
-        plugin.addModels(PERSPECTIVE_MODEL_LIST.stream().map(Pair::getRight).toList());
-    }
-
-    private static void addPerspectiveModel(Item item) {
-        ResourceLocation res = BuiltInRegistries.ITEM.getKey(item);
-        if (!res.equals(BuiltInRegistries.ITEM.getDefaultKey())) {
-            ModelResourceLocation rawName = new ModelResourceLocation(res, "inventory");
-            ResourceLocation invName = new ResourceLocation(res.getNamespace(), "item/" + res.getPath() + "_inventory");
-            PERSPECTIVE_MODEL_LIST.add(Pair.of(rawName, invName));
-        }
     }
 
 //    @SubscribeEvent

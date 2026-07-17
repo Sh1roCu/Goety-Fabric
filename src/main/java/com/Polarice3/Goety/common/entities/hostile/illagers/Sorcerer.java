@@ -213,6 +213,11 @@ public class Sorcerer extends HuntingIllagerEntity {
     }
 
     @Override
+    public boolean canPickUpLoot() {
+        return false;
+    }
+
+    @Override
     protected int getSpellCastingTime() {
         return this.castingTime;
     }

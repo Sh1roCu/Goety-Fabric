@@ -89,13 +89,13 @@ public class QuickGrowingVine extends AbstractVine {
     }
 
     public int getAnimationState(String animation) {
-        if (Objects.equals(animation, IDLE)){
+        if (Objects.equals(animation, IDLE)) {
             return 1;
-        } else if (Objects.equals(animation, BURST)){
+        } else if (Objects.equals(animation, BURST)) {
             return 2;
-        } else if (Objects.equals(animation, BURROW)){
+        } else if (Objects.equals(animation, BURROW)) {
             return 3;
-        } else if (Objects.equals(animation, HOLD)){
+        } else if (Objects.equals(animation, HOLD)) {
             return 4;
         } else {
             return 0;
@@ -121,6 +121,10 @@ public class QuickGrowingVine extends AbstractVine {
 
     public int getCurrentAnimation() {
         return this.entityData.get(ANIM_STATE);
+    }
+
+    public boolean isCurrentAnimation(String animation) {
+        return this.getCurrentAnimation() == this.getAnimationState(animation);
     }
 
     @Override
@@ -232,6 +236,14 @@ public class QuickGrowingVine extends AbstractVine {
             return 5;
         }
         return 3;
+    }
+
+    @Override
+    public void startBursting() {
+        if (this.isCurrentAnimation(BURROW) && this.activeTick > 0) {
+            this.activeTick = 0;
+        }
+        super.startBursting();
     }
 
     @Override

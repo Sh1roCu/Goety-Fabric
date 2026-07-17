@@ -374,6 +374,7 @@ public class ModBlocks {
                     .mapColor(MapColor.TERRACOTTA_GREEN)
                     .strength(3.0F, 9.0F)
                     .sound(SoundType.STONE)));
+    public static final Block END_ROCK_STAIRS = registerStairs("end_rock_stairs", END_ROCK);
     public static final Block END_ROCK_SLAB = registerSlabs("end_rock_slab", END_ROCK);
     public static final Block SOILED_END_ROCK = register("soiled_end_rock",
             () -> new Block(BlockBehaviour.Properties.copy(END_ROCK)));
@@ -392,6 +393,7 @@ public class ModBlocks {
                     .mapColor(MapColor.TERRACOTTA_GREEN)
                     .strength(3.0F, 9.0F)
                     .sound(SoundType.STONE)));
+    public static final Block END_ROCK_BRICK_STAIRS = registerStairs("end_rock_brick_stairs", END_ROCK_BRICKS);
     public static final Block END_ROCK_BRICK_SLAB = registerSlabs("end_rock_brick_slab", END_ROCK_BRICKS);
     public static final Block END_ROCK_BRICK_WALL_BLOCK = registerWalls("end_rock_brick_wall", END_ROCK_BRICKS);
     public static final Block END_ROCK_BRICK_FENCE = register("end_rock_brick_fence",

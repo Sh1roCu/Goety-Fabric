@@ -54,7 +54,11 @@ public class CursedCageBlockEntity extends BlockEntity implements Clearable {
         if (this.item.getItem() == ModItems.SOUL_TRANSFER && this.item.getTag() != null) {
             if (this.item.getTag().contains("owner")) {
                 UUID owner = this.item.getTag().getUUID("owner");
-                return this.level.getPlayerByUUID(owner);
+                if (this.level instanceof ServerLevel serverLevel) {
+                    return serverLevel.getServer().getPlayerList().getPlayer(owner);
+                } else if (this.level != null) {
+                    return this.level.getPlayerByUUID(owner);
+                }
             }
         }
         return null;
@@ -65,7 +69,10 @@ public class CursedCageBlockEntity extends BlockEntity implements Clearable {
             Player player = this.getOwner();
             if (player != null) {
                 if (SEHelper.getSEActive(player)) {
-                    return SEHelper.getSESouls(player);
+                    int souls = SEHelper.getSESouls(player);
+                    if (souls > 0) {
+                        return souls;
+                    }
                 }
             }
             if (this.item.getItem() instanceof ITotem) {
@@ -96,8 +103,7 @@ public class CursedCageBlockEntity extends BlockEntity implements Clearable {
                 if (SEHelper.getSEActive(player)) {
                     int Soulcount = SEHelper.getSESouls(player);
                     if (Soulcount > 0) {
-                        SEHelper.decreaseSESouls(player, souls);
-                        SEHelper.sendSEUpdatePacket(player);
+                        SEHelper.decreaseSouls(player, souls);
                         ArcaBlockEntity arcaTile = (ArcaBlockEntity) this.level.getBlockEntity(SEHelper.getArcaBlock(player));
                         if (arcaTile != null) {
                             arcaTile.generateParticles();

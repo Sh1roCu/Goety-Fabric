@@ -47,6 +47,13 @@ public class ModEnchantments {
 
     public static final Enchantment ROYALTY = register("royalty",
             () -> new RoyaltyEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.MAINHAND));
+
+    public static final Enchantment FEALTY = register("fealty",
+            () -> new BroomEnchantment(Enchantment.Rarity.VERY_RARE, 1, EquipmentSlot.MAINHAND));
+
+    public static final Enchantment HARDY = register("hardy",
+            () -> new BroomEnchantment(Enchantment.Rarity.VERY_RARE, 3, EquipmentSlot.MAINHAND));
+
     public static void init() {
 
     }
