@@ -51,6 +51,9 @@ import com.Polarice3.Goety.common.items.equipment.DarkScytheItem;
 import com.Polarice3.Goety.common.items.equipment.IceAxeItem;
 import com.Polarice3.Goety.common.items.equipment.PhilosophersMaceItem;
 import com.Polarice3.Goety.common.items.equipment.SickleItem;
+import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
+import com.Polarice3.Goety.common.items.magic.FocusBag;
+import com.Polarice3.Goety.common.items.magic.FocusPack;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
@@ -72,6 +75,9 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -116,6 +122,7 @@ import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -1732,6 +1739,45 @@ public class ModEvents {
     private static void addFuels(Collection<ItemLike> items, int burnTime) {
         for (ItemLike item : items) {
             FuelRegistry.INSTANCE.add(item, burnTime);
+        }
+    }
+
+    public static void onFocusBagUpgrade(Player player, ItemStack crafted) {
+        if (!(crafted.getItem() instanceof FocusPack)) return;
+
+        if (player.level().isClientSide) return;
+        if (!(player.containerMenu instanceof CraftingMenu menu)) return;
+
+        var packHandler = FocusBagItemHandler.get(crafted);
+        if (packHandler == null) return;
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack bagStack = menu.getSlot(i).getItem();
+            if (!(bagStack.getItem() instanceof FocusBag) || bagStack.getItem() instanceof FocusPack) {
+                continue;
+            }
+
+            var bagHandler = FocusBagItemHandler.get(bagStack);
+            if (bagHandler == null) continue;
+
+            for (int bagSlot = 1; bagSlot < bagHandler.getSlotCount(); bagSlot++) {
+                ItemStack itemInBag = bagHandler.getStackInSlot(bagSlot);
+                if (itemInBag.isEmpty()) continue;
+
+                ItemStack toInsert = itemInBag.copy();
+
+                ItemVariant resource = ItemVariant.of(toInsert);
+                try (Transaction tx = Transaction.openOuter()) {
+                    int before = toInsert.getCount();
+                    int after = before - (int) packHandler.insert(resource, before, tx);
+                    toInsert = after == 0 ? ItemStack.EMPTY : resource.toStack(after);
+                    tx.commit();
+                }
+
+                if (!toInsert.isEmpty()) {
+                    player.drop(toInsert, false);
+                }
+            }
         }
     }
 }

@@ -60,6 +60,7 @@
     "common.PlayerMixin",
     "common.PotionBrewingMixin",
     "common.PotionSlotMixin",
+    "common.ResultSlotMixin",
     "common.ServerLevelMixin",
     "common.ServerLevelMixin$EntityCallbacksMixin",
     "common.ShapedRecipeMixin",
