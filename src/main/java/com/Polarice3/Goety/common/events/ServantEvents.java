@@ -60,7 +60,7 @@ public class ServantEvents {
 
     public static void livingEffects(LivingTickEvent event) {
         LivingEntity livingEntity = event.getEntity();
-        if (livingEntity instanceof Mob mob) {
+        if (livingEntity instanceof Mob mob && !StunnedEvents.isStunned(mob)) {
             if (mob instanceof OwnableEntity ownable && mob.getTarget() != null) {
                 if (SEHelper.isAlly(ownable.getOwner(), mob.getTarget())) {
                     mob.setTarget(null);
@@ -96,8 +96,7 @@ public class ServantEvents {
     public static void targetEvents(LivingChangeTargetEvent event) {
         LivingEntity attacker = event.getEntity();
         LivingEntity target = event.getOriginalTarget();
-        LivingEntity newTarget = event.getNewTarget();
-        if (attacker instanceof Mob mobAttacker) {
+        if (attacker instanceof Mob mobAttacker && !StunnedEvents.isStunned(mobAttacker)) {
             if (target instanceof Player) {
                 if (mobAttacker.getLastHurtByMob() instanceof IOwned owned
                         && owned.getTrueOwner() == target
@@ -115,18 +114,12 @@ public class ServantEvents {
                     }
                 }
             }
-            if (attacker instanceof IOwned owned && owned.getMasterOwner() instanceof Player) {
-                if (attacker.level.getServer() != null) {
-                    if (!attacker.level.getServer().isPvpAllowed()) {
-                        if (target instanceof Player
-                                || (target instanceof IOwned owned1
-                                && owned1.getMasterOwner() instanceof Player)) {
-                            if (event.getTargetType() == MOB_TARGET) {
-                                event.setNewTarget(null);
-                            } else {
-                                event.setCanceled(true);
-                            }
-                        }
+            if (attacker instanceof IOwned owned) {
+                if (ServantUtil.nullifyTarget(owned, target)) {
+                    if (event.getTargetType() == MOB_TARGET) {
+                        event.setNewTarget(null);
+                    } else {
+                        event.setCanceled(true);
                     }
                 }
             }
@@ -193,17 +186,13 @@ public class ServantEvents {
                     }
                 }
             }
-        }
-        if ((attacker instanceof IOwned owned
-                && owned.getMasterOwner() instanceof Player)
-                || attacker instanceof Player) {
-            if (attacker.level.getServer() != null) {
-                if (!attacker.level.getServer().isPvpAllowed()) {
-                    if (victim instanceof Player
-                            || (victim instanceof IOwned owned1
-                            && owned1.getMasterOwner() instanceof Player)) {
-                        // event.setCanceled(true);
-                        cancelled = true;
+            if (owned.getMasterOwner() instanceof Player || attacker instanceof Player) {
+                if (attacker.level.getServer() != null) {
+                    if (!attacker.level.getServer().isPvpAllowed()) {
+                        if (victim instanceof Player || (victim instanceof IOwned owned1 && owned1.getMasterOwner() instanceof Player)) {
+                            // event.setCanceled(true);
+                            cancelled = true;
+                        }
                     }
                 }
             }

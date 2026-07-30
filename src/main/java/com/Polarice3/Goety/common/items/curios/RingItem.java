@@ -11,6 +11,8 @@ public class RingItem extends SingleStackItem {
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (stack.getItem() == ModItems.RING_OF_WANT) {
             return enchantment == ModEnchantments.WANTING;
+        } else if (stack.getItem() == ModItems.RING_OF_THE_DRAGON) {
+            return enchantment == ModEnchantments.RADIUS;
         }
         return false;
     }

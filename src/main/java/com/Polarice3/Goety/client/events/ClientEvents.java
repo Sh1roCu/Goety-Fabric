@@ -16,10 +16,8 @@ import com.Polarice3.Goety.client.gui.screen.inventory.FocusRadialMenuScreen;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.item.CustomItemsRenderer;
 import com.Polarice3.Goety.client.render.model.LichModeModel;
-import com.Polarice3.Goety.common.blocks.entities.ArcaBlockEntity;
-import com.Polarice3.Goety.common.blocks.entities.BrewCauldronBlockEntity;
-import com.Polarice3.Goety.common.blocks.entities.CursedCageBlockEntity;
-import com.Polarice3.Goety.common.blocks.entities.OminousIdolBlockEntity;
+import com.Polarice3.Goety.common.blocks.entities.*;
+import com.Polarice3.Goety.common.crafting.CauldronSusStewRecipe;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ally.GuardianServant;
 import com.Polarice3.Goety.common.entities.ally.Leapleaf;
@@ -630,7 +628,7 @@ public class ClientEvents {
                         }
                     } else if (blockEntity instanceof BrewCauldronBlockEntity cauldronBlock) {
                         if (player.isShiftKeyDown() || player.isCrouching()) {
-                            if (cauldronBlock.mode == BrewCauldronBlockEntity.Mode.BREWING){
+                            if (cauldronBlock.mode == BrewCauldronBlockEntity.Mode.BREWING) {
                                 poseStack.pushPose();
                                 poseStack.translate((float) (width / 2), (float) (height - 60), 0.0F);
                                 RenderSystem.enableBlend();
@@ -695,11 +693,23 @@ public class ClientEvents {
                                 poseStack.popPose();
                             }
                         }
+                    } else if (blockEntity instanceof SculpturedStatueBlockEntity statueBlock) {
+                        poseStack.pushPose();
+                        poseStack.translate((float) (width / 2), (float) (height - 68), 0.0F);
+                        RenderSystem.enableBlend();
+                        RenderSystem.defaultBlendFunc();
+                        String s = statueBlock.getBlockState().getBlock().getName().getString();
+                        int l = fontRenderer.width(s);
+                        guiGraphics.drawString(fontRenderer, s, (-l / 2), -4, 0xFFFFFF);
+                        RenderSystem.disableBlend();
+                        poseStack.popPose();
                     }
                 }
             }
         }
     }
+
+    public static ColorUtil CUBE_COLOR = new ColorUtil(ChatFormatting.GOLD);
 
     public static void renderWorldLast(WorldRenderContext context) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -716,7 +726,7 @@ public class ClientEvents {
                         GlobalPos loc = WaystoneItem.getPosition(stack);
                         if (loc != null) {
                             if (loc.dimension() == world.dimension()) {
-                                renderCubes.put(loc.pos(), new ColorUtil(ChatFormatting.GOLD));
+                                renderCubes.put(loc.pos(), CUBE_COLOR);
                             }
                         }
                     }
@@ -1333,5 +1343,6 @@ public class ClientEvents {
 
     public static void onRecipesUpdated(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         CrusherServant.invalidateRecipeCache();
+        CauldronSusStewRecipe.invalidateFlowerCache();
     }
 }

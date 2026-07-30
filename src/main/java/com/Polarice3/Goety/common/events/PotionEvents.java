@@ -84,6 +84,8 @@ public class PotionEvents {
 
     public static AttributeModifier SOUL_ARMOR_MOD = new AttributeModifier(UUID.fromString("3e4b414b-466c-4b90-8a92-a878e2542bb8"), "Increase Armor", 2.0D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
+    public static ColorUtil VOID_TOUCHED = new ColorUtil(0x7f0075);
+
     public static void livingEffects(LivingTickEvent event) {
         LivingEntity livingEntity = event.getEntity();
         if (livingEntity != null) {
@@ -93,7 +95,7 @@ public class PotionEvents {
                 }
                 if (livingEntity.hasEffect(GoetyEffects.VOID_TOUCHED)) {
                     if (livingEntity.tickCount % 10 == 0) {
-                        ColorUtil colorUtil = new ColorUtil(0x7f0075);
+                        ColorUtil colorUtil = VOID_TOUCHED;
                         serverLevel.sendParticles(new FollowFireParticleOption(livingEntity.getId()), livingEntity.getX(), livingEntity.getY() + (livingEntity.getBbHeight() / 2.0F), livingEntity.getZ(), 0, colorUtil.red(), colorUtil.green(), colorUtil.blue(), 1.0F);
                     }
                 }

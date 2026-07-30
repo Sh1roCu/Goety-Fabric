@@ -81,6 +81,7 @@ public class ModBlocks {
     public static final Block SCULK_GROWER = enchantedRegister("sculk_grower", SculkGrowerBlock::new);
     public static final Block SPIDER_NEST = register("spider_nest", SpiderNestBlock::new, true, LootTableType.EMPTY);
     public static final Block SHADE_GRAVESTONE = register("shade_gravestone", GravestoneBlock::new);
+    public static final Block SHADE_OSSUARY = register("shade_ossuary", OssuaryBlock::new);
     public static final Block BLAZING_CAGE = register("blazing_cage", BlazingCageBlock::new);
     public static final Block OMINOUS_PYRE = register("ominous_pyre", OminousPyreBlock::new);
     public static final Block OMINOUS_IDOL = register("ominous_idol", OminousIdolBlock::new, false, LootTableType.EMPTY);
@@ -349,6 +350,10 @@ public class ModBlocks {
     public static final Block TOP_SOILED_END_BASALT = register("top_soiled_end_basalt",
             () -> new Block(BlockBehaviour.Properties.copy(END_BASALT).mapColor(MapColor.COLOR_GRAY)));
     public static final Block BOTTOM_SOILED_END_BASALT = register("bottom_soiled_end_basalt",
+            () -> new Block(BlockBehaviour.Properties.copy(END_BASALT)));
+    public static final Block TOP_DIRTY_END_BASALT = register("top_dirty_end_basalt",
+            () -> new Block(BlockBehaviour.Properties.copy(END_BASALT).mapColor(MapColor.COLOR_PURPLE)));
+    public static final Block BOTTOM_DIRTY_END_BASALT = register("bottom_dirty_end_basalt",
             () -> new Block(BlockBehaviour.Properties.copy(END_BASALT)));
     public static final Block GRASSY_END_BASALT = register("grassy_end_basalt",
             () -> new Block(BlockBehaviour.Properties.copy(END_BASALT)));
@@ -715,6 +720,10 @@ public class ModBlocks {
     public static final Block CHORUS_LOG = register("chorus_log", () -> fireProofLog(MapColor.COLOR_PURPLE));
     public static final Block CHORUS_WOOD = register("chorus_wood",
             () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+    public static final Block BLOSSOMING_CHORUS_WOOD = register("blossoming_chorus_wood",
+            () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+    public static final Block BLOOMING_CHORUS_WOOD = register("blooming_chorus_wood",
+            () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
     public static final Block STUDDED_CHORUS_WOOD = register("studded_chorus_wood",
             () -> new RotatedPillarBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
     public static final Block CHORUS_WOOD_STAIRS = registerStairs("chorus_wood_stairs",
@@ -979,6 +988,10 @@ public class ModBlocks {
     public static final Block CHORUS_END_STONE_PILLAR_BLOCK = register("chorus_end_stone_pillar", () -> new RotatedPillarBlock(endStoneProperties()));
     public static final Block INFUSED_END_STONE_PILLAR_BLOCK = register("infused_end_stone_pillar", () -> new RotatedPillarBlock(endStoneProperties().mapColor(MapColor.EMERALD)));
     public static final Block CHORUS_GRASS_BLOCK = register("chorus_grass_block", ChorusGrassBlock::new, true, LootTableType.EMPTY);
+    public static final Block CHORUS_GRASS_DIRT = register("chorus_grass_dirt", () -> new ChorusGrassBlock(BlockBehaviour.Properties.copy(END_DIRT)
+            .mapColor(MapColor.COLOR_ORANGE)
+            .randomTicks()
+            .sound(SoundType.GRASS)), true, LootTableType.EMPTY);
     public static final Block COBBLED_CHORUS_GRASS_BLOCK = register("cobbled_chorus_grass_block", () -> new Block(endStoneProperties().mapColor(MapColor.COLOR_ORANGE)));
 
     //End Lights
@@ -1260,6 +1273,12 @@ public class ModBlocks {
     public static final PlushieBlock PLUSHIE_8 = curioIsterRegister("plushie_8", () -> new PlushieBlock(8));
     public static final PlushieBlock PLUSHIE_9 = curioIsterRegister("plushie_9", () -> new PlushieBlock(9));
     public static final PlushieBlock PLUSHIE_10 = curioIsterRegister("plushie_10", () -> new PlushieBlock(10));
+
+    public static final SculpturedStatueBlock SCULPTURED_STATUE = isterRegister("sculptured_statue", SculpturedStatueBlock::new);
+    public static final SculpturedStatueBlock STATUE_1 = isterRegister("sculptured_statue_1", () -> new SculpturedStatueBlock(1));
+    public static final SculpturedStatueBlock STATUE_2 = isterRegister("sculptured_statue_2", () -> new SculpturedStatueBlock(2));
+    public static final SculpturedStatueBlock STATUE_3 = isterRegister("sculptured_statue_3", () -> new SculpturedStatueBlock(3, true));
+    public static final SculpturedStatueBlock STATUE_4 = isterRegister("sculptured_statue_4", () -> new SculpturedStatueBlock(4));
 
     //Custom Items
     public static final Item SNAP_WARTS_ITEM = ModItems.register("snap_warts",

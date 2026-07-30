@@ -1780,4 +1780,12 @@ public class ModEvents {
             }
         }
     }
+
+    public static void onTeleport(EntityTeleportEvent event) {
+        if (!(event instanceof EntityTeleportEvent.TeleportCommand) && !(event instanceof EntityTeleportEvent.SpreadPlayersCommand)) {
+            if (event.getEntity() instanceof Player player) {
+                CuriosFinder.dragonBlast(player, event.getPrev());
+            }
+        }
+    }
 }

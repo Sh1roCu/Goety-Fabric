@@ -2,6 +2,9 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.magic.SpellType;
+import com.Polarice3.Goety.client.particles.CircleExplodeParticleOption;
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.client.particles.SphereExplodeParticleOption;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.neutral.AbstractNecromancer;
@@ -14,9 +17,12 @@ import com.Polarice3.Goety.compat.trinkets.TrinketsLoaded;
 import com.Polarice3.Goety.config.ItemConfig;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModMobType;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.init.ModTags;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,6 +33,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -546,5 +553,31 @@ public class CuriosFinder {
         }
 
         return foundStack;
+    }
+
+    public static void dragonBlast(LivingEntity livingEntity, Vec3 target) {
+        if (livingEntity instanceof Player player) {
+            if (CuriosFinder.hasCurio(player, ModItems.RING_OF_THE_DRAGON)) {
+                ItemStack ring = CuriosFinder.findCurio(player, ModItems.RING_OF_THE_DRAGON);
+                if (player.level instanceof ServerLevel serverLevel) {
+                    if (!player.getCooldowns().isOnCooldown(ring.getItem())) {
+                        float radius = 3.0F;
+                        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RADIUS, ring);
+                        if (level > 0) {
+                            radius += level * 0.5F;
+                        }
+                        ColorUtil colorUtil = ColorUtil.LIGHT_PURPLE;
+                        serverLevel.sendParticles(new CircleExplodeParticleOption(colorUtil.red(), colorUtil.green(), colorUtil.blue(), radius, 1), target.x, target.y + 0.25F, target.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                        serverLevel.sendParticles(new SphereExplodeParticleOption(colorUtil.red(), colorUtil.green(), colorUtil.blue(), radius, 1), target.x, target.y + 0.25F, target.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                        for (int i = 0; i < Mth.floor(radius); ++i) {
+                            serverLevel.sendParticles(ModParticleTypes.BIG_CULT_SPELL, target.x + (serverLevel.getRandom().nextGaussian() / 16.0F), target.y + 1.0F + (serverLevel.getRandom().nextGaussian() / 16.0F), target.z + (serverLevel.getRandom().nextGaussian() / 16.0F), 0, colorUtil.red(), colorUtil.green(), colorUtil.blue(), 1.0F);
+                        }
+                        new SpellExplosion(serverLevel, player, serverLevel.damageSources().explosion(player, player), target.x, target.y, target.z, radius, 0.0F);
+                        serverLevel.playSound(null, target.x, target.y, target.z, ModSounds.VOID_BLAST, livingEntity.getSoundSource(), 1.3F, 1.0F);
+                        player.getCooldowns().addCooldown(ring.getItem(), 40);
+                    }
+                }
+            }
+        }
     }
 }

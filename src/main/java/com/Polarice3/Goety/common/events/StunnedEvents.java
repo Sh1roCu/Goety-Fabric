@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 public class StunnedEvents {
 
-    private static boolean isStunned(@Nullable LivingEntity entity) {
+    public static boolean isStunned(@Nullable LivingEntity entity) {
         return entity != null && entity.isAlive() && (entity.hasEffect(GoetyEffects.STUNNED)
                 || (entity instanceof Player player && SEHelper.hasCamera(player)));
     }

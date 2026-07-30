@@ -91,7 +91,7 @@ public class ModBlockLootProvider extends FabricBlockLootTableProvider {
             return this.applyExplosionDecay(p_249159_, LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FIRETHORN).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_3, 3))).add(LootItem.lootTableItem(ModBlocks.FIRETHORN_BERRIES)).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 3.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))).withPool(LootPool.lootPool().when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FIRETHORN).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_3, 2))).add(LootItem.lootTableItem(ModBlocks.FIRETHORN_BERRIES)).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
         });
         this.add(ModBlocks.COBBLED_DIRT, (block) -> {
-           return LootTable.lootTable().withPool(LootPool.lootPool().add(AlternativesEntry.alternatives(
+            return LootTable.lootTable().withPool(LootPool.lootPool().add(AlternativesEntry.alternatives(
                     LootItem.lootTableItem(ModBlocks.COBBLED_DIRT).when(HAS_SILK_TOUCH),
                     LootItem.lootTableItem(Items.COBBLESTONE).when(HAS_PICKAXE),
                     LootItem.lootTableItem(Items.DIRT).when(HAS_SHOVEL),
@@ -109,6 +109,7 @@ public class ModBlockLootProvider extends FabricBlockLootTableProvider {
         this.add(ModBlocks.FORBIDDEN_GRASS, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, Blocks.DIRT));
         this.add(ModBlocks.END_GROWTH_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.END_ROCK));
         this.add(ModBlocks.CHORUS_GRASS_BLOCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_END_STONE_BLOCK));
+        this.add(ModBlocks.CHORUS_GRASS_DIRT, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.END_DIRT));
         this.add(ModBlocks.RED_MOSS_SILTSTONE, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.COBBLED_SILTSTONE_BLOCK));
         this.add(ModBlocks.RED_MOSS_HIGHROCK, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, ModBlocks.HIGHROCK_BLOCK));
         this.add(ModBlocks.RED_MOSS_DIRT, (p_124183_) -> createSingleItemTableWithSilkTouch(p_124183_, Blocks.DIRT));
@@ -224,16 +225,16 @@ public class ModBlockLootProvider extends FabricBlockLootTableProvider {
         this.dropOther(ModBlocks.END_MUD_CAULDRON, Blocks.CAULDRON.asItem());
         this.add(ModBlocks.DETRITUS_DUST, (p_251108_) -> {
             return LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_252097_) -> {
-                return LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_252097_.intValue())));
+                return LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_252097_.intValue())));
             }).when(HAS_NO_SILK_TOUCH), AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_251216_) -> {
-                return p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.DETRITUS) : LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_)));
+                return p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.DETRITUS) : LootItem.lootTableItem(ModBlocks.DETRITUS_DUST).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_)));
             }))));
         });
         this.add(ModBlocks.END_SOIL_DEBRIS, (p_251108_) -> {
             return LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_252097_) -> {
-                return LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_252097_.intValue())));
+                return LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_252097_))).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_252097_.intValue())));
             }).when(HAS_NO_SILK_TOUCH), AlternativesEntry.alternatives(LayerBlock.LAYERS.getPossibleValues(), (p_251216_) -> {
-                return p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.END_SOIL) : LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float)p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_)));
+                return p_251216_ == 8 ? LootItem.lootTableItem(ModBlocks.END_SOIL) : LootItem.lootTableItem(ModBlocks.END_SOIL_DEBRIS).apply(SetItemCountFunction.setCount(ConstantValue.exactly((float) p_251216_.intValue()))).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(p_251108_).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(LayerBlock.LAYERS, p_251216_)));
             }))));
         });
     }

@@ -45,7 +45,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
@@ -220,7 +219,7 @@ public abstract class AbstractSkeletonServant extends Summoned implements Ranged
             var biome = level.getBiome(blockPos);
             if (biome.is(ConventionalBiomeTags.CLIMATE_COLD) && biome.is(ConventionalBiomeTags.IN_OVERWORLD) && level.canSeeSky(blockPos)) {
                 entityType = ModEntityType.STRAY_SERVANT;
-            } else if (BlockFinder.findStructure(serverLevel, blockPos, BuiltinStructures.PILLAGER_OUTPOST)) {
+            } else if (BlockFinder.findStructure(serverLevel, blockPos, ModTags.Structures.PILLAGER_OUTPOST)) {
                 entityType = ModEntityType.SKELETON_PILLAGER_SERVANT;
             } else if (player != null && BlockFinder.findStructure(serverLevel, blockPos, ModTags.Structures.CAN_SUMMON_WITHER_SKELETONS) && SEHelper.hasResearch(player, ResearchList.BYGONE)) {
                 entityType = ModEntityType.WITHER_SKELETON_SERVANT;

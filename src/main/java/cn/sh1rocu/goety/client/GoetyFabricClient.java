@@ -7,6 +7,7 @@ import com.Polarice3.Goety.client.events.ClientEvents;
 import com.Polarice3.Goety.common.blocks.BrazierBlock;
 import com.Polarice3.Goety.common.blocks.DarkAltarBlock;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
+import com.Polarice3.Goety.common.blocks.OssuaryBlock;
 import com.Polarice3.Goety.common.blocks.fluids.EndMudFluid;
 import com.Polarice3.Goety.common.blocks.fluids.ModFluids;
 import com.Polarice3.Goety.common.blocks.fluids.VoidFluid;
@@ -129,7 +130,7 @@ public class GoetyFabricClient implements ClientModInitializer, ModelLoadingPlug
         RenderType translucent = RenderType.translucent();
 
         ModBlocks.BLOCKS.stream().filter(
-                b -> b instanceof DarkAltarBlock || b instanceof BrazierBlock
+                b -> b instanceof DarkAltarBlock || b instanceof BrazierBlock || b instanceof OssuaryBlock
         ).forEach(block ->
                 BlockRenderLayerMap.INSTANCE.putBlock(block, cutout)
         );

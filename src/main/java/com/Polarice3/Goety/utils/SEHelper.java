@@ -291,7 +291,7 @@ public class SEHelper {
     public static int SoulMultiply(LivingEntity livingEntity, DamageSource source) {
         ItemStack weapon = livingEntity.getMainHandItem();
         int multiply = 1;
-        if (ModDamageSource.physicalAttacks(source)) {
+        if (ModDamageSource.physicalAttacks(source) || source.getDirectEntity() instanceof Projectile projectile && projectile.getOwner() == livingEntity) {
             int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER, weapon);
             if (i > 0) {
                 multiply = Mth.clamp(i + 1, 1, 10);

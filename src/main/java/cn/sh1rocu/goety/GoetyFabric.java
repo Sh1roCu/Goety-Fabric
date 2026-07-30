@@ -147,6 +147,9 @@ public class GoetyFabric implements ModInitializer {
         ExplosionEvent.DETONATE.register(ModEvents::explosionDetonateEvent);
         ProjectileImpactEvent.EVENT.register(ModEvents::projectileImpactEvent);
         EntitySleepEvents.ALLOW_NEARBY_MONSTERS.register(ModEvents::sleepEvents);
+        EntityTeleportEvent.ENDER_PEARL.register(ModEvents::onTeleport);
+        EntityTeleportEvent.ENDER_ENTITY.register(ModEvents::onTeleport);
+        EntityTeleportEvent.CHORUS.register(ModEvents::onTeleport);
 
         LivingTickEvent.EVENT.register(PotionEvents::livingEffects);
         LivingHurtEvent.EVENT.register(PotionEvents::hurtEvent);

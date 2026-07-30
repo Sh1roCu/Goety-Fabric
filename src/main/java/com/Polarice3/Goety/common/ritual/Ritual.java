@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.ritual;
 
 import cn.sh1rocu.goety.mixin.accessor.BucketItemAccessor;
+import cn.sh1rocu.goety.util.transfer.ItemStackHandler;
 import com.Polarice3.Goety.api.ritual.IRitualType;
 import com.Polarice3.Goety.api.ritual.RitualType;
 import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
@@ -207,33 +208,41 @@ public abstract class Ritual {
                                                Ingredient ingredient, List<ItemStack> consumedIngredients) {
         for (PedestalBlockEntity pedestal : pedestals) {
             var handler = pedestal.itemStackHandler;
-            var resource = handler.getVariantInSlot(0);
-            if (!resource.isBlank()) {
-                ItemStack stack = resource.toStack((int) StorageUtil.simulateExtract(handler, resource, 1, null));
-                if (ingredient.test(stack)) {
-                    ItemStack extracted;
-                    try (Transaction tx = Transaction.openOuter()) {
-                        extracted = resource.toStack((int) handler.extract(resource, 1, tx));
-                        tx.commit();
-                    }
-
-                    consumedIngredients.add(extracted);
-
-                    if (extracted.getItem() instanceof BucketItem bucketItem && !((BucketItemAccessor) bucketItem).goety$fluid().defaultFluidState().isEmpty()) {
-                        ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), new ItemStack(Items.BUCKET));
-                        world.playSound(null, pedestal.getBlockPos(), SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS,
-                                0.7F, 0.7F);
-                    } else if (extracted.getRecipeRemainder() != null) {
-                        ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), extracted.getRecipeRemainder());
-                    }
-
-                    handler.setStackInSlot(0, ItemStack.EMPTY);
-
-                    world.playSound(null, pedestal.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS,
-                            0.7F, 0.7F);
-                    return true;
-                }
+            if (handler != null && consumeAdditionalIngredientFromPedestal(world, ingredient, pedestal, consumedIngredients, handler)) {
+                return true;
             }
+        }
+        return false;
+    }
+
+    public boolean consumeAdditionalIngredientFromPedestal(Level world, Ingredient ingredient, PedestalBlockEntity pedestal, List<ItemStack> consumedIngredients, ItemStackHandler handler) {
+        var resource = handler.getVariantInSlot(0);
+        if (resource.isBlank()) {
+            return false;
+        }
+        ItemStack stack = resource.toStack((int) StorageUtil.simulateExtract(handler, resource, 1, null));
+        if (ingredient.test(stack)) {
+            ItemStack extracted;
+            try (Transaction tx = Transaction.openOuter()) {
+                extracted = resource.toStack((int) handler.extract(resource, 1, tx));
+                tx.commit();
+            }
+
+            consumedIngredients.add(extracted);
+
+            if (extracted.getItem() instanceof BucketItem bucketItem && !((BucketItemAccessor) bucketItem).goety$fluid().defaultFluidState().isEmpty()) {
+                ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), new ItemStack(Items.BUCKET));
+                world.playSound(null, pedestal.getBlockPos(), SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS,
+                        0.7F, 0.7F);
+            } else if (extracted.getRecipeRemainder() != null) {
+                ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), extracted.getRecipeRemainder());
+            }
+
+            handler.setStackInSlot(0, ItemStack.EMPTY);
+
+            world.playSound(null, pedestal.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS,
+                    0.7F, 0.7F);
+            return true;
         }
         return false;
     }

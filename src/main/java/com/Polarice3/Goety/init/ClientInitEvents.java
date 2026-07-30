@@ -251,6 +251,8 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.BLACK_CRYSTAL, BlackCrystalRenderer::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.OMINOUS_STATUE, OminousStatueRenderer::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.BRAZIER_STATUE, OminousBrazierStatueRenderer::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.SCULPTURED_STATUE, SculpturedStatueRenderer::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.SCULPTURED_STATUE_SLIM, SculpturedStatueRenderer::createSlimLayer);
         EntityModelLayerRegistry.registerModelLayer(ModBlockLayer.PLUSHIE, PlushieModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SPIKE, SpikeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HARPOON, HarpoonModel::createBodyLayer);
@@ -459,6 +461,7 @@ public class ClientInitEvents {
         BlockEntityRenderers.register(ModBlockEntities.HAUNTED_JUG, ModBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SPIDER_NEST, TrainingBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SHADE_GRAVESTONE, TrainingBlockRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.SHADE_OSSUARY, TrainingBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.BLAZING_CAGE, TrainingBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.OMINOUS_PYRE, BarracksBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.OMINOUS_IDOL, ModBlockEntityRenderer::new);
@@ -486,6 +489,7 @@ public class ClientInitEvents {
         BlockEntityRenderers.register(ModBlockEntities.SIGN_BLOCK_ENTITIES, SignRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.HANGING_SIGN_BLOCK_ENTITIES, HangingSignRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.PLUSHIE, PlushieBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.SCULPTURED_STATUE, SculpturedStatueRenderer::new);
 
         EntityRendererRegistry.register(ModEntityType.NETHER_METEOR, NetherMeteorRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MOD_FIREBALL, (rendererManager) -> new ModFireballRenderer<>(rendererManager, 0.75F, true));

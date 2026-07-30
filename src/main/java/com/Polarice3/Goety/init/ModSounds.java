@@ -699,6 +699,8 @@ public class ModSounds {
     public static final SoundEvent BROOM_BREAK = create("broom_break");
     public static final SoundEvent BROOM_IMPACT = create("broom_impact");
 
+    public static final SoundEvent VOID_BLAST = create("void_blast");
+
     public static final SoundEvent FOCUS_PICK = create("focus_pick");
 
     public static final SoundEvent CORRUPT_BEAM_START = create("corrupt_beam_start");

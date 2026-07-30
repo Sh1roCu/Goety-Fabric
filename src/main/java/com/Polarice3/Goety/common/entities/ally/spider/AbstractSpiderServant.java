@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally.spider;
 
+import cn.sh1rocu.goety.mixin.accessor.MobAccessor;
 import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.entities.ally.IServant;
@@ -560,6 +561,8 @@ public abstract class AbstractSpiderServant extends Spider implements PlayerRide
         }
         this.setLeftHanded(randomsource.nextFloat() < 0.05F);
 
+//        MobAccessor mobAccessor = (MobAccessor) this;
+//        mobAccessor.spawnType(pReason);
         this.checkHostility();
         if (pReason != MobSpawnType.MOB_SUMMONED && this.getTrueOwner() == null) {
             this.setNatural(true);
@@ -598,6 +601,9 @@ public abstract class AbstractSpiderServant extends Spider implements PlayerRide
     @Nullable
     @Override
     public LivingEntity getTrueOwner() {
+        if (this.hasEffect(GoetyEffects.WILD_RAGE)) {
+            return null;
+        }
         if (!this.level.isClientSide) {
             UUID uuid = this.getOwnerId();
             return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);

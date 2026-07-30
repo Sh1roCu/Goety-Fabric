@@ -28,6 +28,7 @@ import com.Polarice3.Goety.common.magic.spells.frost.*;
 import com.Polarice3.Goety.common.magic.spells.geomancy.*;
 import com.Polarice3.Goety.common.magic.spells.necromancy.*;
 import com.Polarice3.Goety.common.magic.spells.nether.*;
+import com.Polarice3.Goety.common.magic.spells.nether.FireBreathSpell;
 import com.Polarice3.Goety.common.magic.spells.storm.*;
 import com.Polarice3.Goety.common.magic.spells.utility.CraftingSpell;
 import com.Polarice3.Goety.common.magic.spells.utility.GlowLightSpell;
@@ -278,7 +279,6 @@ public class ModItems {
     public static final Item SHREDDING_FOCUS = register("shredding_focus", () -> new MagicFocus(new SpikeSpell()));
     public static final Item ILLUSION_FOCUS = register("illusion_focus", () -> new MagicFocus(new IllusionSpell()));
     public static final Item IGNITE_FOCUS = register("ignite_focus", () -> new MagicFocus(new IgniteSpell()));
-    public static final Item FIRE_BREATH_FOCUS = register("fire_breath_focus", () -> new MagicFocus(new FireBreathSpell()));
     public static final Item SOUL_BOLT_FOCUS = register("soul_bolt_focus", () -> new MagicFocus(new SoulBoltSpell()));
     public static final Item MAGIC_BOLT_FOCUS = register("magic_bolt_focus", () -> new MagicFocus(new MagicBoltSpell()));
     public static final Item SWORD_FOCUS = register("sword_focus", () -> new MagicFocus(new SwordSpell()));
@@ -373,7 +373,7 @@ public class ModItems {
     public static final Item LIGHTNING_FOCUS = register("lightning_focus", () -> new MagicFocus(new LightningSpell()));
     public static final Item THUNDERSTORM_FOCUS = register("thunderstorm_focus", () -> new MagicFocus(new ThunderstormSpell()));
 
-    //Abyss
+    /// Abyss
     public static final Item WATER_JET_FOCUS = register("water_jet_focus", () -> new MagicFocus(new WaterJetSpell()));
     public static final Item BOUNCY_BUBBLE_FOCUS = register("bouncy_bubble_focus", () -> new MagicFocus(new BouncyBubbleSpell()));
     public static final Item STEAMING_FOCUS = register("steaming_focus", () -> new MagicFocus(new SteamSpell()));
@@ -385,6 +385,7 @@ public class ModItems {
     public static final Item TIDAL_FOCUS = register("tidal_focus", () -> new MagicFocus(new TidalSpell()));
 
     /// Nether
+    public static final Item FIRE_BREATH_FOCUS = register("fire_breath_focus", () -> new MagicFocus(new FireBreathSpell()));
     public static final Item FIREBALL_FOCUS = register("fireball_focus", () -> new MagicFocus(new FireballSpell()));
     public static final Item LAVABALL_FOCUS = register("lavaball_focus", () -> new MagicFocus(new LavaballSpell()));
     public static final Item BOMBARDMENT_FOCUS = register("bombardment_focus", () -> new MagicFocus(new BombardmentSpell()));
