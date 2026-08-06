@@ -17,7 +17,7 @@ public class BrewingCatalystProcessor implements IComponentProcessor {
     @Override
     public void setup(Level level, IVariableProvider variables) {
         String effectId = variables.get("recipe").asString();
-        this.brewEffect = new BrewEffects().getBrewEffect(effectId);
+        this.brewEffect = BrewEffects.INSTANCE.getBrewEffect(effectId);
         if (variables.has("text")) {
             this.extraText = variables.get("text").asString();
         }
@@ -29,7 +29,7 @@ public class BrewingCatalystProcessor implements IComponentProcessor {
             return IVariable.empty();
 
         if (key.startsWith("input")) {
-            ItemStack itemStack = new BrewEffects().getCatalystFromEffect(this.brewEffect.getEffectID());
+            ItemStack itemStack = BrewEffects.INSTANCE.getCatalystFromEffect(this.brewEffect.getEffectID());
             return IVariable.from(itemStack);
         }
 

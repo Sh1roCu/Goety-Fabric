@@ -7,9 +7,11 @@ import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.ally.illager.PillagerServant;
 import com.Polarice3.Goety.common.entities.ally.illager.VindicatorServant;
+import com.Polarice3.Goety.common.entities.ally.illager.raider.ModRavager;
 import com.Polarice3.Goety.common.entities.ally.illager.raider.Prisoner;
 import com.Polarice3.Goety.common.entities.ally.illager.raider.RaiderServant;
 import com.Polarice3.Goety.common.entities.ally.undead.skeleton.AbstractSkeletonServant;
+import com.Polarice3.Goety.common.entities.ally.undead.zombie.ZombieRavager;
 import com.Polarice3.Goety.common.entities.ally.undead.zombie.ZombieServant;
 import com.Polarice3.Goety.common.entities.ally.undead.zombie.ZombieVillagerServant;
 import com.Polarice3.Goety.common.entities.hostile.*;
@@ -156,51 +158,55 @@ public class ServantUtil {
 
     public static void infect(Mob target, LivingEntity owner, boolean permanent, boolean keepLoot) {
         Summoned summoned = null;
-        if (target instanceof PiglinBrute) {
+        if (target instanceof PiglinBrute){
             summoned = target.convertTo(ModEntityType.ZPIGLIN_BRUTE_SERVANT, keepLoot);
-        } else if (target instanceof AbstractPiglin) {
+        } else if (target instanceof AbstractPiglin){
             summoned = target.convertTo(ModEntityType.ZPIGLIN_SERVANT, keepLoot);
-        } else if (target instanceof Villager || target instanceof Prisoner || target.getType().getDescriptionId().contains("entity.guardvillagers.guard")) {
+        } else if (target instanceof Villager || target instanceof Prisoner || target.getType().getDescriptionId().contains("entity.guardvillagers.guard")){
             summoned = target.convertTo(ModEntityType.ZOMBIE_VILLAGER_SERVANT, keepLoot);
-        } else if (target instanceof Vindicator || target instanceof VindicatorServant) {
+        } else if (target instanceof Vindicator || target instanceof VindicatorServant){
             summoned = target.convertTo(ModEntityType.ZOMBIE_VINDICATOR_SERVANT, keepLoot);
-        } else if (target instanceof Pillager || target instanceof PillagerServant) {
+        } else if (target instanceof Pillager || target instanceof PillagerServant){
             summoned = target.convertTo(ModEntityType.SKELETON_PILLAGER_SERVANT, keepLoot);
+        } else if (target instanceof Ravager || target instanceof ModRavager){
+            summoned = target.convertTo(ModEntityType.ZOMBIE_RAVAGER, keepLoot);
         }
 
         if (summoned != null) {
             EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) summoned.getType();
-//            if (net.minecraftforge.event.ForgeEventFactory.canLivingConvert(target, entityType, (timer) -> {})) {
-            if (owner != null) {
-                summoned.setTrueOwner(owner);
-            }
-            if (target.level instanceof ServerLevel serverLevel) {
-                summoned.finalizeSpawn(serverLevel, target.level.getCurrentDifficultyAt(summoned.blockPosition()), MobSpawnType.CONVERSION, null, null);
-            }
-            if (!permanent) {
-                summoned.setLimitedLife(10 * (15 + target.level.random.nextInt(45)));
-            }
-            if (summoned instanceof ZombieVillagerServant servant) {
-                if (target instanceof Villager villager) {
-                    servant.setVillagerData(villager.getVillagerData());
-                    servant.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
-                    servant.setTradeOffers(villager.getOffers().createTag());
-                    servant.setVillagerXp(villager.getVillagerXp());
-                } else if (target instanceof Prisoner prisoner) {
-                    servant.setVillagerData(prisoner.getVillagerData());
-                    if (prisoner.getGossips() != null) {
-                        servant.setGossips(prisoner.getGossips());
-                    }
-                    if (prisoner.getOffers() != null) {
-                        servant.setTradeOffers(prisoner.getOffers());
-                    }
-                    servant.setVillagerXp(prisoner.getVillagerXp());
+            // if (net.minecraftforge.event.ForgeEventFactory.canLivingConvert(target, entityType, (timer) -> {})) {
+                if (owner != null) {
+                    summoned.setTrueOwner(owner);
                 }
-            }
-            if (!summoned.isSilent()) {
-                summoned.level.levelEvent(null, 1026, summoned.blockPosition(), 0);
-            }
-//            }
+                if (target.level instanceof ServerLevel serverLevel) {
+                    summoned.finalizeSpawn(serverLevel, target.level.getCurrentDifficultyAt(summoned.blockPosition()), MobSpawnType.CONVERSION, null, null);
+                }
+                if (!permanent) {
+                    summoned.setLimitedLife(10 * (15 + target.level.random.nextInt(45)));
+                }
+                if (summoned instanceof ZombieVillagerServant servant) {
+                    if (target instanceof Villager villager) {
+                        servant.setVillagerData(villager.getVillagerData());
+                        servant.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
+                        servant.setTradeOffers(villager.getOffers().createTag());
+                        servant.setVillagerXp(villager.getVillagerXp());
+                    } else if (target instanceof Prisoner prisoner) {
+                        servant.setVillagerData(prisoner.getVillagerData());
+                        if (prisoner.getGossips() != null) {
+                            servant.setGossips(prisoner.getGossips());
+                        }
+                        if (prisoner.getOffers() != null) {
+                            servant.setTradeOffers(prisoner.getOffers());
+                        }
+                        servant.setVillagerXp(prisoner.getVillagerXp());
+                    }
+                } else if (summoned instanceof ZombieRavager servant) {
+                    servant.convertNewEquipment(target);
+                }
+                if (!summoned.isSilent()) {
+                    summoned.level.levelEvent(null, 1026, summoned.blockPosition(), 0);
+                }
+            // }
         }
     }
 

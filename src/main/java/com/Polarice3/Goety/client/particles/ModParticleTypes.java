@@ -119,6 +119,9 @@ public class ModParticleTypes {
     public static final SimpleParticleType SMALL_FIRE_GROUND = register("small_fire_ground",
             () -> FabricParticleTypes.simple(false));
 
+    public static final SimpleParticleType SMALL_FIRE_REVERSED = register("small_fire_reversed",
+            () -> FabricParticleTypes.simple(false));
+
     public static final SimpleParticleType BIG_FIRE = register("big_fire",
             () -> FabricParticleTypes.simple(false));
 

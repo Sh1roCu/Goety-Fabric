@@ -716,6 +716,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.SNAPPER, SnapperRenderer::new);
         EntityRendererRegistry.register(ModEntityType.GNASHER, GnasherRenderer::new);
         EntityRendererRegistry.register(ModEntityType.GUARDIAN_SERVANT, GuardianServantRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.ELDER_GUARDIAN_SERVANT, ElderGuardianServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BEAR_SERVANT, BearServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.POLAR_BEAR_SERVANT, BearServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.HOGLIN_SERVANT, HoglinServantRenderer::new);

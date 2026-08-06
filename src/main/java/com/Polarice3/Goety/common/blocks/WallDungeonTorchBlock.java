@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -78,13 +79,13 @@ public class WallDungeonTorchBlock extends DungeonTorchBlock {
         return p_58144_.getOpposite() == p_58143_.getValue(FACING) && !p_58143_.canSurvive(p_58146_, p_58147_) ? Blocks.AIR.defaultBlockState() : p_58143_;
     }
 
-    @Override
     public void animateTick(BlockState p_222660_, Level p_222661_, BlockPos p_222662_, RandomSource p_222663_) {
         if (p_222660_.getValue(LIT)) {
             double d0 = (double) p_222662_.getX() + 0.5D;
             double d1 = (double) p_222662_.getY() + 1.25D;
             double d2 = (double) p_222662_.getZ() + 0.5D;
-            p_222661_.addParticle(ModParticleTypes.BIG_FIRE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            ParticleOptions particleOptions = ModParticleTypes.BIG_FIRE;
+            p_222661_.addParticle(particleOptions, d0, d1, d2, 0.0D, 0.0D, 0.0D);
             p_222661_.addParticle(ModParticleTypes.BIG_FIRE_DROP, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }
     }

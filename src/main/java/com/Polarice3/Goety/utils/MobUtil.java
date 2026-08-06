@@ -72,10 +72,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.*;
@@ -1838,5 +1835,16 @@ public class MobUtil {
         } else if (getTarget(attacker) == getOwner(defender)) {
             return false;
         } else return !areAllies(defender, getTarget(attacker));
+    }
+
+    public static boolean stormSpawn(LevelAccessor accessor, BlockPos blockPos) {
+        if (accessor.getDifficulty() != Difficulty.PEACEFUL) {
+            if (accessor instanceof WorldGenLevel genLevel) {
+                if (genLevel.canSeeSky(blockPos) && blockPos.getY() >= accessor.getSeaLevel()) {
+                    return genLevel.getLevel().isThundering();
+                }
+            }
+        }
+        return false;
     }
 }

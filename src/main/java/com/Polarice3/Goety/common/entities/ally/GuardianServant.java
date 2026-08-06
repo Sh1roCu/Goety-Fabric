@@ -1,8 +1,11 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
+import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.config.SpellConfig;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -72,7 +75,7 @@ public class GuardianServant extends Summoned {
     protected void registerGoals() {
         super.registerGoals();
         MoveTowardsRestrictionGoal movetowardsrestrictiongoal = new MoveTowardsRestrictionGoal(this, 1.0D);
-        this.randomStrollGoal = new WaterWanderGoal<>(this);
+        this.randomStrollGoal = new WaterWanderGoal<>(this, 1.0D, 80);
         this.goalSelector.addGoal(3, new GuardianAttackGoal(this));
         this.goalSelector.addGoal(5, movetowardsrestrictiongoal);
         this.goalSelector.addGoal(7, this.randomStrollGoal);
@@ -84,16 +87,32 @@ public class GuardianServant extends Summoned {
     }
 
     @Override
+    public void targetSelectGoal() {
+        this.targetSelector.addGoal(1, new SummonTargetGoal(this, 10, true, false, SummonTargetGoal.predicate(this).and(new GuardianAttackSelector(this))));
+    }
+
+    public void targetRetaliateGoal() {
+    }
+
+    @Override
     public void followGoal() {
         this.goalSelector.addGoal(4, new FollowOwnerWaterGoal(this, 1.0D, 10.0F, 2.0F));
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.GuardianDamage.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.5D)
                 .add(Attributes.FOLLOW_RANGE, 16.0D)
-                .add(Attributes.MAX_HEALTH, 30.0D);
+                .add(Attributes.ARMOR, AttributesConfig.GuardianArmor.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.GuardianHealth.get());
+    }
+
+    @Override
+    public void setConfigurableAttributes() {
+        MobUtil.setBaseAttributes(this.getAttribute(Attributes.MAX_HEALTH), AttributesConfig.GuardianHealth.get());
+        MobUtil.setBaseAttributes(this.getAttribute(Attributes.ARMOR), AttributesConfig.GuardianArmor.get());
+        MobUtil.setBaseAttributes(this.getAttribute(Attributes.ATTACK_DAMAGE), AttributesConfig.GuardianDamage.get());
     }
 
     @Override
@@ -120,7 +139,7 @@ public class GuardianServant extends Summoned {
 
     @Override
     public Predicate<Entity> summonPredicate() {
-        return livingEntity -> livingEntity instanceof GuardianServant;
+        return livingEntity -> livingEntity instanceof GuardianServant && !(livingEntity instanceof ElderGuardianServant);
     }
 
     @Override
@@ -411,8 +430,8 @@ public class GuardianServant extends Summoned {
 
         public GuardianAttackGoal(GuardianServant p_32871_) {
             this.guardian = p_32871_;
-            this.elder = false;
-            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            this.elder = p_32871_ instanceof ElderGuardianServant;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
         @Override
@@ -485,6 +504,19 @@ public class GuardianServant extends Summoned {
                     super.tick();
                 }
             }
+        }
+    }
+
+    static class GuardianAttackSelector implements Predicate<LivingEntity> {
+        private final GuardianServant guardian;
+
+        public GuardianAttackSelector(GuardianServant p_32879_) {
+            this.guardian = p_32879_;
+        }
+
+        @Override
+        public boolean test(@Nullable LivingEntity p_32881_) {
+            return p_32881_ != null && p_32881_.distanceToSqr(this.guardian) > 9.0D;
         }
     }
 

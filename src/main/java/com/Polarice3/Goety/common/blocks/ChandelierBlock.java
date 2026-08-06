@@ -425,6 +425,6 @@ public class ChandelierBlock extends Block implements SimpleWaterloggedBlock, Fa
         }
 
         p_220688_.addParticle(ModParticleTypes.SMALL_FIRE, p_220689_.x, p_220689_.y, p_220689_.z, 0.0D, 0.0D, 0.0D);
-        p_220688_.addParticle(ModParticleTypes.SMALL_FIRE_DROP, p_220689_.x, p_220689_.y, p_220689_.z, 0.0D, 0.0D, 0.0D);
+        p_220688_.addParticle(ModParticleTypes.SMALL_FIRE_REVERSED, p_220689_.x, p_220689_.y, p_220689_.z, 0.0D, 0.0D, 0.0D);
     }
 }

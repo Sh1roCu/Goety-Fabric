@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.entities.OminousBrazierStatueBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -35,11 +36,11 @@ public class OminousBrazierStatueBlock extends StatueBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         RandomSource randomsource = pLevel.getRandom();
-        if (canLight(pState)){
-            pLevel.playSound((Player)null, pPos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, (randomsource.nextFloat() - randomsource.nextFloat()) * 0.2F + 1.0F);
+        if (canLight(pState)) {
+            pLevel.playSound((Player) null, pPos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, (randomsource.nextFloat() - randomsource.nextFloat()) * 0.2F + 1.0F);
             pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.LIT, Boolean.TRUE));
         } else {
-            pLevel.playSound((Player)null, pPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+            pLevel.playSound((Player) null, pPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
             pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.LIT, Boolean.FALSE));
         }
         return InteractionResult.SUCCESS;
@@ -78,18 +79,19 @@ public class OminousBrazierStatueBlock extends StatueBlock {
     public void animateTick(BlockState p_222593_, Level p_222594_, BlockPos p_222595_, RandomSource p_222596_) {
         if (p_222593_.getValue(LIT) && p_222593_.getValue(HALF) == DoubleBlockHalf.LOWER) {
             Direction facing = p_222593_.getValue(FACING);
-            double d0 = (double)p_222595_.getX() + facing.getStepX() + 1.0D;
-            double d1 = (double)p_222595_.getY() + 1.0D;
-            double d2 = (double)p_222595_.getZ() + facing.getStepZ() + 1.0D;
+            double d0 = (double) p_222595_.getX() + facing.getStepX() + 1.0D;
+            double d1 = (double) p_222595_.getY() + 1.0D;
+            double d2 = (double) p_222595_.getZ() + facing.getStepZ() + 1.0D;
             if (facing == Direction.WEST) {
-                d2 = (double)p_222595_.getZ() + facing.getStepZ();
+                d2 = (double) p_222595_.getZ() + facing.getStepZ();
             } else if (facing == Direction.EAST) {
-                d0 = (double)p_222595_.getX() + facing.getStepX();
+                d0 = (double) p_222595_.getX() + facing.getStepX();
             } else if (facing == Direction.SOUTH) {
-                d0 = (double)p_222595_.getX() + facing.getStepX();
-                d2 = (double)p_222595_.getZ() + facing.getStepZ();
+                d0 = (double) p_222595_.getX() + facing.getStepX();
+                d2 = (double) p_222595_.getZ() + facing.getStepZ();
             }
-            p_222594_.addParticle(ModParticleTypes.BIG_FIRE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            ParticleOptions particleOptions = ModParticleTypes.BIG_FIRE;
+            p_222594_.addParticle(particleOptions, d0, d1, d2, 0.0D, 0.0D, 0.0D);
             p_222594_.addParticle(ModParticleTypes.BIG_FIRE_DROP, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }
     }

@@ -21,7 +21,7 @@ public class BrewingSacrificeProcessor implements IComponentProcessor {
     @Override
     public void setup(Level level, IVariableProvider variables) {
         String effectId = variables.get("recipe").asString();
-        this.brewEffect = new BrewEffects().getBrewEffect(effectId);
+        this.brewEffect = BrewEffects.INSTANCE.getBrewEffect(effectId);
         if (variables.has("text")) {
             this.extraText = variables.get("text").asString();
         }
@@ -34,7 +34,7 @@ public class BrewingSacrificeProcessor implements IComponentProcessor {
 
         if (key.startsWith("input")) {
             ItemStack itemStack;
-            EntityType<?> entityType = new BrewEffects().getSacrificeFromEffect(this.brewEffect.getEffectID());
+            EntityType<?> entityType = BrewEffects.INSTANCE.getSacrificeFromEffect(this.brewEffect.getEffectID());
             Item item = SpawnEggItem.byId(entityType);
             if (item != null) {
                 itemStack = new ItemStack(item);

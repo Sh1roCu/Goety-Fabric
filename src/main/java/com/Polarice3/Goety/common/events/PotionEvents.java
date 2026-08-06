@@ -29,6 +29,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -55,10 +56,16 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.PatrollingMonster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -433,6 +440,34 @@ public class PotionEvents {
                         }
                     }
                 }
+                if (attackerL.hasEffect(GoetyEffects.SMITING)) {
+                    if (ModDamageSource.physicalAttacks(event.getSource())) {
+                        MobEffectInstance effectInstance = attackerL.getEffect(GoetyEffects.SMITING);
+                        if (effectInstance != null) {
+                            Enchantment enchantment = Enchantments.SMITE;
+                            ItemStack weapon = attackerL.getMainHandItem();
+                            int amp = effectInstance.getAmplifier() + 1;
+                            if (!weapon.isEnchanted() || EnchantmentHelper.getItemEnchantmentLevel(enchantment, weapon) < amp) {
+                                finalDamage += enchantment.getDamageBonus(amp, target.getMobType());
+                                enchantment.doPostAttack(attackerL, target, amp);
+                            }
+                        }
+                    }
+                }
+                if (attackerL.hasEffect(GoetyEffects.INSECT_BANE)) {
+                    if (ModDamageSource.physicalAttacks(event.getSource())) {
+                        MobEffectInstance effectInstance = attackerL.getEffect(GoetyEffects.INSECT_BANE);
+                        if (effectInstance != null) {
+                            Enchantment enchantment = Enchantments.BANE_OF_ARTHROPODS;
+                            ItemStack weapon = attackerL.getMainHandItem();
+                            int amp = effectInstance.getAmplifier() + 1;
+                            if (!weapon.isEnchanted() || EnchantmentHelper.getItemEnchantmentLevel(enchantment, weapon) < amp) {
+                                finalDamage += enchantment.getDamageBonus(amp, target.getMobType());
+                                enchantment.doPostAttack(attackerL, target, amp);
+                            }
+                        }
+                    }
+                }
             }
 
             if (event.getAmount() > 0.0F) {
@@ -541,6 +576,23 @@ public class PotionEvents {
                 serverLevel.sendParticles(ModParticleTypes.DOOM_DEATH, effected.getX(), effected.getNameTagOffsetY(), effected.getZ(), 0, 0.0D, 0.07D, 0.0D, 0.5D);
                 effected.playSound(ModSounds.DOOM, 1.0F, 1.0F);
                 ModNetwork.sendToALL(serverLevel.getServer(), SPlayWorldSoundPacket.ID, SPlayWorldSoundPacket.encode(effected.blockPosition(), ModSounds.DOOM, 1.0F, 1.0F));
+            }
+        }
+        if (effected instanceof Villager villager) {
+            if (villager.hasEffect(GoetyEffects.ILLAGUE) || villager.hasEffect(GoetyEffects.NECROSIS)) {
+                if (villager.level instanceof ServerLevel serverLevel) {
+                    ZombieVillager zombievillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
+                    if (zombievillager != null) {
+                        zombievillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
+                        zombievillager.setVillagerData(villager.getVillagerData());
+                        zombievillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
+                        zombievillager.setTradeOffers(villager.getOffers().createTag());
+                        zombievillager.setVillagerXp(villager.getVillagerXp());
+                        if (!zombievillager.isSilent()) {
+                            serverLevel.levelEvent(null, 1026, zombievillager.blockPosition(), 0);
+                        }
+                    }
+                }
             }
         }
     }
@@ -932,6 +984,11 @@ public class PotionEvents {
         }
         if (event.getEffectInstance().getEffect() == GoetyEffects.VOID_TOUCHED) {
             if (event.getEntity().getType().is(ModTags.EntityTypes.VOID_TOUCHED_IMMUNE)) {
+                event.setResult(MobEffectEvent.Result.DENY);
+            }
+        }
+        if (event.getEffectInstance().getEffect() == GoetyEffects.DOOM) {
+            if (!event.getEntity().canChangeDimensions() || event.getEntity().getType().is(ConventionalEntityTypeTags.BOSSES)) {
                 event.setResult(MobEffectEvent.Result.DENY);
             }
         }

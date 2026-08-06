@@ -117,7 +117,7 @@ public class CandelabraBlock extends Block implements SimpleWaterloggedBlock {
 
     public static void extinguish(@Nullable Player p_151900_, BlockState p_151901_, LevelAccessor p_151902_, BlockPos p_151903_) {
         setLit(p_151902_, p_151901_, p_151903_, false);
-        p_151902_.playSound((Player) null, p_151903_, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+        p_151902_.playSound(null, p_151903_, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
         p_151902_.gameEvent(p_151900_, GameEvent.BLOCK_CHANGE, p_151903_);
     }
 
@@ -242,6 +242,6 @@ public class CandelabraBlock extends Block implements SimpleWaterloggedBlock {
         }
 
         p_220688_.addParticle(ModParticleTypes.SMALL_FIRE, p_220689_.x, p_220689_.y, p_220689_.z, 0.0D, 0.0D, 0.0D);
-        p_220688_.addParticle(ModParticleTypes.SMALL_FIRE_DROP, p_220689_.x, p_220689_.y, p_220689_.z, 0.0D, 0.0D, 0.0D);
+        p_220688_.addParticle(ModParticleTypes.SMALL_FIRE_REVERSED, p_220689_.x, p_220689_.y, p_220689_.z, 0.0D, 0.0D, 0.0D);
     }
 }

@@ -182,6 +182,9 @@ public class ServantSpawnEggs {
     public static final ServantSpawnEggItem GUARDIAN_SERVANT_SPAWN_EGG = ModItems.register("guardian_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.GUARDIAN_SERVANT, 0x5aafa4, 0xff822f, egg()));
 
+    public static final ServantSpawnEggItem ELDER_GUARDIAN_SERVANT_SPAWN_EGG = ModItems.register("elder_guardian_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(ModEntityType.ELDER_GUARDIAN_SERVANT, 0xc9c5b4, 0x1e2c4c, egg()));
+
     public static final ServantSpawnEggItem BEAR_SERVANT_SPAWN_EGG = ModItems.register("bear_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.BEAR_SERVANT, 0x3a281d, 0xfa2e14, egg()));
 

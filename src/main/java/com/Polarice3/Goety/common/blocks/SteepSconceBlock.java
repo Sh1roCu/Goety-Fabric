@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -32,7 +34,7 @@ public class SteepSconceBlock extends Block {
             Direction.WEST, Block.box(10.0D, 0.0D, 3.5D, 16.0D, 16.0D, 12.5D)));
 
     public SteepSconceBlock() {
-        super(Properties.of()
+        super(BlockBehaviour.Properties.of()
                 .mapColor(MapColor.TERRACOTTA_BROWN)
                 .instrument(NoteBlockInstrument.BASS)
                 .sound(SoundType.WOOD)
@@ -107,7 +109,8 @@ public class SteepSconceBlock extends Block {
         double d1 = (double) p_222662_.getY() + 1.25D;
         double d2 = (double) p_222662_.getZ() + 0.5D;
         Direction direction1 = direction.getOpposite();
-        p_222661_.addParticle(ModParticleTypes.BIG_FIRE, d0 + 0.25D * (double) direction1.getStepX(), d1, d2 + 0.25D * (double) direction1.getStepZ(), 0.0D, 0.0D, 0.0D);
+        ParticleOptions particleOptions = ModParticleTypes.BIG_FIRE;
+        p_222661_.addParticle(particleOptions, d0 + 0.25D * (double) direction1.getStepX(), d1, d2 + 0.25D * (double) direction1.getStepZ(), 0.0D, 0.0D, 0.0D);
         p_222661_.addParticle(ModParticleTypes.BIG_FIRE_DROP, d0 + 0.25D * (double) direction1.getStepX(), d1, d2 + 0.25D * (double) direction1.getStepZ(), 0.0D, 0.0D, 0.0D);
     }
 }

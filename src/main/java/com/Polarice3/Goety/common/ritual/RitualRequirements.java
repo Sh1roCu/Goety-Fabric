@@ -38,8 +38,8 @@ public class RitualRequirements extends RitualTypes {
         return getConvertEntity(entityType, pPos, pLevel) == null;
     }
 
-    public static Mob getConvertEntity(TagKey<EntityType<?>> entityType, BlockPos pPos, Level pLevel){
-        for (Mob mob : pLevel.getEntitiesOfClass(Mob.class, new AABB(pPos).inflate(RANGE))){
+    public static Mob getConvertEntity(TagKey<EntityType<?>> entityType, BlockPos pPos, Level pLevel) {
+        for (Mob mob : pLevel.getEntitiesOfClass(Mob.class, new AABB(pPos).inflate(RANGE))) {
             if (EntityType.WANDERING_TRADER.is(entityType) || EntityType.VILLAGER.is(entityType)) {
                 if (mob instanceof Prisoner prisoner) {
                     if (prisoner.isTrader()) {
@@ -55,10 +55,10 @@ public class RitualRequirements extends RitualTypes {
                             return null;
                         }
                     }
-                } else if (mob.getType().is(entityType)){
+                } else if (mob.getType().is(entityType)) {
                     return mob;
                 }
-            } else if (mob.getType().is(entityType)){
+            } else if (mob.getType().is(entityType)) {
                 return mob;
             }
         }
@@ -164,12 +164,12 @@ public class RitualRequirements extends RitualTypes {
                 }
             }
             case NECROTURGY -> {
-                Predicate<BlockState> first = blockState -> blockState.getBlock() instanceof SculkBlock;
+                Predicate<BlockState> first = blockState -> blockState.getBlock() instanceof SculkBlock || blockState.is(ModBlocks.GRAVE_SOIL);
                 Predicate<BlockState> second = blockState -> blockState.getBlock() instanceof SlabBlock;
                 Predicate<BlockState> third = blockState -> blockState.getBlock() instanceof FlowerPotBlock flowerPotBlock && flowerPotBlock.getContent() != Blocks.AIR;
                 if (!finder.hasBlocks(first, 16)) {
                     if (pPlayer != null) {
-                        pPlayer.displayClientMessage(Component.translatable("info.goety.ritual.structure.noBlocks", Blocks.SCULK.getName()), true);
+                        pPlayer.displayClientMessage(Component.translatable("info.goety.ritual.structure.noBlocksMulti", Blocks.SCULK.getName(), ModBlocks.GRAVE_SOIL.getName()), true);
                     }
                     return false;
                 }
@@ -269,7 +269,7 @@ public class RitualRequirements extends RitualTypes {
             case SABBATH -> {
                 Predicate<BlockState> first = blockState -> blockState.is(Blocks.CRYING_OBSIDIAN);
                 Predicate<BlockState> second = blockState -> blockState.is(Blocks.OBSIDIAN);
-                Predicate<BlockState> third = blockState -> blockState.is(Blocks.SOUL_FIRE);
+                Predicate<BlockState> third = blockState -> blockState.getBlock() instanceof SoulFireBlock;
                 if (!finder.hasBlocks(first, 8)) {
                     if (pPlayer != null) {
                         pPlayer.displayClientMessage(Component.translatable("info.goety.ritual.structure.noBlocks", Blocks.CRYING_OBSIDIAN.getName()), true);
@@ -473,7 +473,7 @@ public class RitualRequirements extends RitualTypes {
                     return false;
                 }
             }
-            case DIVINATION ->{
+            case DIVINATION -> {
                 Predicate<BlockState> first = blockState -> blockState.is(ModBlocks.CRYSTAL_BALL);
                 Predicate<BlockState> third = blockState -> blockState.getBlock() instanceof AbstractSkullBlock || blockState.getBlock() instanceof TallSkullBlock || blockState.getBlock() instanceof WallTallSkullBlock;
                 if (!finder.hasBlocks(first, 1)) {

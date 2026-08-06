@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.common.blocks.fluids.ModFluids;
+import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.vehicle.ModBoat;
 import com.Polarice3.Goety.common.items.armor.*;
 import com.Polarice3.Goety.common.items.block.HauntedArmorStandItem;
@@ -141,6 +142,7 @@ public class ModItems {
     public static final Item POISON_QUILL_SEED = register("poison_quill_seed", () -> new QuickGrowSeedItem(true));
     public static final Item REFUSE_BOTTLE = register("refuse_bottle", RefuseBottleItem::new);
     public static final Item RESILIENCE_LOTION = register("resilience_lotion", () -> new UnguentItem(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MathHelper.minutesToTicks(3))));
+    public static final Item AGING_CREAM = register("aging_cream", () -> new UnguentItem(new MobEffectInstance(GoetyEffects.WANE, MathHelper.minutesToTicks(3)), new MobEffectInstance(GoetyEffects.SAPPED, MathHelper.minutesToTicks(3))));
     public static final Item FLYING_OINTMENT = register("flying_ointment", FlyingOintmentItem::new);
     public static final Item ILL_BOMB = register("ill_bomb", IllBombItem::new);
     public static final Item OMINOUS_SHACKLES = register("ominous_shackles", OminousShacklesItem::new);

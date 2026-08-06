@@ -5,6 +5,7 @@ import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -103,7 +104,7 @@ public class CandlestickBlock extends Block implements SimpleWaterloggedBlock {
 
     public static void extinguish(@Nullable Player p_151900_, BlockState p_151901_, LevelAccessor p_151902_, BlockPos p_151903_) {
         setLit(p_151902_, p_151901_, p_151903_, false);
-        p_151902_.playSound((Player) null, p_151903_, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+        p_151902_.playSound(null, p_151903_, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
         p_151902_.gameEvent(p_151900_, GameEvent.BLOCK_CHANGE, p_151903_);
     }
 
@@ -169,7 +170,7 @@ public class CandlestickBlock extends Block implements SimpleWaterloggedBlock {
         if (!p_152807_.getValue(WATERLOGGED) && p_152808_.getType() == Fluids.WATER) {
             BlockState blockstate = p_152807_.setValue(WATERLOGGED, Boolean.valueOf(true));
             if (p_152807_.getValue(LIT) && p_152807_.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                extinguish((Player) null, blockstate, p_152805_, p_152806_);
+                extinguish(null, blockstate, p_152805_, p_152806_);
             } else {
                 p_152805_.setBlock(p_152806_, blockstate, 3);
             }
@@ -216,8 +217,8 @@ public class CandlestickBlock extends Block implements SimpleWaterloggedBlock {
                 }
             }
 
-            p_220698_.addParticle(ModParticleTypes.SMALL_FIRE, p_220699_.getX() + 0.5D, p_220699_.getY() + (8 / 16.0D), p_220699_.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
-            p_220698_.addParticle(ModParticleTypes.SMALL_FIRE_DROP, p_220699_.getX() + 0.5D, p_220699_.getY() + (8 / 16.0D), p_220699_.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
+            ParticleOptions particleOptions = p_220700_.nextBoolean() ? ModParticleTypes.SMALL_FIRE_REVERSED : ModParticleTypes.SMALL_FIRE;
+            p_220698_.addParticle(particleOptions, p_220699_.getX() + 0.5D, p_220699_.getY() + (8 / 16.0D), p_220699_.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
         }
     }
 }

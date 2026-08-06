@@ -673,6 +673,7 @@ public class Goety {
         FabricDefaultAttributeRegistry.register(ModEntityType.SNAPPER, Snapper.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.GNASHER, Gnasher.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.GUARDIAN_SERVANT, GuardianServant.setCustomAttributes().build());
+        FabricDefaultAttributeRegistry.register(ModEntityType.ELDER_GUARDIAN_SERVANT, ElderGuardianServant.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.BEAR_SERVANT, BearServant.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.POLAR_BEAR_SERVANT, BearServant.setCustomAttributes().build());
         FabricDefaultAttributeRegistry.register(ModEntityType.HOGLIN_SERVANT, HoglinServant.setCustomAttributes().build());

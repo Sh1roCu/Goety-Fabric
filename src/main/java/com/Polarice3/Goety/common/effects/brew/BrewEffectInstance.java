@@ -140,7 +140,7 @@ public class BrewEffectInstance implements Comparable<BrewEffectInstance> {
 
     @Nullable
     public static BrewEffectInstance load(CompoundTag p_19561_) {
-        BrewEffect mobeffect = new BrewEffects().getBrewEffect(p_19561_);
+        BrewEffect mobeffect = BrewEffects.INSTANCE.getBrewEffect(p_19561_);
         return mobeffect == null ? null : loadSpecifiedEffect(mobeffect, p_19561_);
     }
 

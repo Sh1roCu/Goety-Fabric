@@ -10,7 +10,6 @@ import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.BlockFinder;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -45,12 +44,12 @@ public class GravestoneBlockEntity extends TrainingBlockEntity {
                 }
             }
             if (level instanceof ServerLevel serverLevel) {
-                double d0 = (double) blockPos.getX() + level.random.nextDouble();
-                double d1 = (double) blockPos.getY() + level.random.nextDouble();
-                double d2 = (double) blockPos.getZ() + level.random.nextDouble();
+                double d0 = (double) blockPos.getX() + level.getRandom().nextDouble();
+                double d1 = (double) blockPos.getY() + level.getRandom().nextDouble();
+                double d2 = (double) blockPos.getZ() + level.getRandom().nextDouble();
                 serverLevel.sendParticles(ModParticleTypes.NECRO_FIRE, d0, d1, d2, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-                if (level.random.nextFloat() < 0.3F) {
-                    if (level.random.nextFloat() < 0.17F) {
+                if (level.getRandom().nextFloat() < 0.3F) {
+                    if (level.getRandom().nextFloat() < 0.17F) {
                         ModNetwork.sendToALL(serverLevel.getServer(), SPlayWorldSoundPacket.ID, SPlayWorldSoundPacket.encode(blockPos, SoundEvents.FURNACE_FIRE_CRACKLE, 0.5F + level.random.nextFloat(), level.random.nextFloat() * 0.7F + 0.3F));
                     }
                 }

@@ -311,6 +311,8 @@ public class ModBlocks {
             new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).sound(SoundType.BASALT).requiresCorrectToolForDrops().strength(1.5F)), true, LootTableType.EMPTY);
     public static final Block SNOWY_DARK_DIRT = register("snowy_dark_dirt", () ->
             new Block(BlockBehaviour.Properties.copy(DARK_DIRT)), true, LootTableType.EMPTY);
+    public static final Block GRAVE_SOIL = register("grave_soil", () ->
+            new GraveSoilBlock(BlockBehaviour.Properties.copy(DARK_DIRT).sound(SoundType.SOUL_SOIL)));
     public static final Block DETRITUS = register("detritus", () ->
             new Block(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.TERRACOTTA_BROWN)

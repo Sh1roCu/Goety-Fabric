@@ -34,7 +34,7 @@ public class ModLevelRegistry {
             @Override
             public boolean test(BiomeSelectionContext selectionContext) {
                 return !selectionContext.hasTag(ModTags.Biomes.COMMON_BLACKLIST) &&
-                        !selectionContext.getBiomeRegistryEntry().is(biomeResourceKey -> biomeResourceKey.registry().getNamespace().contains("alexscaves"));
+                        !selectionContext.getBiomeRegistryEntry().is(biomeResourceKey -> biomeResourceKey.location().getNamespace().contains("alexscaves"));
             }
         };
 

@@ -4,12 +4,12 @@ import com.Polarice3.Goety.client.particles.MagicSmokeParticleOption;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -115,7 +115,7 @@ public class FirewoodBlock extends Block implements SimpleWaterloggedBlock {
             boolean flag = p_51259_.getValue(LIT);
             if (flag) {
                 if (!p_51257_.isClientSide()) {
-                    p_51257_.playSound((Player) null, p_51258_, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    p_51257_.playSound(null, p_51258_, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
 
                 p_51257_.gameEvent(GameEvent.BLOCK_CHANGE, p_51258_, GameEvent.Context.of(p_51259_));
@@ -147,7 +147,8 @@ public class FirewoodBlock extends Block implements SimpleWaterloggedBlock {
             if (this.spawnParticles) {
                 Vec3 vec3 = new Vec3(0.5D, 0.75D, 0.5D);
                 vec3 = vec3.add(p_220920_.getX(), p_220920_.getY(), p_220920_.getZ());
-                p_220919_.addParticle(ModParticleTypes.BIG_FIRE, vec3.x, vec3.y, vec3.z, 0.0D, 0.0D, 0.0D);
+                ParticleOptions particleOptions = ModParticleTypes.BIG_FIRE;
+                p_220919_.addParticle(particleOptions, vec3.x, vec3.y, vec3.z, 0.0D, 0.0D, 0.0D);
                 p_220919_.addParticle(ModParticleTypes.BIG_FIRE_DROP, vec3.x, vec3.y, vec3.z, 0.0D, 0.0D, 0.0D);
                 for (int i = 0; i < 4; ++i) {
                     vec3 = vec3.offsetRandom(p_220921_, 0.5F);
