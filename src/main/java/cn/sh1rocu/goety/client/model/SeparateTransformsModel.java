@@ -1,6 +1,8 @@
 package cn.sh1rocu.goety.client.model;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -61,7 +63,7 @@ public class SeparateTransformsModel extends BlockModel {
 
     public SeparateTransformsModel(BlockModel baseModel, ImmutableMap<ItemDisplayContext, BlockModel> perspectives,
                                    BlockModel original) {
-        super(null, List.of(), Map.of(), original.hasAmbientOcclusion(),
+        super(null, Lists.newArrayList(), Maps.newHashMap(), original.hasAmbientOcclusion(),
                 original.getGuiLight(), original.getTransforms(), original.getOverrides());
         this.baseModel = baseModel;
         this.perspectives = perspectives;
