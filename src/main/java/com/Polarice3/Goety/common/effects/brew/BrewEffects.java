@@ -122,6 +122,7 @@ public class BrewEffects {
         this.register(new PotionBrewEffect(GoetyEffects.INSECT_BANE, BrewConfig.InsectBaneCost.get(), BrewConfig.InsectBaneCapacity.get(), 3600), Items.BLUE_ORCHID);
         this.register(new PotionBrewEffect(GoetyEffects.INSIGHT, BrewConfig.InsightCost.get(), 3600), Items.WRITABLE_BOOK);
         this.register(new PotionBrewEffect(GoetyEffects.LEECHING, BrewConfig.LeechingCost.get(), 3600), Items.BEETROOT);
+        this.register(new PotionBrewEffect(GoetyEffects.NECROSIS, BrewConfig.NecrosisCost.get(), 900), ModItems.GRAVE_DUST);
         this.register(new PotionBrewEffect(GoetyEffects.NYCTOPHOBIA, BrewConfig.NyctophobiaCost.get(), BrewConfig.NyctophobiaCapacity.get(), 1800), Items.SCULK_SHRIEKER);
         this.register(new PotionBrewEffect(GoetyEffects.PHOTOSYNTHESIS, BrewConfig.PhotosynthesisCost.get(), 1800), Items.SUNFLOWER);
         this.register(new PotionBrewEffect(GoetyEffects.PLUNGE, BrewConfig.PlungeCost.get(), BrewConfig.PlungeCapacity.get(), 600), Items.ANVIL);

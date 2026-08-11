@@ -10,10 +10,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UnguentItem extends Item {
-    public List<MobEffectInstance> instances;
+    public List<MobEffectInstance> instances = new ArrayList<>();
 
     public UnguentItem(MobEffectInstance... instances) {
         this(List.of(instances));
@@ -32,10 +33,16 @@ public class UnguentItem extends Item {
         this.instances = instances;
     }
 
+    public UnguentItem addEffect(MobEffectInstance instance) {
+        UnguentItem unguentItem = this;
+        unguentItem.instances.add(instance);
+        return unguentItem;
+    }
+
     @Override
     public ItemStack finishUsingItem(ItemStack p_41348_, Level p_41349_, LivingEntity p_41350_) {
         super.finishUsingItem(p_41348_, p_41349_, p_41350_);
-        if (!(p_41350_ instanceof Player) || !((Player)p_41350_).getAbilities().instabuild) {
+        if (!(p_41350_ instanceof Player) || !((Player) p_41350_).getAbilities().instabuild) {
             p_41348_.shrink(1);
         }
 
