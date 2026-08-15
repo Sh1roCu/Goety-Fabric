@@ -179,6 +179,9 @@ public class ModParticleTypes {
     public static final SimpleParticleType FROST = register("frost",
             () -> FabricParticleTypes.simple(false));
 
+    public static final SimpleParticleType SMALL_FROST = register("small_frost",
+            () -> FabricParticleTypes.simple(false));
+
     public static final SimpleParticleType FROST_NOVA = register("frost_nova",
             () -> FabricParticleTypes.simple(false));
 

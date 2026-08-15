@@ -159,8 +159,8 @@ public class PotionEvents {
                     }
                 }
             }
-            if (livingEntity.hasEffect(GoetyEffects.FREEZING)) {
-                if (!livingEntity.level.isClientSide) {
+            if (livingEntity.hasEffect(GoetyEffects.FREEZING)){
+                if (!livingEntity.level.isClientSide){
                     MobEffectInstance instance = livingEntity.getEffect(GoetyEffects.FREEZING);
                     if (instance != null) {
                         livingEntity.setIsInPowderSnow(true);
@@ -168,10 +168,9 @@ public class PotionEvents {
                             int h = instance.getAmplifier() + 1;
                             MiscCapHelper.setFreezing(livingEntity, h);
                             if (livingEntity.level instanceof ServerLevel serverLevel) {
-                                if (serverLevel.random.nextFloat() <= 0.25F) {
-                                    for (int h1 = 0; h1 < h; ++h1) {
-                                        ServerParticleUtil.addParticlesAroundSelf(serverLevel, ParticleTypes.SNOWFLAKE, livingEntity);
-                                    }
+                                float chance = 0.005F * (h * h);
+                                if (serverLevel.getRandom().nextFloat() <= chance) {
+                                    ServerParticleUtil.addParticlesAroundMiddleSelf(serverLevel, ParticleTypes.SNOWFLAKE, livingEntity);
                                 }
                             }
                             int i = livingEntity.getTicksFrozen();

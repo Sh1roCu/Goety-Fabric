@@ -77,7 +77,8 @@ public class ClientSideInit extends SidedInit {
         registry.register(ModParticleTypes.END_FIRE, FireParticle.ReversibleProvider::new);
         registry.register(ModParticleTypes.END_FIRE_DROP, FireParticle.Provider::new);
         registry.register(ModParticleTypes.SMALL_END_FIRE, FireParticle.SmallReversibleProvider::new);
-        registry.register(ModParticleTypes.FROST, FireParticle.FrostProvider::new);
+        registry.register(ModParticleTypes.FROST, FrostParticle.Provider::new);
+        registry.register(ModParticleTypes.SMALL_FROST, FrostParticle.SmallProvider::new);
         registry.register(ModParticleTypes.FROST_NOVA, FlameParticle.Provider::new);
         registry.register(ModParticleTypes.FLY, FireParticle.FlyProvider::new);
         registry.register(ModParticleTypes.SPELL_CLOUD, FireParticle.ColorProvider::new);
