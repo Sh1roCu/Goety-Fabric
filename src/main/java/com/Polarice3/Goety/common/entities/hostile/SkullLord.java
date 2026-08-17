@@ -878,6 +878,7 @@ public class SkullLord extends Monster implements ICustomAttributes, IEntityList
                     soulSkull.setPos(soulSkull.getX(), SkullLord.this.getY(0.75D), soulSkull.getZ());
                     soulSkull.setYRot(SkullLord.this.getYRot());
                     soulSkull.setXRot(SkullLord.this.getXRot());
+                    soulSkull.setDamage(SkullLord.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.shootTime = shoot;
                     SkullLord.this.level.addFreshEntity(soulSkull);
                     SkullLord.this.playSound(ModSounds.SKULL_LORD_SHOOT, 1.0F, 1.0F);

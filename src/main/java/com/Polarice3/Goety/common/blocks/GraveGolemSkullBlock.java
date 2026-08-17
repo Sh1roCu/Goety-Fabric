@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 
 public class GraveGolemSkullBlock extends BaseEntityBlock implements ICustomCloneStack {
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
-    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D);
     @Nullable
     private BlockPattern graveGolemBase;
     @Nullable
@@ -201,8 +201,9 @@ public class GraveGolemSkullBlock extends BaseEntityBlock implements ICustomClon
     private BlockPattern getOrCreateGraveGolemBase() {
         if (this.graveGolemBase == null) {
             this.graveGolemBase = BlockPatternBuilder.start()
-                    .aisle("~~ ~~", "#####", "BDDDB", "~~D~~")
+                    .aisle("~~ ~~", "#GGG#", "#DDD#", "B~D~B")
                     .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.SHADE_STONE_BLOCK)))
+                    .where('G', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.GRAVE_SOIL)))
                     .where('D', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.SKULL_PILE)))
                     .where('B', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BONE_BLOCK)))
                     .where('~', (p_284869_) -> {
@@ -216,10 +217,11 @@ public class GraveGolemSkullBlock extends BaseEntityBlock implements ICustomClon
     private BlockPattern getOrCreateGraveGolemFull() {
         if (this.graveGolemFull == null) {
             this.graveGolemFull = BlockPatternBuilder.start()
-                    .aisle("~~^~~", "#####", "BDDDB", "~~D~~")
+                    .aisle("~~^~~", "#GGG#", "#DDD#", "B~D~B")
                     .where('^', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.GRAVE_GOLEM_SKULL_BLOCK)
                             .or(BlockStatePredicate.forBlock(ModBlocks.WALL_GRAVE_GOLEM_SKULL_BLOCK))))
                     .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.SHADE_STONE_BLOCK)))
+                    .where('G', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.GRAVE_SOIL)))
                     .where('D', BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.SKULL_PILE)))
                     .where('B', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BONE_BLOCK)))
                     .where('~', (p_284869_) -> {

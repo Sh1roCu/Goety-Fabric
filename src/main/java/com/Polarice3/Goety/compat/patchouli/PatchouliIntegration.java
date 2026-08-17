@@ -277,6 +277,8 @@ public class PatchouliIntegration implements ICompatable {
     public static final Supplier<IMultiblock> GRAVE_GOLEM_REVIVE = Suppliers.memoize(() -> {
         IStateMatcher shadeStone = PatchouliAPI.get().predicateMatcher(ModBlocks.SHADE_STONE_BLOCK,
                 state -> state.is(ModBlocks.SHADE_STONE_BLOCK));
+        IStateMatcher graveSoil = PatchouliAPI.get().predicateMatcher(ModBlocks.GRAVE_SOIL,
+                state -> state.is(ModBlocks.GRAVE_SOIL));
         IStateMatcher skullPile = PatchouliAPI.get().predicateMatcher(ModBlocks.SKULL_PILE,
                 state -> state.is(ModBlocks.SKULL_PILE));
         IStateMatcher boneBlock = PatchouliAPI.get().predicateMatcher(Blocks.BONE_BLOCK,
@@ -287,17 +289,18 @@ public class PatchouliIntegration implements ICompatable {
                                 "__H__"
                         },
                         {
-                                "#####"
+                                "#GGG#"
                         },
                         {
-                                "BDDDB"
+                                "#DDD#"
                         },
                         {
-                                "__0__"
+                                "B_0_B"
                         }
                 },
                 'H', ModBlocks.GRAVE_GOLEM_SKULL_BLOCK,
                 '#', shadeStone,
+                'G', graveSoil,
                 'B', boneBlock,
                 'D', skullPile,
                 '0', skullPile

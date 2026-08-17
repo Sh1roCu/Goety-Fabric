@@ -5,7 +5,6 @@ import cn.sh1rocu.goety.api.extension.IEntityPersistentData;
 import cn.sh1rocu.goety.mixin.accessor.MobAccessor;
 import cn.sh1rocu.goety.mixin.accessor.VillagerAccessor;
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.api.blocks.IEnchanteableBlock;
 import com.Polarice3.Goety.api.entities.IChunkLoader;
 import com.Polarice3.Goety.api.entities.IHiding;
 import com.Polarice3.Goety.api.entities.IOwned;
@@ -47,10 +46,6 @@ import com.Polarice3.Goety.common.entities.util.StormEntity;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.items.armor.ModArmorMaterials;
 import com.Polarice3.Goety.common.items.curios.WarlockGarmentItem;
-import com.Polarice3.Goety.common.items.equipment.DarkScytheItem;
-import com.Polarice3.Goety.common.items.equipment.IceAxeItem;
-import com.Polarice3.Goety.common.items.equipment.PhilosophersMaceItem;
-import com.Polarice3.Goety.common.items.equipment.SickleItem;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.magic.FocusBag;
 import com.Polarice3.Goety.common.items.magic.FocusPack;
@@ -86,7 +81,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
@@ -124,22 +118,17 @@ import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.*;
@@ -901,95 +890,6 @@ public class ModEvents {
                 }
             }
         }
-    }
-
-    public static boolean onBreakingBlock(Level world, Player player, BlockPos pos, BlockState blockState, @Nullable BlockEntity blockEntity) {
-        Block block = blockState.getBlock();
-        ItemStack tool = player.getMainHandItem();
-        if (tool.getItem() instanceof PhilosophersMaceItem) {
-            if (block.getDescriptionId().contains("nether_gold")) {
-                if (!player.level.isClientSide) {
-                    Block.dropResources(Blocks.GOLD_ORE.defaultBlockState(), player.level, pos, null, player, player.getMainHandItem());
-                    block.playerWillDestroy(player.level, pos, blockState, player);
-                    player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                    ItemHelper.hurtAndBreak(tool, 1, player);
-                    return false;
-                }
-            }
-        }
-        if (tool.getItem() instanceof DarkScytheItem) {
-            if (block.getDescriptionId().contains("sculk") && blockState.is(BlockTags.MINEABLE_WITH_HOE)) {
-                if (!player.level.isClientSide) {
-                    ItemStack fakeItem = new ItemStack(Items.DIAMOND_HOE);
-                    fakeItem.enchant(Enchantments.SILK_TOUCH, 1);
-                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(tool);
-                    if (!map1.isEmpty()) {
-                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(tool).keySet()) {
-                            if (enchantment != Enchantments.SILK_TOUCH) {
-                                fakeItem.enchant(enchantment, map1.get(enchantment));
-                            }
-                        }
-                    }
-                    if (block instanceof IEnchanteableBlock) {
-                        block.playerDestroy(player.level, player, pos, blockState, blockEntity, fakeItem);
-                    } else {
-                        Block.dropResources(blockState, player.level, pos, null, player, fakeItem);
-                    }
-                    player.level.levelEvent(player, 2001, pos, Block.getId(blockState));
-                    player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                    ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
-                    return false;
-                }
-            }
-        }
-        if (tool.getItem() instanceof IceAxeItem) {
-            if (blockState.is(BlockTags.ICE)) {
-                if (!player.level.isClientSide) {
-                    ItemStack fakeItem = new ItemStack(Items.IRON_PICKAXE);
-                    fakeItem.enchant(Enchantments.SILK_TOUCH, 1);
-                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(tool);
-                    if (!map1.isEmpty()) {
-                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(tool).keySet()) {
-                            if (enchantment != Enchantments.SILK_TOUCH) {
-                                fakeItem.enchant(enchantment, map1.get(enchantment));
-                            }
-                        }
-                    }
-                    if (block instanceof IEnchanteableBlock) {
-                        block.playerDestroy(player.level, player, pos, blockState, world.getBlockEntity(pos), fakeItem);
-                    } else {
-                        Block.dropResources(blockState, player.level, pos, null, player, fakeItem);
-                    }
-                    block.playerWillDestroy(player.level, pos, blockState, player);
-                    player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                    ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
-                    return false;
-                }
-            }
-        }
-        if (tool.getItem() instanceof SickleItem) {
-            if (!player.isCreative()) {
-                if (!EnchantmentHelper.hasSilkTouch(tool)) {
-                    if (player.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
-                        if (block instanceof TallGrassBlock || blockState.is(Blocks.TALL_GRASS) || blockState.is(Blocks.LARGE_FERN)) {
-                            if (!player.level.isClientSide) {
-                                if (player.level.getRandom().nextFloat() < 0.125F) {
-                                    int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
-                                    int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
-                                    Block.popResource(player.level, pos, new ItemStack(ModBlocks.HENBANE_SEEDS, count));
-                                }
-                                if (player.level.getRandom().nextFloat() < 0.1F) {
-                                    int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
-                                    int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
-                                    Block.popResource(player.level, pos, new ItemStack(ModBlocks.NIGHTSHADE_SEEDS, count));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     public static void targetEvents(LivingChangeTargetEvent event) {

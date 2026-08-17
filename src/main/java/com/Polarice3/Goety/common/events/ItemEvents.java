@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.events;
 
 import cn.sh1rocu.goety.api.event.*;
+import com.Polarice3.Goety.api.blocks.IEnchanteableBlock;
 import com.Polarice3.Goety.api.items.IPersist;
 import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.api.items.magic.IWand;
@@ -30,6 +31,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
@@ -53,10 +55,16 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TallGrassBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -65,6 +73,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ItemEvents {
@@ -345,6 +354,99 @@ public class ItemEvents {
 //                }
 //            }
 //        }
+    }
+
+    public static boolean onBreakingBlock(Level world, Player player, BlockPos pos, BlockState blockState, @Nullable BlockEntity blockEntity) {
+        Block block = blockState.getBlock();
+        ItemStack tool = player.getMainHandItem();
+        boolean canceled = false;
+        if (tool.getItem() instanceof PhilosophersMaceItem) {
+            if (block.getDescriptionId().contains("nether_gold")) {
+                if (!player.level.isClientSide) {
+                    Block.dropResources(Blocks.GOLD_ORE.defaultBlockState(), player.level, pos, null, player, player.getMainHandItem());
+                    block.playerWillDestroy(player.level, pos, blockState, player);
+                    player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                    ItemHelper.hurtAndBreak(tool, 1, player);
+                    // event.setCanceled(true);
+                    canceled = true;
+                }
+            }
+        }
+        if (tool.getItem() instanceof DarkScytheItem) {
+            if (block.getDescriptionId().contains("sculk") && blockState.is(BlockTags.MINEABLE_WITH_HOE)) {
+                if (!player.level.isClientSide) {
+                    ItemStack fakeItem = new ItemStack(Items.DIAMOND_HOE);
+                    fakeItem.enchant(Enchantments.SILK_TOUCH, 1);
+                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(tool);
+                    if (!map1.isEmpty()) {
+                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(tool).keySet()) {
+                            if (enchantment != Enchantments.SILK_TOUCH) {
+                                fakeItem.enchant(enchantment, map1.get(enchantment));
+                            }
+                        }
+                    }
+                    if (block instanceof IEnchanteableBlock) {
+                        block.playerDestroy(player.level, player, pos, blockState, blockEntity, fakeItem);
+                    } else {
+                        Block.dropResources(blockState, player.level, pos, null, player, fakeItem);
+                    }
+                    player.level.levelEvent(player, 2001, pos, Block.getId(blockState));
+                    player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                    ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
+                    // event.setCanceled(true);
+                    canceled = true;
+                }
+            }
+        }
+        if (tool.getItem() instanceof IceAxeItem) {
+            if (blockState.is(BlockTags.ICE)) {
+                if (!player.level.isClientSide) {
+                    ItemStack fakeItem = new ItemStack(Items.IRON_PICKAXE);
+                    fakeItem.enchant(Enchantments.SILK_TOUCH, 1);
+                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(tool);
+                    if (!map1.isEmpty()) {
+                        for (Enchantment enchantment : EnchantmentHelper.getEnchantments(tool).keySet()) {
+                            if (enchantment != Enchantments.SILK_TOUCH) {
+                                fakeItem.enchant(enchantment, map1.get(enchantment));
+                            }
+                        }
+                    }
+                    if (block instanceof IEnchanteableBlock) {
+                        block.playerDestroy(player.level, player, pos, blockState, blockEntity, fakeItem);
+                    } else {
+                        Block.dropResources(blockState, player.level, pos, null, player, fakeItem);
+                    }
+                    block.playerWillDestroy(player.level, pos, blockState, player);
+                    player.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                    ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
+                    // event.setCanceled(true);
+                    canceled = true;
+                }
+            }
+        }
+        if (tool.getItem() instanceof SickleItem) {
+            if (!player.isCreative()) {
+                if (!EnchantmentHelper.hasSilkTouch(tool)) {
+                    if (player.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+                        if (block instanceof TallGrassBlock || blockState.is(Blocks.TALL_GRASS) || blockState.is(Blocks.LARGE_FERN)) {
+                            if (!player.level.isClientSide) {
+                                if (player.level.getRandom().nextFloat() < 0.125F) {
+                                    int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+                                    int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
+                                    Block.popResource(player.level, pos, new ItemStack(ModBlocks.HENBANE_SEEDS, count));
+                                }
+                                if (player.level.getRandom().nextFloat() < 0.1F) {
+                                    int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+                                    int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
+                                    Block.popResource(player.level, pos, new ItemStack(ModBlocks.NIGHTSHADE_SEEDS, count));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return !canceled;
     }
 
     public static InteractionResult playerInteractBlockEvents(Player player, Level level, InteractionHand hand, BlockHitResult blockHitResult) {
