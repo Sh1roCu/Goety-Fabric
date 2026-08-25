@@ -1,6 +1,7 @@
 package cn.sh1rocu.goety.mixin.common;
 
 import cn.sh1rocu.goety.api.extension.IEntityListener;
+import com.Polarice3.Goety.common.events.ModEvents;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.Holder;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.storage.WritableLevelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Supplier;
@@ -34,6 +36,16 @@ public abstract class ServerLevelMixin extends Level {
             iEntity.onAddedToWorld();
         }
         return call;
+    }
+
+    @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setDayTime(J)V"))
+    private long goety$sleepFinishedEvent(long newTime) {
+        long minTime = this.getDayTime();
+        long newTimeIn = ModEvents.onSleepFinished((ServerLevel) (Object) this, newTime, minTime);
+        if (minTime > newTimeIn) {
+            return newTime;
+        }
+        return newTimeIn;
     }
 
     @Mixin(targets = "net.minecraft.server.level.ServerLevel$EntityCallbacks")

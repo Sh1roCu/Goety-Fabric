@@ -6,10 +6,7 @@ import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.common.entities.projectiles.NecroBolt;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.ClientUtils;
-import com.Polarice3.Goety.utils.LichdomHelper;
-import com.Polarice3.Goety.utils.ServerParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -120,7 +118,13 @@ public class Doppelganger extends Summoned implements RangedAttackMob {
         if (LichdomHelper.isInLichMode(this.getTrueOwner())) {
             if (this.tickCount % 5 == 0) {
                 if (this.level.isClientSide) {
-                    this.level.addParticle(ModParticleTypes.LICH, this.getRandomX(0.5D), this.getY(), this.getRandomZ(0.5D), 0.0D, 0.0D, 0.0D);
+                    int color = LichdomHelper.lichModeColor(this.getTrueOwner());
+                    if (color > -1) {
+                        ColorUtil colorUtil = new ColorUtil(color);
+                        this.level.addParticle(ModParticleTypes.LICH_COLORED, this.getRandomX(0.5D), this.getY(), this.getRandomZ(0.5D), colorUtil.red(), colorUtil.green(), colorUtil.blue());
+                    } else {
+                        this.level.addParticle(ModParticleTypes.LICH, this.getRandomX(0.5D), this.getY(), this.getRandomZ(0.5D), 0.0D, 0.0D, 0.0D);
+                    }
                 }
             }
         }
@@ -343,13 +347,26 @@ public class Doppelganger extends Summoned implements RangedAttackMob {
 
     @Override
     public void die(DamageSource cause) {
-        if (!this.level.isClientSide) {
-            for (int i = 0; i < this.level.random.nextInt(10) + 10; ++i) {
-                ParticleOptions particleOptions = ParticleTypes.POOF;
+        if (this.level instanceof ServerLevel serverLevel) {
+            for (int i = 0; i < serverLevel.getRandom().nextInt(10) + 10; ++i) {
+                boolean flag = true;
                 if (this.isUndeadClone()) {
-                    particleOptions = ModParticleTypes.LICH;
+                    if (this.getTrueOwner() != null) {
+                        int color = LichdomHelper.lichModeColor(this.getTrueOwner());
+                        if (color > -1) {
+                            ColorUtil colorUtil = new ColorUtil(color);
+                            serverLevel.sendParticles(ModParticleTypes.LICH_COLORED, this.getX(), this.getY(), this.getZ(), 0, colorUtil.red(), colorUtil.green(), colorUtil.blue(), 1.0F);
+                            flag = false;
+                        }
+                    }
                 }
-                ServerParticleUtil.smokeParticles(particleOptions, this.getX(), this.getY(), this.getZ(), this.level);
+                if (flag) {
+                    ParticleOptions particleOptions = ParticleTypes.POOF;
+                    if (this.isUndeadClone()) {
+                        particleOptions = ModParticleTypes.LICH;
+                    }
+                    ServerParticleUtil.smokeParticles(particleOptions, this.getX(), this.getY(), this.getZ(), this.level);
+                }
             }
         }
         SoundEvent soundEvent = SoundEvents.ILLUSIONER_MIRROR_MOVE;

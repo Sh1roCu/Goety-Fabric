@@ -74,7 +74,6 @@ public class ClientInitEvents {
     public static void init() {
         clientInit();
         EntityAddedLayerCallback.EVENT.register(ClientInitEvents::addLayers);
-        EntityAddedLayerCallback.EVENT.register(ClientRendererInit.getInstance()::onAddLayers);
         registerGUI();
         onRegisterLayers();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
@@ -177,30 +176,6 @@ public class ClientInitEvents {
                 , (stack, world, living, seed) -> !EternalCauldronItem.getBottle(stack).isEmpty() ? 1.0F : 0.0F);
 
     }
-
-    /*private static void copyOldArtIfMissing() {
-        File dir = new File(".", "resourcepacks");
-        File target = new File(dir, "Goety Old Textures.zip");
-
-        if(!target.exists())
-            try {
-                dir.mkdirs();
-                InputStream in = Goety.class.getResourceAsStream("/assets/goety/old_textures.zip");
-                FileOutputStream out = new FileOutputStream(target);
-
-                byte[] buf = new byte[16384];
-                int len;
-                if (in != null) {
-                    while ((len = in.read(buf)) > 0)
-                        out.write(buf, 0, len);
-
-                    in.close();
-                }
-                out.close();
-            } catch (IOException ignored) {
-
-            }
-    }*/
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void addLayers(
@@ -363,6 +338,7 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MAGGOT, CarrionMaggotModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.FLY, CarrionFlyModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SORCERER, SorcererModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.ENVIOKER, EnviokerModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.TORMENTOR, TormentorModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.INQUILLAGER, InquillagerModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.CONQUILLAGER, ConquillagerModel::createBodyLayer);
@@ -423,6 +399,7 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HAUNTED_ARMOR_STAND, HauntedArmorStandModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HAS_INNER, () -> HauntedArmorStandArmorModel.createBodyLayer(new CubeDeformation(0.5F)));
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.HAS_OUTER, () -> HauntedArmorStandArmorModel.createBodyLayer(new CubeDeformation(1.0F)));
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SARCOPHAGUS, SarcophagusModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.SMALL_PAINTING, HauntedPaintingModel::createSmallFrameLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MEDIUM_PAINTING, HauntedPaintingModel::createMediumFrameLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.LARGE_PAINTING, HauntedPaintingModel::createLargeFrameLayer);
@@ -488,6 +465,7 @@ public class ClientInitEvents {
         BlockEntityRenderers.register(ModBlockEntities.LOFTY_CHEST, LoftyChestRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SIGN_BLOCK_ENTITIES, SignRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.HANGING_SIGN_BLOCK_ENTITIES, HangingSignRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.SARCOPHAGUS, SarcophagusRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.PLUSHIE, PlushieBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SCULPTURED_STATUE, SculpturedStatueRenderer::new);
 

@@ -28,6 +28,7 @@ import com.Polarice3.Goety.common.world.data.GrimoireData;
 import com.Polarice3.Goety.compat.minecolonies.MinecoloniesLoaded;
 import com.Polarice3.Goety.config.BrewConfig;
 import com.Polarice3.Goety.config.MainConfig;
+import com.Polarice3.Goety.init.ModTags;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -103,7 +104,7 @@ public class SEHelper {
             if (ITotem.currentSouls(itemStack) + souls > ITotem.maximumSouls(itemStack)) {
                 souls = ITotem.maximumSouls(itemStack);
             }
-            ITotem.setSoulsamount(TotemFinder.FindTotem(player), souls);
+            ITotem.setSoulsAmount(TotemFinder.FindTotem(player), souls);
         }
     }
 
@@ -181,7 +182,9 @@ public class SEHelper {
     public static int getSoulGiven(LivingEntity victim) {
         if (victim != null) {
             boolean flag = true;
-            if (victim instanceof IOwned owned && owned.getTrueOwner() != null) {
+            if (victim.getType().is(ModTags.EntityTypes.SOULLESS)) {
+                flag = false;
+            } else if (victim instanceof IOwned owned && owned.getTrueOwner() != null) {
                 flag = false;
             } else if (victim.isBaby() && !(victim instanceof Enemy)) {
                 flag = false;

@@ -12,6 +12,7 @@ import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.blocks.ModChestBlock;
+import com.Polarice3.Goety.common.blocks.SarcophagusBlock;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ModEntityType;
@@ -75,7 +76,9 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -89,6 +92,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -122,7 +127,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -1578,7 +1585,8 @@ public class ModEvents {
         }
     }
 
-    public static InteractionResult sleepEvents(Player player, BlockPos sleepingPos, boolean vanillaResult) {
+    public static Player.BedSleepingProblem sleepEvents(Player player, BlockPos sleepingPos) {
+        Player.BedSleepingProblem result = null;
         if (player != null) {
             if (!player.isCreative()) {
                 double d0 = 8.0D;
@@ -1590,11 +1598,99 @@ public class ModEvents {
                 });
                 if (!list.isEmpty()) {
                     // event.setResult(Player.BedSleepingProblem.NOT_SAFE);
-                    return InteractionResult.FAIL;
+                    result = Player.BedSleepingProblem.NOT_SAFE;
                 }
             }
         }
-        return InteractionResult.PASS;
+        return result;
+    }
+
+    public static InteractionResult onCanSleep(Player player, BlockPos blockPos, boolean vanillaResult) {
+        InteractionResult result = InteractionResult.PASS;
+        BlockState blockState = player.level.getBlockState(blockPos);
+        if (blockState.getBlock() instanceof SarcophagusBlock) {
+            if (player.level.isDay()) {
+                // event.setResult(Event.Result.ALLOW);
+                result = InteractionResult.SUCCESS;
+            } else {
+                // event.setResult(Event.Result.DENY);
+                result = InteractionResult.FAIL;
+            }
+        }
+        return result;
+    }
+
+    public static long onSleepFinished(ServerLevel level, long newTime, long dayTime) {
+        boolean anyInSarcophagus = level.players().stream()
+                .filter(LivingEntity::isSleeping)
+                .anyMatch(player -> player.getSleepingPos()
+                        .map(pos -> level.getBlockState(pos).getBlock() instanceof SarcophagusBlock)
+                        .orElse(false));
+
+        if (anyInSarcophagus) {
+            long dist = level.getDayTime() % 24000L > 12000L ? 13000 : -11000;
+            return newTime + dist;
+        }
+        return newTime;
+    }
+
+    public static void onWakeUp(Player player, boolean wakeImmediately, boolean updateLevel) {
+        Optional<BlockPos> optional = player.getSleepingPos();
+        Level level = player.level();
+        if (MainConfig.SarcophagusUndead.get()) {
+            if (!level.isClientSide) {
+                if (!wakeImmediately && !updateLevel) {
+                    if (optional.isPresent()) {
+                        BlockState state = level.getBlockState(optional.get());
+                        if (state.getBlock() instanceof SarcophagusBlock && state.hasProperty(SarcophagusBlock.CUSHIONED)) {
+                            if (player.getMobType() != MobType.UNDEAD && !state.getValue(SarcophagusBlock.CUSHIONED)) {
+                                player.addEffect(new MobEffectInstance(GoetyEffects.SAPPED, MathHelper.secondsToTicks(30), 2, false, false));
+                                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, MathHelper.secondsToTicks(30), 1, false, false));
+                                player.addEffect(new MobEffectInstance(GoetyEffects.FLIMSY, MathHelper.secondsToTicks(30), 0, false, false));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static Player.BedSleepingProblem canStartSleeping(Player player, BlockPos pos) {
+        Player.BedSleepingProblem result = null;
+        Level level = player.level();
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof SarcophagusBlock) {
+            if (!level.dimensionType().natural()) {
+                // event.setResult(Player.BedSleepingProblem.NOT_POSSIBLE_HERE);
+                result = Player.BedSleepingProblem.NOT_POSSIBLE_HERE;
+            } else if (!bedInRange(player, pos, state.getValue(HorizontalDirectionalBlock.FACING).getOpposite())) {
+                player.displayClientMessage(Component.translatable("info.goety.sarcophagus.too_far"), true);
+                // event.setResult(Player.BedSleepingProblem.OTHER_PROBLEM);
+                result = Player.BedSleepingProblem.OTHER_PROBLEM;
+            } else {
+                BlockPos above = pos.above();
+                if (obstructedAt(level, above) || obstructedAt(level, above.relative(state.getValue(HorizontalDirectionalBlock.FACING).getOpposite()))) {
+                    player.displayClientMessage(Component.translatable("info.goety.sarcophagus.obstructed"), true);
+                    // event.setResult(Player.BedSleepingProblem.OTHER_PROBLEM);
+                    result = Player.BedSleepingProblem.OTHER_PROBLEM;
+                }
+            }
+        }
+        return result;
+    }
+
+    //Stole these three from @TeamLapen: https://github.com/TeamLapen/Vampirism/blob/40aff6fd757fdf3d148d4b9e5a94b677970628a2/src/main/java/de/teamlapen/vampirism/entity/player/ModPlayerEventHandler.java#L602
+    private static boolean obstructedAt(Level level, BlockPos pos) {
+        return level.getBlockState(pos).isSuffocating(level, pos);
+    }
+
+    private static boolean bedInRange(Player player, BlockPos pos, Direction direction) {
+        return isReachableBedBlock(player, pos) && isReachableBedBlock(player, pos.relative(direction));
+    }
+
+    private static boolean isReachableBedBlock(Player player, BlockPos pPos) {
+        Vec3 vec3 = Vec3.atBottomCenterOf(pPos);
+        return Math.abs(player.getX() - vec3.x()) <= 3.0D && Math.abs(player.getY() - vec3.y()) <= 2.0D && Math.abs(player.getZ() - vec3.z()) <= 3.0D;
     }
 
     public static void furnaceBurnItems() {

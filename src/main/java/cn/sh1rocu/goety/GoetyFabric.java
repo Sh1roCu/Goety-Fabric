@@ -1,6 +1,7 @@
 package cn.sh1rocu.goety;
 
 import cn.sh1rocu.goety.api.event.*;
+import cn.sh1rocu.goety.api.extension.IBedBlock;
 import cn.sh1rocu.goety.api.extension.ICustomBlockPathType;
 import cn.sh1rocu.goety.util.forge.FluidInteractionRegistry;
 import cn.sh1rocu.goety.util.forge.UsernameCache;
@@ -31,7 +32,10 @@ import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -79,7 +83,7 @@ public class GoetyFabric implements ModInitializer {
             if (item instanceof WitchStaff witchStaff) {
                 return witchStaff.initCapabilities(itemStack);
             }
-            if (item instanceof EternalCauldronItem eternalCauldron){
+            if (item instanceof EternalCauldronItem eternalCauldron) {
                 return eternalCauldron.initCapabilities(itemStack);
             }
             return null;
@@ -93,6 +97,27 @@ public class GoetyFabric implements ModInitializer {
         });
 
         ServerLifecycleEvents.SERVER_STARTING.register((server) -> GoetyFabric.server = new WeakReference<>(server));
+
+        EntitySleepEvents.SET_BED_OCCUPATION_STATE.register((entity, sleepingPos, bedState, occupied) -> {
+            if (bedState.getBlock() instanceof IBedBlock bedBlock && bedBlock.isBed(bedState, entity.level(), sleepingPos, entity)) {
+                bedBlock.setBedOccupied(bedState, entity.level(), sleepingPos, entity, occupied);
+                return true;
+            }
+            return false;
+        });
+        EntitySleepEvents.MODIFY_SLEEPING_DIRECTION.register((entity, sleepingPos, direction) -> {
+            var bedState = entity.level().getBlockState(sleepingPos);
+            if (bedState.getBlock() instanceof IBedBlock bedBlock && bedBlock.isBed(bedState, entity.level(), sleepingPos, entity)) {
+                return bedState.getValue(HorizontalDirectionalBlock.FACING);
+            }
+            return direction;
+        });
+        EntitySleepEvents.ALLOW_BED.register((entity, sleepingPos, bedState, vanillaResult) -> {
+            if (bedState.getBlock() instanceof IBedBlock bedBlock && bedBlock.isBed(bedState, entity.level(), sleepingPos, entity)) {
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
+        });
 
         ServerLifecycleEvents.SERVER_STARTED.register(Goety::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPED.register(Goety::onServerStopped);
@@ -113,6 +138,7 @@ public class GoetyFabric implements ModInitializer {
         AttackEntityCallback.EVENT.register(ItemEvents::playerAttackEvents);
         UseEntityCallback.EVENT.register(ItemEvents::interactEntityEvents);
         UseItemCallback.EVENT.register(ItemEvents::generalInteractEvents);
+        // LivingDropsEvent.EVENT.register(ItemEvents::dropEvents);
 
         PlayerTickEvent.START.register(LichEvents::onPlayerLichdom);
         PlayerTickEvent.END.register(LichEvents::onPlayerLichdom);
@@ -146,7 +172,9 @@ public class GoetyFabric implements ModInitializer {
         ExplosionEvent.START.register(ModEvents::explosionStartEvent);
         ExplosionEvent.DETONATE.register(ModEvents::explosionDetonateEvent);
         ProjectileImpactEvent.EVENT.register(ModEvents::projectileImpactEvent);
-        EntitySleepEvents.ALLOW_NEARBY_MONSTERS.register(ModEvents::sleepEvents);
+        EntitySleepEvents.ALLOW_SLEEPING.register(ModEvents::sleepEvents);
+        EntitySleepEvents.ALLOW_SLEEP_TIME.register(ModEvents::onCanSleep);
+        EntitySleepEvents.ALLOW_SLEEPING.register(ModEvents::canStartSleeping);
         EntityTeleportEvent.ENDER_PEARL.register(ModEvents::onTeleport);
         EntityTeleportEvent.ENDER_ENTITY.register(ModEvents::onTeleport);
         EntityTeleportEvent.CHORUS.register(ModEvents::onTeleport);

@@ -414,7 +414,7 @@ public class SoulEnergyEvents {
                     player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
                     player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
                     ModNetwork.sendTo(player, TotemDeathPacket.ID, TotemDeathPacket.encode(player.getUUID()));
-                    ITotem.setSoulsamount(TotemFinder.FindTotem(player), 0);
+                    ITotem.setSoulsAmount(TotemFinder.FindTotem(player), 0);
                 }
                 // event.setCanceled(true);
                 cancelled = true;
@@ -440,7 +440,7 @@ public class SoulEnergyEvents {
                             ServerLevel serverWorld = (ServerLevel) victim.level;
                             serverWorld.getChunkSource().broadcast(victim, new ClientboundEntityEventPacket(victim, (byte) 35));
                         }
-                        ITotem.setSoulsamount(itemStack, 0);
+                        ITotem.setSoulsAmount(itemStack, 0);
                         if (victim instanceof Mob) {
                             itemStack.shrink(1);
                             victim.spawnAtLocation(new ItemStack(ModItems.SPENT_TOTEM));

@@ -29,7 +29,6 @@ import com.Polarice3.Goety.common.magic.spells.frost.*;
 import com.Polarice3.Goety.common.magic.spells.geomancy.*;
 import com.Polarice3.Goety.common.magic.spells.necromancy.*;
 import com.Polarice3.Goety.common.magic.spells.nether.*;
-import com.Polarice3.Goety.common.magic.spells.nether.FireBreathSpell;
 import com.Polarice3.Goety.common.magic.spells.storm.*;
 import com.Polarice3.Goety.common.magic.spells.utility.CraftingSpell;
 import com.Polarice3.Goety.common.magic.spells.utility.GlowLightSpell;
@@ -219,6 +218,7 @@ public class ModItems {
     public static final SingleStackItem RING_OF_FORCE = register("ring_of_force", RingItem::new);
     public static final SingleStackItem RING_OF_THE_FORGE = register("ring_of_the_forge", RingItem::new);
     public static final SingleStackItem RING_OF_THE_DRAGON = register("ring_of_the_dragon", RingItem::new);
+    //    public static final SingleStackItem RING_OF_WRECKING = register("ring_of_wrecking", RingItem::new);
     public static final SingleStackItem PENDANT_OF_HUNGER = register("pendant_of_hunger", PendantOfHungerItem::new);
     public static final SingleStackItem TARGETING_MONOCLE = register("targeting_monocle", TargetingMonocleItem::new);
     public static final SingleStackItem DARK_HAT = register("dark_hat", MagicHatItem::new);
@@ -505,6 +505,7 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final Item COOKING_LADLE = register("cooking_ladle",
             () -> new Item(new Item.Properties()));
+    public static final Item SOUL_ENERGY = register("soul_energy", SoulItem::new);
 
     public static FabricItemSettings baseProperties() {
         return new FabricItemSettings();
@@ -521,7 +522,8 @@ public class ModItems {
                 || item == BONE_SHARD
                 || item == COOKING_LADLE
                 || item instanceof TotemOfSouls
-                || item instanceof BrewItem;
+                || item instanceof BrewItem
+                || item instanceof SoulItem;
     }
 
     public static void init() {

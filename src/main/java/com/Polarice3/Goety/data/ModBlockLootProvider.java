@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -74,6 +75,8 @@ public class ModBlockLootProvider extends FabricBlockLootTableProvider {
                 this.add(block, createDoorTable(block));
             } else if (block instanceof SlabBlock) {
                 this.add(block, createSlabItemTable(block));
+            } else if (block.defaultBlockState().hasProperty(BlockStateProperties.BED_PART)){
+                this.add(block, this.createSinglePropConditionTable(block, BlockStateProperties.BED_PART, BedPart.HEAD));
             } else if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
                 this.add(block, bl -> createSinglePropConditionTable(bl, BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
             } else {

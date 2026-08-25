@@ -10,6 +10,7 @@ public class LichImp implements ILichdom {
     private boolean lichMode;
     private boolean nightVision;
     private int smited;
+    private int lichModeColor = -1;
 
     @Override
     public boolean getLichdom() {
@@ -49,6 +50,16 @@ public class LichImp implements ILichdom {
     @Override
     public void setSmited(int smited) {
         this.smited = smited;
+    }
+
+    @Override
+    public int lichModeColor() {
+        return this.lichModeColor;
+    }
+
+    @Override
+    public void setLichModeColor(int colorCode) {
+        this.lichModeColor = colorCode;
     }
 
     @Override

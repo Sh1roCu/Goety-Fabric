@@ -1840,7 +1840,7 @@ public class MobUtil {
     public static boolean stormSpawn(LevelAccessor accessor, BlockPos blockPos) {
         if (accessor.getDifficulty() != Difficulty.PEACEFUL) {
             if (accessor instanceof WorldGenLevel genLevel) {
-                if (genLevel.canSeeSky(blockPos) && blockPos.getY() >= accessor.getSeaLevel()) {
+                if (genLevel.canSeeSky(blockPos) && blockPos.getY() >= accessor.getSeaLevel() && !genLevel.getBiome(blockPos).value().coldEnoughToSnow(blockPos)) {
                     return genLevel.getLevel().isThundering();
                 }
             }

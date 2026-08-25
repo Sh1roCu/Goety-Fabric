@@ -19,4 +19,8 @@ public interface ILichdom extends AutoSyncedComponent {
     int smited();
 
     void setSmited(int smited);
+
+    int lichModeColor();
+
+    void setLichModeColor(int colorCode);
 }

@@ -19,7 +19,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider p_255894_) {
+    protected void addTags(HolderLookup.Provider provider) {
         Collection<Block> plushie = new ArrayList<>();
         Collection<Block> ominous = new ArrayList<>();
         ModBlocks.BLOCKS.forEach(block ->
@@ -43,6 +43,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
             ominous.add(ModBlocks.MANDALA);
             ominous.add(ModBlocks.OMINOUS_STATUE);
             ominous.add(ModBlocks.OMINOUS_BRAZIER_STATUE);
+            ominous.add(ModBlocks.OMINOUS_SARCOPHAGUS);
             for (Block block : ominous){
                 this.getOrCreateTagBuilder(ModTags.Blocks.OMINOUS_BLOCKS).add(block).setReplace(false);
             }

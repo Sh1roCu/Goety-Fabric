@@ -95,6 +95,9 @@ public class ModParticleTypes {
     public static final SimpleParticleType LICH = register("lich",
             () -> FabricParticleTypes.simple(true));
 
+    public static final SimpleParticleType LICH_COLORED = register("lich_colored",
+            () -> FabricParticleTypes.simple(true));
+
     public static final SimpleParticleType CONFUSED = register("confused",
             () -> FabricParticleTypes.simple(true));
 

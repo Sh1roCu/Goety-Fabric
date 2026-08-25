@@ -4,6 +4,7 @@ import cn.sh1rocu.goety.api.event.LivingDamageEvent;
 import cn.sh1rocu.goety.api.event.LivingHurtEvent;
 import cn.sh1rocu.goety.api.extension.ILeftClickEntity;
 import cn.sh1rocu.goety.util.forge.EventHooks;
+import com.Polarice3.Goety.common.events.ModEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -62,5 +63,10 @@ public abstract class PlayerMixin extends LivingEntity {
         } else {
             return event.getAmount();
         }
+    }
+
+    @Inject(method = "stopSleepInBed", at = @At("HEAD"))
+    private void goety$onPlayerWakeup(boolean wakeImmediately, boolean updateLevel, CallbackInfo ci) {
+        ModEvents.onWakeUp((Player) (Object) this, wakeImmediately, updateLevel);
     }
 }

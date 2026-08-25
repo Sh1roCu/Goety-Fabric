@@ -31,7 +31,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.raid.Raid;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -336,11 +336,14 @@ public class Crusher extends HuntingIllagerEntity {
         super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT) && pRecentlyHit) {
             if (this.level.random.nextFloat() < 0.025F + (pLooting * 0.01F)) {
-                Item item = ModItems.GREAT_HAMMER;
+                ItemStack itemStack = ModItems.GREAT_HAMMER.getDefaultInstance();
                 if (this.isStorm()) {
-                    item = ModItems.STORMLANDER;
+                    itemStack = ModItems.STORMLANDER.getDefaultInstance();
                 }
-                this.spawnAtLocation(item);
+                if (itemStack.isDamageableItem()) {
+                    itemStack.setDamageValue(itemStack.getMaxDamage() - this.random.nextInt(1 + this.random.nextInt(Math.max(itemStack.getMaxDamage() - 3, 1))));
+                }
+                this.spawnAtLocation(itemStack);
             }
         }
     }

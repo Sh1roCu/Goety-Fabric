@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.items.equipment;
 
 import cn.sh1rocu.goety.api.extension.IEnchantment;
-import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.items.ModTiers;
@@ -21,15 +20,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -45,7 +42,7 @@ public class DarkScytheItem extends TieredItem implements Vanishable, IEnchantme
     private final Multimap<Attribute, AttributeModifier> scytheAttributes;
 
     public DarkScytheItem(Tier itemTier, Properties properties) {
-        super(itemTier, properties.durability(itemTier.getUses()));
+        super(itemTier, properties.rarity(Rarity.UNCOMMON).durability(itemTier.getUses()));
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         initialDamage = ItemConfig.ScytheBaseDamage.get().floatValue() + itemTier.getAttackDamageBonus();
         double attackSpeed = 4.0D - ItemConfig.ScytheAttackSpeed.get();
@@ -115,7 +112,9 @@ public class DarkScytheItem extends TieredItem implements Vanishable, IEnchantme
     public void attackMobs(ItemStack pStack, LivingEntity pTarget, Player pPlayer) {
         int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER, pStack);
         int soulEater = Mth.clamp(enchantment + 1, 1, 10);
-        SEHelper.increaseSouls(pPlayer, ItemConfig.DarkScytheSouls.get() * soulEater);
+        if (SEHelper.getSoulGiven(pTarget) > 0) {
+            SEHelper.increaseSouls(pPlayer, ItemConfig.DarkScytheSouls.get() * soulEater);
+        }
 
         float f = (float) pPlayer.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float f1 = EnchantmentHelper.getDamageBonus(pPlayer.getMainHandItem(), pTarget.getMobType());
@@ -140,12 +139,18 @@ public class DarkScytheItem extends TieredItem implements Vanishable, IEnchantme
                         }
                         pStack.hurtAndBreak(1, pPlayer, (p_220045_0_) ->
                                 p_220045_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND));
-                        if (livingentity instanceof IOwned) {
-                            if (((IOwned) livingentity).getTrueOwner() != pPlayer) {
-                                SEHelper.increaseSouls(pPlayer, ItemConfig.DarkScytheSouls.get() * soulEater);
+                        boolean giveSoul = false;
+                        if (livingentity instanceof OwnableEntity owned) {
+                            if (owned.getOwner() != pPlayer) {
+                                giveSoul = true;
                             }
                         } else {
-                            SEHelper.increaseSouls(pPlayer, ItemConfig.DarkScytheSouls.get() * soulEater);
+                            giveSoul = true;
+                        }
+                        if (giveSoul) {
+                            if (SEHelper.getSoulGiven(livingentity) > 0) {
+                                SEHelper.increaseSouls(pPlayer, ItemConfig.DarkScytheSouls.get() * soulEater);
+                            }
                         }
                         EnchantmentHelper.doPostHurtEffects(livingentity, pPlayer);
                         EnchantmentHelper.doPostDamageEffects(pPlayer, livingentity);

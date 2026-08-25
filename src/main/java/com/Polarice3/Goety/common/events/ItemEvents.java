@@ -45,6 +45,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -620,14 +621,6 @@ public class ItemEvents {
                 result = InteractionResult.FAIL;
             }
         }
-//        if (item instanceof IWand || item instanceof GoodwillGrimoire || item instanceof GrudgeGrimoire) {
-//            if (entity instanceof Villager villager) {
-//                InteractionResult itemAction = itemStack.interactLivingEntity(player, villager, hand);
-//                if (itemAction.consumesAction()) {
-//                    result= InteractionResult.SUCCESS;
-//                }
-//            }
-//        }
 
         return result;
     }
@@ -642,4 +635,20 @@ public class ItemEvents {
         }
         return InteractionResultHolder.pass(itemStack);
     }
+
+//    public static void dropEvents(LivingDropsEvent event){
+//        if (event.getEntity() != null) {
+//            Entity attacker = event.getSource().getEntity();
+//            LivingEntity victim = event.getEntity();
+//            if (attacker instanceof Player player) {
+//                if (!victim.level.isClientSide) {
+//                    if (victim instanceof Mob) {
+//                        if (CuriosFinder.hasCurio(player, ModItems.RING_OF_WRECKING.get())) {
+//                            event.getDrops().removeIf(itemEntity -> itemEntity.getItem().isDamageableItem());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

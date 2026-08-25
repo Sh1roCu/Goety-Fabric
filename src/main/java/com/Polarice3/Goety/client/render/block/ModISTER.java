@@ -27,6 +27,7 @@ import java.util.function.Supplier;
 public class ModISTER extends BlockEntityWithoutLevelRenderer {
     private final Map<Block, ModChestBlockEntity> chestEntities = new HashMap<>();
     private final Map<Block, SculpturedStatueBlockEntity> statueEntities = new HashMap<>();
+    private final Map<Block, SarcophagusBlockEntity> sarcophagusEntities = new HashMap<>();
     private final Map<Block, BlackCrystalBlockEntity> crystalEntities = new HashMap<>();
 
     public static final Supplier<BlockEntityWithoutLevelRenderer> INSTANCE = Suppliers.memoize(ModISTER::new);
@@ -37,6 +38,10 @@ public class ModISTER extends BlockEntityWithoutLevelRenderer {
 
     private SculpturedStatueBlockEntity statueEntity(Block block) {
         return this.statueEntities.computeIfAbsent(block, block1 -> new SculpturedStatueBlockEntity(BlockPos.ZERO, block1.defaultBlockState()));
+    }
+
+    private SarcophagusBlockEntity sarcophagusEntity(Block block) {
+        return this.sarcophagusEntities.computeIfAbsent(block, block1 -> new SarcophagusBlockEntity(BlockPos.ZERO, block1.defaultBlockState()));
     }
 
     private BlackCrystalBlockEntity crystalEntity(Block block) {
@@ -150,6 +155,12 @@ public class ModISTER extends BlockEntityWithoutLevelRenderer {
                     } else {
                         statueRenderer.renderItem(block.defaultBlockState(), 180.0F, pMatrixStack, pBuffer, pLight);
                     }
+                }
+            } else if (block instanceof SarcophagusBlock) {
+                SarcophagusBlockEntity blockEntity = sarcophagusEntity(block);
+                BlockEntityRenderer<?> renderer = Minecraft.getInstance().getBlockEntityRenderDispatcher().getRenderer(blockEntity);
+                if (renderer instanceof SarcophagusRenderer renderer1) {
+                    renderer1.render(blockEntity, ClientEvents.PARTIAL_TICK, pMatrixStack, pBuffer, pLight, pOverlay);
                 }
             }
         }

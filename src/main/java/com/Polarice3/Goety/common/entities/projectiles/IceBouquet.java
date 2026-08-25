@@ -330,7 +330,7 @@ public class IceBouquet extends GroundProjectile {
                 if (target.hurt(damageSource, damage)) {
                     target.invulnerableTime = 16;
                     if (owner instanceof Player player) {
-                        if (target.isAlive() && this.isSoulEating()) {
+                        if (target.isAlive() && this.isSoulEating() && SEHelper.getSoulGiven(target) > 0) {
                             SEHelper.increaseSouls(player, 1);
                         }
                         if (this.isTrap()) {

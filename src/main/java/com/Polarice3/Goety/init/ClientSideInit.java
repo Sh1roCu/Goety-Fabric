@@ -26,6 +26,7 @@ public class ClientSideInit extends SidedInit {
         registry.register(ModParticleTypes.NECRO_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
         registry.register(ModParticleTypes.GLOW_EFFECT, AdditiveSpellParticle.AlphaProvider::new);
         registry.register(ModParticleTypes.LICH, BigSpellParticle.Provider::new);
+        registry.register(ModParticleTypes.LICH_COLORED, BigSpellParticle.LichProvider::new);
         registry.register(ModParticleTypes.WARLOCK, SpellParticle.WitchProvider::new);
         registry.register(ModParticleTypes.BONE, ShortFlameParticle.Provider::new);
         registry.register(ModParticleTypes.LEECH, FlameParticle.Provider::new);
