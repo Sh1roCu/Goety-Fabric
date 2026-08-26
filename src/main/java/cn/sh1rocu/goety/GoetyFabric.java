@@ -128,7 +128,6 @@ public class GoetyFabric implements ModInitializer {
         LivingDamageEvent.EVENT.register(BaseEvent.LOWEST, ItemEvents::onLivingDamage);
         LivingJumpEvent.EVENT.register(ItemEvents::onLivingJump);
         LivingFallEvent.EVENT.register(ItemEvents::onLivingFall);
-        LivingEntityUseItemEvent.TICK.register(ItemEvents::usingItemEvents);
         PlayerBlockBreakEvents.BEFORE.register(ItemEvents::onBreakingBlock);
         UseBlockCallback.EVENT.register(ItemEvents::playerInteractBlockEvents);
         LivingEntityUseItemEvent.FINISH.register(ItemEvents::useItemEvent);
@@ -138,7 +137,7 @@ public class GoetyFabric implements ModInitializer {
         AttackEntityCallback.EVENT.register(ItemEvents::playerAttackEvents);
         UseEntityCallback.EVENT.register(ItemEvents::interactEntityEvents);
         UseItemCallback.EVENT.register(ItemEvents::generalInteractEvents);
-        // LivingDropsEvent.EVENT.register(ItemEvents::dropEvents);
+        LivingDropsEvent.EVENT.register(ItemEvents::dropEvents);
 
         PlayerTickEvent.START.register(LichEvents::onPlayerLichdom);
         PlayerTickEvent.END.register(LichEvents::onPlayerLichdom);

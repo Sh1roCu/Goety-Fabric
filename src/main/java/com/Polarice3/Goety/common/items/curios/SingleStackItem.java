@@ -209,6 +209,9 @@ public class SingleStackItem extends TrinketItem implements IEnchantment {
             if (stack.is(ModItems.RING_OF_FORCE)) {
                 tooltip.add(Component.translatable("info.goety.ring_of_force").withStyle(secondary));
             }
+            if (stack.is(ModItems.RING_OF_WRECKING)) {
+                tooltip.add(Component.translatable("info.goety.ring_of_wrecking").withStyle(secondary));
+            }
             if (stack.is(ModItems.RING_OF_THE_FORGE)) {
                 tooltip.add(Component.translatable("info.goety.ring_of_the_forge").withStyle(secondary));
             }

@@ -509,7 +509,9 @@ public class Goety {
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.LARGE_SIENNA_FERN.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.SIENNA_VINE.asItem(), 0.5F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.HENBANE_SEEDS, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(ModBlocks.NIGHTSHADE_SEEDS, 0.3F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.HENBANE_FLOWER, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(ModItems.NIGHTSHADE_BLOSSOM, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModItems.SNAP_FUNGUS, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.ROTTEN_SAPLING.asItem(), 0.65F);
         CompostingChanceRegistry.INSTANCE.add(ModBlocks.CHORUS_SAPLING.asItem(), 0.65F);

@@ -218,7 +218,7 @@ public class ModItems {
     public static final SingleStackItem RING_OF_FORCE = register("ring_of_force", RingItem::new);
     public static final SingleStackItem RING_OF_THE_FORGE = register("ring_of_the_forge", RingItem::new);
     public static final SingleStackItem RING_OF_THE_DRAGON = register("ring_of_the_dragon", RingItem::new);
-    //    public static final SingleStackItem RING_OF_WRECKING = register("ring_of_wrecking", RingItem::new);
+    public static final SingleStackItem RING_OF_WRECKING = register("ring_of_wrecking", RingItem::new);
     public static final SingleStackItem PENDANT_OF_HUNGER = register("pendant_of_hunger", PendantOfHungerItem::new);
     public static final SingleStackItem TARGETING_MONOCLE = register("targeting_monocle", TargetingMonocleItem::new);
     public static final SingleStackItem DARK_HAT = register("dark_hat", MagicHatItem::new);

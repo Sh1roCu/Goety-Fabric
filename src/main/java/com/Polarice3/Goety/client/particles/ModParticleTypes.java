@@ -170,6 +170,12 @@ public class ModParticleTypes {
     public static final SimpleParticleType SMALL_DRAGON_FLAME_GROUND = register("small_dragon_flame_ground",
             () -> FabricParticleTypes.simple(false));
 
+    public static final SimpleParticleType NECRO_DRAGON_FLAME = register("necro_dragon_flame",
+            () -> FabricParticleTypes.simple(false));
+
+    public static final SimpleParticleType NECRO_DRAGON_FLAME_GROUND = register("necro_dragon_flame_ground",
+            () -> FabricParticleTypes.simple(false));
+
     public static final SimpleParticleType END_FIRE = register("end_fire",
             () -> FabricParticleTypes.simple(false));
 

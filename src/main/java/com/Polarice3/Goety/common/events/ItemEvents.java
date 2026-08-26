@@ -346,17 +346,6 @@ public class ItemEvents {
         }
     }
 
-    public static void usingItemEvents(LivingEntityUseItemEvent.Tick event) {
-//        if (!event.getEntity().level.isClientSide) {
-//            if (event.getItem().getItem() instanceof IWand && CuriosFinder.hasCurio(event.getEntity(), ModItems.TARGETING_MONOCLE)) {
-//                Entity entity = MobUtil.getSingleTarget(event.getEntity().level, event.getEntity(), 16, 3);
-//                if (entity instanceof LivingEntity living && !MobUtil.areAllies(entity, event.getEntity())) {
-//                    event.getEntity().lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(living.getX(), living.getEyeY(), living.getZ()));
-//                }
-//            }
-//        }
-    }
-
     public static boolean onBreakingBlock(Level world, Player player, BlockPos pos, BlockState blockState, @Nullable BlockEntity blockEntity) {
         Block block = blockState.getBlock();
         ItemStack tool = player.getMainHandItem();
@@ -431,15 +420,21 @@ public class ItemEvents {
                     if (player.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
                         if (block instanceof TallGrassBlock || blockState.is(Blocks.TALL_GRASS) || blockState.is(Blocks.LARGE_FERN)) {
                             if (!player.level.isClientSide) {
+                                boolean damage = false;
                                 if (player.level.getRandom().nextFloat() < 0.125F) {
                                     int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
                                     int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
                                     Block.popResource(player.level, pos, new ItemStack(ModBlocks.HENBANE_SEEDS, count));
+                                    damage = true;
                                 }
                                 if (player.level.getRandom().nextFloat() < 0.1F) {
                                     int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
                                     int count = 1 + RandomUtil.nextInt(player.level.getRandom(), i);
                                     Block.popResource(player.level, pos, new ItemStack(ModBlocks.NIGHTSHADE_SEEDS, count));
+                                    damage = true;
+                                }
+                                if (damage) {
+                                    ItemHelper.hurtAndBreak(player.getMainHandItem(), 1, player);
                                 }
                             }
                         }
@@ -636,19 +631,33 @@ public class ItemEvents {
         return InteractionResultHolder.pass(itemStack);
     }
 
-//    public static void dropEvents(LivingDropsEvent event){
-//        if (event.getEntity() != null) {
-//            Entity attacker = event.getSource().getEntity();
-//            LivingEntity victim = event.getEntity();
-//            if (attacker instanceof Player player) {
-//                if (!victim.level.isClientSide) {
-//                    if (victim instanceof Mob) {
-//                        if (CuriosFinder.hasCurio(player, ModItems.RING_OF_WRECKING.get())) {
-//                            event.getDrops().removeIf(itemEntity -> itemEntity.getItem().isDamageableItem());
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    public static void dropEvents(LivingDropsEvent event){
+        if (event.getEntity() != null) {
+            Entity attacker = event.getSource().getEntity();
+            LivingEntity victim = event.getEntity();
+            if (!event.getSource().is(ModDamageSource.DISMISSED)) {
+                Player player = MobUtil.getPlayerFromEntity(attacker);
+                if (player == null) {
+                    if (victim.lastHurtByPlayer != null) {
+                        player = victim.lastHurtByPlayer;
+                    }
+                }
+                if (player != null) {
+                    if (!victim.level.isClientSide) {
+                        if (victim instanceof Mob && !victim.getType().is(ModTags.EntityTypes.UNWRECKABLE)) {
+                            if (CuriosFinder.hasCurio(player, ModItems.RING_OF_WRECKING)) {
+                                boolean flag = event.getDrops().stream().anyMatch(itemEntity -> ItemHelper.isWreckable(itemEntity.getItem()));
+                                if (flag) {
+                                    if (!victim.isSilent()) {
+                                        victim.playSound(SoundEvents.ITEM_BREAK, 1.0F, 0.8F + victim.getRandom().nextFloat() * 0.4F);
+                                    }
+                                }
+                                event.getDrops().removeIf(itemEntity -> ItemHelper.isWreckable(itemEntity.getItem()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

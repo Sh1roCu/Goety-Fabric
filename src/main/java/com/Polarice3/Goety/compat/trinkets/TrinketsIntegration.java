@@ -13,6 +13,7 @@ public class TrinketsIntegration implements ICompatable {
             .put(ModItems.RING_OF_WANT, "ring")
             .put(ModItems.RING_OF_THIRST, "ring")
             .put(ModItems.RING_OF_FORCE, "ring")
+            .put(ModItems.RING_OF_WRECKING, "ring")
             .put(ModItems.RING_OF_THE_FORGE, "ring")
             .put(ModItems.RING_OF_THE_DRAGON, "ring")
             .put(ModItems.DARK_HAT, "head")

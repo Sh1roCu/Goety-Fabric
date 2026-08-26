@@ -16,6 +16,7 @@ import com.Polarice3.Goety.client.gui.screen.inventory.FocusRadialMenuScreen;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.item.CustomItemsRenderer;
 import com.Polarice3.Goety.client.render.model.LichModeModel;
+import com.Polarice3.Goety.common.blocks.SarcophagusBlock;
 import com.Polarice3.Goety.common.blocks.entities.*;
 import com.Polarice3.Goety.common.crafting.CauldronSusStewRecipe;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
@@ -75,6 +76,9 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.InBedChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -94,6 +98,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -1344,5 +1349,29 @@ public class ClientEvents {
     public static void onRecipesUpdated(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         CrusherServant.invalidateRecipeCache();
         CauldronSusStewRecipe.invalidateFlowerCache();
+    }
+
+    //Stole and edited the code from @TeamLapen:https://github.com/TeamLapen/Vampirism/blob/version/1.20/1.20.1/latest/src/main/java/de/teamlapen/vampirism/client/gui/ScreenEventHandler.java
+    //Changed it cause the .get(1) caused a IndexOutOfBoundsException lol.
+    public static void initScreenEvent(Minecraft client, Screen screen, int scaledWidth, int scaledHeight) {
+        if (screen instanceof InBedChatScreen) {
+            Player player = client.player;
+            if (player != null && player.isSleeping()) {
+                boolean sarcophagus = player.getSleepingPos()
+                        .map(pos -> player.level.getBlockState(pos).getBlock())
+                        .filter(block -> block instanceof SarcophagusBlock)
+                        .isPresent();
+                if (sarcophagus) {
+                    for (GuiEventListener eventListener : screen.children()) {
+                        if (eventListener instanceof AbstractWidget widget) {
+                            if (widget.getMessage().getContents() instanceof TranslatableContents contents && contents.getKey().equals("multiplayer.stopSleeping")) {
+                                widget.setMessage(Component.translatable("info.goety.sarcophagus.stop_sleeping"));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
