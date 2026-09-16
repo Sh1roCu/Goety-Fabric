@@ -27,6 +27,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -35,6 +36,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -46,6 +48,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -66,13 +69,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -245,9 +249,10 @@ public class ItemEvents {
         Entity directEntity = event.getSource().getDirectEntity();
         if (event.getAmount() > 0.0F) {
             if (directEntity instanceof LivingEntity livingAttacker) {
+                ItemStack itemStack = livingAttacker.getMainHandItem();
                 if (ModDamageSource.physicalAttacks(event.getSource())) {
-                    ItemHelper.setItemEffect(livingAttacker.getMainHandItem(), victim);
-                    if (livingAttacker.getMainHandItem().getItem() instanceof TieredItem weapon) {
+                    ItemHelper.setItemEffect(itemStack, victim);
+                    if (itemStack.getItem() instanceof TieredItem weapon) {
                         if (weapon == ModItems.FANGED_DAGGER) {
                             MobEffect effect = MobEffects.POISON;
                             if (CuriosFinder.hasWildRobe(livingAttacker)) {
@@ -284,6 +289,25 @@ public class ItemEvents {
                                     } else {
                                         EffectsUtil.resetDuration(victim, GoetyEffects.SAPPED, seconds);
                                     }
+                                }
+                            }
+                        }
+                    }
+                    if (itemStack.is(ModTags.Items.SOUL_TAKING)) {
+                        if (livingAttacker instanceof Player player) {
+                            boolean giveSoul = false;
+                            if (victim instanceof OwnableEntity owned) {
+                                if (owned.getOwner() != player) {
+                                    giveSoul = true;
+                                }
+                            } else {
+                                giveSoul = true;
+                            }
+                            if (giveSoul) {
+                                int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER, itemStack);
+                                int soulEater = Mth.clamp(enchantment + 1, 1, 10);
+                                if (SEHelper.getSoulGiven(victim) > 0) {
+                                    SEHelper.increaseSouls(player, ItemConfig.DarkScytheSouls.get() * soulEater);
                                 }
                             }
                         }
@@ -438,6 +462,22 @@ public class ItemEvents {
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+        if (tool.getItem() instanceof IWand) {
+            if (player.isCreative()) {
+                if (player.level.getBlockEntity(pos) instanceof RandomizableContainerBlockEntity be) {
+                    CompoundTag compoundTag = blockEntity.saveWithFullMetadata();
+                    if (compoundTag.contains("LootTableSeed")) {
+                        compoundTag.remove("LootTableSeed");
+                        be.load(compoundTag);
+                        be.setChanged();
+                        player.level.sendBlockUpdated(pos, blockState, blockState, 3);
+                        player.level.playSound(player, pos, ModSounds.CAST_SPELL, player.getSoundSource(), 1.0F, player.getVoicePitch());
+                        // event.setCanceled(true);
+                        canceled = true;
                     }
                 }
             }
@@ -631,7 +671,7 @@ public class ItemEvents {
         return InteractionResultHolder.pass(itemStack);
     }
 
-    public static void dropEvents(LivingDropsEvent event){
+    public static void dropEvents(LivingDropsEvent event) {
         if (event.getEntity() != null) {
             Entity attacker = event.getSource().getEntity();
             LivingEntity victim = event.getEntity();

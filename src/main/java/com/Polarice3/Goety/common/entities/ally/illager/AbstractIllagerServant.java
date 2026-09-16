@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.entities.ally.illager;
 
 import com.Polarice3.Goety.api.entities.ITrainable;
+import com.Polarice3.Goety.api.entities.ally.illager.ICharmUser;
 import com.Polarice3.Goety.api.entities.ally.illager.ILooter;
+import com.Polarice3.Goety.api.items.magic.IMobCharm;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.entities.OminousPyreBlockEntity;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
@@ -70,7 +72,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public abstract class AbstractIllagerServant extends RaiderServant implements ITrainable, ILooter {
+public abstract class AbstractIllagerServant extends RaiderServant implements ITrainable, ILooter, ICharmUser {
     protected static final EntityDataAccessor<String> CURRENT_TRAIN = SynchedEntityData.defineId(AbstractIllagerServant.class, EntityDataSerializers.STRING);
     protected static final EntityDataAccessor<Optional<BlockPos>> TRAIN_POS = SynchedEntityData.defineId(AbstractIllagerServant.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     protected static final EntityDataAccessor<Optional<BlockPos>> STORED_TRAIN_POS = SynchedEntityData.defineId(AbstractIllagerServant.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
@@ -88,6 +90,7 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
     @Nullable
     public BlockPos dumpChestPos;
     public String dumpChestDim = Level.OVERWORLD.location().toString();
+    public ItemStack charmItem = ItemStack.EMPTY;
     private final SimpleContainer inventory = new SimpleContainer(8);
 
     public AbstractIllagerServant(EntityType<? extends Owned> type, Level worldIn) {
@@ -145,6 +148,7 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
         compound.putInt("EatenFoodLevel", this.eatenFoodLevel);
         this.saveLooterData(compound);
         this.saveTrainableData(compound);
+        this.saveCharmData(compound);
         this.writeInventoryToTag(compound);
     }
 
@@ -162,6 +166,7 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
         }
         this.readLooterData(compound);
         this.readTrainableData(compound);
+        this.readCharmData(compound);
         this.readInventoryFromTag(compound);
     }
 
@@ -179,6 +184,16 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
     @Override
     public MobType getMobType() {
         return MobType.ILLAGER;
+    }
+
+    @Override
+    public ItemStack getCharm() {
+        return this.charmItem;
+    }
+
+    @Override
+    public void setCharm(ItemStack itemStack) {
+        this.charmItem = itemStack;
     }
 
     @Nullable
@@ -359,6 +374,7 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
                 --this.trainCompleted;
             }
             this.trainTick();
+            this.charmTick();
             if (this.eatenFoodLevel > 0) {
                 if (this.tickCount % 20 == 0) {
                     --this.eatenFoodLevel;
@@ -642,6 +658,15 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
             this.setGuaranteedDrop(EquipmentSlot.HEAD);
             this.take(itemEntity, itemstack.getCount());
             itemEntity.discard();
+        } else if (itemstack.getItem() instanceof IMobCharm && itemEntity.tickCount > 20 && this.getCharm().isEmpty()) {
+            this.onItemPickup(itemEntity);
+            this.setCharm(itemstack.split(1));
+            this.take(itemEntity, 1);
+            if (itemstack.isEmpty()) {
+                itemEntity.discard();
+            } else {
+                itemEntity.setItem(itemstack);
+            }
         } else {
             InventoryCarrier.pickUpItem(this, this, itemEntity);
         }
@@ -654,8 +679,13 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
 
     @Override
     public boolean wantsToPickUp(ItemStack itemStack) {
-        return MobsConfig.IllagerServantPickUpDrops.get()
-                && this.validFood(itemStack)
+        if (!MobsConfig.IllagerServantPickUpDrops.get()) {
+            return false;
+        }
+        if (itemStack.getItem() instanceof IMobCharm) {
+            return this.getCharm().isEmpty();
+        }
+        return this.validFood(itemStack)
                 && this.canHaveMoreFood()
                 && this.getInventory().canAddItem(itemStack);
     }
@@ -770,6 +800,9 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
                 }
             }
         }
+        if (!this.getCharm().isEmpty()) {
+            this.spawnAtLocation(this.getCharm());
+        }
     }
 
     public boolean isWithinDistance(Entity entity, double distance) {
@@ -883,11 +916,34 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
                     }
                 }
                 return InteractionResult.SUCCESS;
-            } else if (itemstack.is(Items.STICK) && this.getOffhandItem().is(Items.TOTEM_OF_UNDYING)) {
-                ItemStack totem = this.getOffhandItem();
-                this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
-                this.dropEquipment(EquipmentSlot.OFFHAND, totem);
-                this.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 1.0F, 1.0F);
+            } else if (itemstack.is(Items.STICK)) {
+                if (this.getOffhandItem().is(Items.TOTEM_OF_UNDYING)) {
+                    ItemStack totem = this.getOffhandItem();
+                    this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    this.dropEquipment(EquipmentSlot.OFFHAND, totem);
+                    this.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 1.0F, 1.0F);
+                    return InteractionResult.SUCCESS;
+                } else if (!this.getCharm().isEmpty()) {
+                    this.spawnAtLocation(this.getCharm());
+                    this.setCharm(ItemStack.EMPTY);
+                    this.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 1.0F, 1.0F);
+                    return InteractionResult.SUCCESS;
+                }
+            } else if (itemstack.getItem() instanceof IMobCharm) {
+                ItemStack charm = this.getCharm();
+                if (!charm.isEmpty()) {
+                    this.spawnAtLocation(charm);
+                }
+                this.setCharm(itemstack.split(1));
+                this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+                if (this.level instanceof ServerLevel serverLevel) {
+                    for (int i = 0; i < 7; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
+                    }
+                }
                 return InteractionResult.SUCCESS;
             }
         }
@@ -1273,6 +1329,7 @@ public abstract class AbstractIllagerServant extends RaiderServant implements IT
                     baby.setBaby(true);
                     this.hasBred = true;
                     if (this.illager.level.addFreshEntity(baby)) {
+                        serverLevel.gameEvent(baby, GameEvent.ENTITY_PLACE, this.illager.position());
                         this.illager.level.broadcastEntityEvent(baby, (byte) 12);
                     }
                 }

@@ -1,9 +1,12 @@
 package com.Polarice3.Goety.api.magic;
 
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.items.ModItems;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -43,6 +46,7 @@ public interface ISummonSpell extends ISpell {
     default void SummonDown(LivingEntity entityLiving) {
         MobEffectInstance effectinstance1 = entityLiving.getEffect(GoetyEffects.SUMMON_DOWN);
         int i = 1;
+        int s = SummonDownDuration();
         if (effectinstance1 != null) {
             i += effectinstance1.getAmplifier();
             entityLiving.removeEffectNoUpdate(GoetyEffects.SUMMON_DOWN);
@@ -51,10 +55,9 @@ public interface ISummonSpell extends ISpell {
         }
 
         i = Mth.clamp(i, 0, 4);
-        int s = SummonDownDuration();
-        if (entityLiving instanceof Player player) {
-            if (WandUtil.enchantedFocus(player)) {
-                s = (int) (SummonDownDuration() * 1.5);
+        if (entityLiving instanceof Player player){
+            if (WandUtil.enchantedFocus(player)){
+                s = Mth.floor(s * 1.5F);
             }
         }
         MobEffectInstance effectinstance = new MobEffectInstance(GoetyEffects.SUMMON_DOWN, s, i, false, false, true);
@@ -123,5 +126,16 @@ public interface ISummonSpell extends ISpell {
             }
         }
         ServerParticleUtil.summonUndeadParticles(worldIn, summoned, colorUtil, colorFrom, colorTo);
+    }
+
+    default void namelessSummon(ServerLevel worldIn, LivingEntity caster, ItemStack staff, LivingEntity summoned) {
+        if (staff.is(ModItems.NAMELESS_STAFF)) {
+            worldIn.sendParticles(ModParticleTypes.LICH, summoned.getX(), summoned.getY(), summoned.getZ(), 1, 0, 0, 0, 0.0F);
+            ServerParticleUtil.summonPowerfulUndeadParticles(worldIn, summoned);
+            this.playSound(worldIn, summoned, ModSounds.SOUL_EXPLODE, 0.25F + (worldIn.getRandom().nextFloat() / 2.0F), 1.0F);
+            this.playSound(worldIn, summoned, SoundEvents.ENDERMAN_TELEPORT, 0.25F + (worldIn.getRandom().nextFloat() / 2.0F), 1.0F);
+        } else {
+            this.summonParticles(worldIn, caster, staff, summoned);
+        }
     }
 }

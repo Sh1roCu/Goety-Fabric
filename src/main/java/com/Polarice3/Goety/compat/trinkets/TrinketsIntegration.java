@@ -67,6 +67,7 @@ public class TrinketsIntegration implements ICompatable {
             .put(ModItems.TOTEM_OF_SOULS, "charm")
             .put(ModItems.ALARMING_CHARM, "charm")
             .put(ModItems.OMINOUS_CHARM, "charm")
+            .put(ModItems.SOUL_HEALER, "charm")
             .put(ModItems.FOCUS_BAG, "belt")
             .put(ModItems.FOCUS_PACK, "belt")
             .put(ModItems.BREW_BAG, "belt")

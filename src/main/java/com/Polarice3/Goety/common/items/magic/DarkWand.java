@@ -541,14 +541,14 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
                             if (this.ShotsFired(stack) > 0) {
                                 float coolPercent = (float) this.ShotsFired(stack) / chargeSpell.shotsNumber(player, stack);
                                 this.setShots(stack, 0);
-                                if (!spell.hasCustomCooldown(player, stack, focus, Mth.floor(chargeSpell.spellCooldown(player) * coolPercent))) {
-                                    SEHelper.addCooldown(player, focus.getItem(), Mth.floor(chargeSpell.spellCooldown(player) * coolPercent));
+                                if (!spell.hasCustomCooldown(player, stack, IWand.getFocus(stack), Mth.floor(chargeSpell.spellCooldown(player) * coolPercent))) {
+                                    SEHelper.addSpellCooldown(player, spell, Mth.floor(chargeSpell.spellCooldown(player) * coolPercent));
                                 }
                             }
                         } else {
                             if (!spell.hasCustomCooldown(player, stack, focus, Mth.floor(chargeSpell.spellCooldown(player)))) {
                                 if (CastTime > chargeSpell.castUp(player, stack)) {
-                                    SEHelper.addCooldown(player, focus.getItem(), Mth.floor(chargeSpell.spellCooldown(player)));
+                                    SEHelper.addSpellCooldown(player, spell, Mth.floor(chargeSpell.spellCooldown(player)));
                                 }
                             }
                         }
@@ -653,7 +653,7 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
 
     }
 
-    public void setSpellConditions(@Nullable ISpell spell, ItemStack stack, LivingEntity livingEntity){
+    public void setSpellConditions(@Nullable ISpell spell, ItemStack stack, LivingEntity livingEntity) {
         if (stack.getTag() == null) {
             return;
         }
@@ -771,14 +771,14 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
                 }
                 if (playerEntity.isCreative()) {
                     if (!spell.hasCustomCooldown(caster, stack, IWand.getFocus(stack), spell.spellCooldown(playerEntity))) {
-                        SEHelper.addCooldown(playerEntity, IWand.getFocus(stack).getItem(), spell.spellCooldown(playerEntity));
+                        SEHelper.addSpellCooldown(playerEntity, spell, spell.spellCooldown(playerEntity));
                     }
                     return stack.getTag() != null;
                 } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(caster, stack))) {
                     if (stack.getTag() != null) {
                         SEHelper.decreaseSouls(playerEntity, SoulUse(caster, stack));
                         if (!spell.hasCustomCooldown(caster, stack, IWand.getFocus(stack), spell.spellCooldown(playerEntity))) {
-                            SEHelper.addCooldown(playerEntity, IWand.getFocus(stack).getItem(), spell.spellCooldown(playerEntity));
+                            SEHelper.addSpellCooldown(playerEntity, spell, spell.spellCooldown(playerEntity));
                         }
                         SEHelper.sendSEUpdatePacket(playerEntity);
                         return true;
@@ -812,7 +812,7 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
                         if (flag) {
                             this.setShots(stack, 0);
                             if (!spell.hasCustomCooldown(caster, stack, IWand.getFocus(stack), spell.spellCooldown(playerEntity))) {
-                                SEHelper.addCooldown(playerEntity, IWand.getFocus(stack).getItem(), spell.spellCooldown(playerEntity));
+                                SEHelper.addSpellCooldown(playerEntity, spell, spell.spellCooldown(playerEntity));
                             }
                         }
                     }
@@ -852,7 +852,7 @@ public class DarkWand extends Item implements IWand, ILeftClickEntity, ICustomAr
                         if (flag) {
                             this.setShots(stack, 0);
                             if (!spell.hasCustomCooldown(caster, stack, IWand.getFocus(stack), spell.spellCooldown(playerEntity))) {
-                                SEHelper.addCooldown(playerEntity, IWand.getFocus(stack).getItem(), spell.spellCooldown(playerEntity));
+                                SEHelper.addSpellCooldown(playerEntity, spell, spell.spellCooldown(playerEntity));
                             }
                         }
                     }

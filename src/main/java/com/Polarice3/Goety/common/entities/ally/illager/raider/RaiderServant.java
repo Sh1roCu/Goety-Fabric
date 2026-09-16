@@ -2,6 +2,8 @@ package com.Polarice3.Goety.common.entities.ally.illager.raider;
 
 import cn.sh1rocu.goety.util.forge.EventHooks;
 import com.Polarice3.Goety.api.entities.ITrainable;
+import com.Polarice3.Goety.api.entities.ally.illager.ICharmUser;
+import com.Polarice3.Goety.api.entities.ally.illager.ILooter;
 import com.Polarice3.Goety.common.advancements.ModCriteriaTriggers;
 import com.Polarice3.Goety.common.blocks.entities.OminousIdolBlockEntity;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
@@ -47,6 +49,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -113,7 +116,7 @@ public abstract class RaiderServant extends Summoned {
 
     @Override
     public void followGoal() {
-        this.goalSelector.addGoal(6, new FollowOwnerGoal<>(this, 1.0D, 10.0F, 2.0F) {
+        this.goalSelector.addGoal(6, new FollowOwnerGoal<>(this, this.getFollowSpeed(), 10.0F, 2.0F){
             @Override
             public boolean canUse() {
                 if (RaiderServant.this.isRaiding()) {
@@ -291,7 +294,7 @@ public abstract class RaiderServant extends Summoned {
         this.entityData.set(LEADER_CLIENT_ID, p_184754_1_);
     }
 
-    public void setLeader(@Nullable RaiderServant livingEntity) {
+    public void setLeader(@Nullable RaiderServant livingEntity){
         if (livingEntity != null && livingEntity != this) {
             this.setLeaderId(livingEntity.getUUID());
             this.setLeaderClientId(livingEntity.getId());
@@ -857,6 +860,39 @@ public abstract class RaiderServant extends Summoned {
         if (convert instanceof RaiderServant servant) {
             if (this.getLeader() != null) {
                 servant.setLeader(this.getLeader());
+            }
+        }
+        if (convert != null && p_21408_) {
+            if (this instanceof ICharmUser charmUser) {
+                if (!charmUser.getCharm().isEmpty()) {
+                    if (convert instanceof ICharmUser charmUser1) {
+                        charmUser1.setCharm(charmUser.getCharm());
+                    } else {
+                        convert.spawnAtLocation(charmUser.getCharm().copyAndClear());
+                    }
+
+                    charmUser.setCharm(ItemStack.EMPTY);
+                }
+            }
+            if (this instanceof ILooter fromLooter) {
+                SimpleContainer source = fromLooter.getInventory();
+                for (int i = 0; i < source.getContainerSize(); ++i) {
+                    ItemStack stack = source.getItem(i);
+                    if (stack.isEmpty()) {
+                        continue;
+                    }
+                    if (convert instanceof ILooter toLooter) {
+                        SimpleContainer dest = toLooter.getInventory();
+                        if (dest.canAddItem(stack)) {
+                            dest.addItem(stack.copyAndClear());
+                        } else {
+                            convert.spawnAtLocation(stack.copyAndClear());
+                        }
+                    } else {
+                        convert.spawnAtLocation(stack.copyAndClear());
+                    }
+                }
+                source.setChanged();
             }
         }
         return convert;

@@ -7,10 +7,7 @@ import com.Polarice3.Goety.common.magic.spells.wind.UpdraftSpell;
 import com.Polarice3.Goety.common.magic.spells.wind.WindBlastSpell;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.ColorUtil;
-import com.Polarice3.Goety.utils.MathHelper;
-import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ServerParticleUtil;
+import com.Polarice3.Goety.utils.*;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -18,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -111,6 +109,15 @@ public class BoundWindCaller extends AbstractBoundIllager {
         }
         if (compound.contains("UpdraftCool")) {
             this.updraftCool = compound.getInt("UpdraftCool");
+        }
+    }
+
+    @Override
+    protected ResourceLocation getDefaultLootTable() {
+        if (this.isNatural()){
+            return ModLootTables.NATURAL_BOUND_WIND_CALLER;
+        } else {
+            return super.getDefaultLootTable();
         }
     }
 

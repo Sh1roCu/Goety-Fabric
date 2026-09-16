@@ -7,6 +7,8 @@ import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
+import com.Polarice3.Goety.common.entities.ai.servant.ServantFollowOwnerGoal;
+import com.Polarice3.Goety.common.entities.ai.servant.ServantPatrolGoal;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.config.MobsConfig;
@@ -15,6 +17,7 @@ import com.Polarice3.Goety.utils.MathHelper;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -52,6 +55,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,6 +77,8 @@ public abstract class AbstractSpiderServant extends Spider implements PlayerRide
     public BlockPos priorityPos;
     public BlockPos boundPos;
     public String boundDim = Level.OVERWORLD.location().toString();
+    public List<GlobalPos> patrolList = new ArrayList<>();
+    public int patrolIndex = 0;
     public int priorityTime;
     public int commandTick;
     public int killChance;
@@ -90,12 +97,17 @@ public abstract class AbstractSpiderServant extends Spider implements PlayerRide
         this.targetSelector.addGoal(1, new Owned.OwnerHurtByTargetGoal<>(this));
         this.targetSelector.addGoal(2, new Owned.OwnerHurtTargetGoal<>(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.patrolGoal();
         this.followGoal();
         this.targetSelectGoal();
     }
 
-    public void followGoal() {
-        this.goalSelector.addGoal(5, new Summoned.FollowOwnerGoal<>(this, 1.0D, 10.0F, 2.0F));
+    public void patrolGoal() {
+        this.goalSelector.addGoal(2, new ServantPatrolGoal<>(this, this.getCommandSpeed()));
+    }
+
+    public void followGoal(){
+        this.goalSelector.addGoal(5, new ServantFollowOwnerGoal<>(this, this.getFollowSpeed(), 10.0F, 2.0F));
     }
 
     public void targetSelectGoal() {
@@ -161,6 +173,26 @@ public abstract class AbstractSpiderServant extends Spider implements PlayerRide
     @Override
     public boolean burnSunTick() {
         return this.isSunBurnTick();
+    }
+
+    @Override
+    public List<GlobalPos> getPatrolRoute() {
+        return this.patrolList;
+    }
+
+    @Override
+    public void setPatrolRoute(List<GlobalPos> list) {
+        this.patrolList = list;
+    }
+
+    @Override
+    public int getPatrolIndex() {
+        return this.patrolIndex;
+    }
+
+    @Override
+    public void setPatrolIndex(int index) {
+        this.patrolIndex = index;
     }
 
     @Override

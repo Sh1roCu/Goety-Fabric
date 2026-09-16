@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally.undead.skeleton;
 
+import com.Polarice3.Goety.api.entities.IShielded;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
@@ -8,10 +9,7 @@ import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.config.SpellConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ServerParticleUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,7 +17,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -47,11 +44,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class VanguardServant extends AbstractSkeletonServant {
+public class VanguardServant extends AbstractSkeletonServant implements IShielded {
     protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(VanguardServant.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> HAS_SHIELD = SynchedEntityData.defineId(VanguardServant.class, EntityDataSerializers.BOOLEAN);
     public int attackTick;
-    public int shieldHealth = 1;
+    public int shieldHealth = AttributesConfig.VanguardServantShield.get();
     public AnimationState idleAnimationState = new AnimationState();
     public AnimationState walkAnimationState = new AnimationState();
     public AnimationState attackAnimationState = new AnimationState();
@@ -98,19 +95,18 @@ public class VanguardServant extends AbstractSkeletonServant {
     @Override
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        if (pCompound.contains("hasShield")) {
-            this.setShield(pCompound.getBoolean("hasShield"));
-        }
-        if (pCompound.contains("ShieldHeath")) {
-            this.setShieldHealth(pCompound.getInt("ShieldHeath"));
-        }
+        this.readShieldedData(pCompound);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putBoolean("hasShield", this.hasShield());
-        pCompound.putInt("ShieldHeath", this.getShieldHealth());
+        this.addShieldedData(pCompound);
+    }
+
+    @Override
+    public double getFollowSpeed() {
+        return 1.25D;
     }
 
     @Override
@@ -139,42 +135,52 @@ public class VanguardServant extends AbstractSkeletonServant {
         this.entityData.set(DATA_FLAGS_ID, (byte) (i & 255));
     }
 
+    @Override
     public boolean hasShield() {
         return this.entityData.get(HAS_SHIELD);
     }
 
+    @Override
     public void setShield(boolean shield) {
         this.entityData.set(HAS_SHIELD, shield);
     }
 
+    @Override
     public int getShieldHealth() {
         return this.shieldHealth;
     }
 
+    @Override
     public void setShieldHealth(int shieldHealth) {
         this.shieldHealth = shieldHealth;
     }
 
-    public void destroyShield() {
-        if (this.hasShield()) {
-            if (this.getShieldHealth() > 1) {
-                this.setShieldHealth(this.getShieldHealth() - 1);
-                this.playSound(SoundEvents.SHIELD_BLOCK);
-            } else {
-                this.setShieldHealth(0);
-                this.setShield(false);
-                this.playSound(SoundEvents.SHIELD_BREAK);
-                if (this.level instanceof ServerLevel serverLevel) {
-                    ServerParticleUtil.addParticlesAroundSelf(serverLevel, new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.SPRUCE_PLANKS)), this);
-                }
-            }
-        }
+    @Override
+    public int getMaxShieldHealth() {
+        return AttributesConfig.VanguardServantShield.get();
     }
 
+    @Override
+    public ItemStack getShieldMaterial() {
+        return new ItemStack(Items.SPRUCE_PLANKS);
+    }
+
+    @Override
+    public int getAttackTick() {
+        return this.attackTick;
+    }
+
+    @Override
+    public void setAttackTick(int attackTick) {
+        this.attackTick = attackTick;
+    }
+
+    @Override
     public boolean isMeleeAttacking() {
         return this.getVanguardFlag(1);
     }
 
+    @Override
     public void setMeleeAttacking(boolean attacking) {
         this.setVanguardFlags(1, attacking);
         this.attackTick = 0;
@@ -285,25 +291,7 @@ public class VanguardServant extends AbstractSkeletonServant {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (!this.level.isClientSide) {
-            if (this.hasShield() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-                this.destroyShield();
-                return false;
-            } else {
-                if (this.getTarget() != null) {
-                    if (source.getEntity() instanceof LivingEntity livingEntity) {
-                        double d0 = this.distanceTo(this.getTarget());
-                        double d1 = this.distanceTo(livingEntity);
-                        if (MobUtil.ownedCanAttack(this, livingEntity) && livingEntity != this.getTrueOwner()) {
-                            if (d0 > d1) {
-                                this.setTarget(livingEntity);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return super.hurt(source, amount);
+        return this.hurtShielded(source, amount, () -> super.hurt(source, amount));
     }
 
     @Override
@@ -315,17 +303,17 @@ public class VanguardServant extends AbstractSkeletonServant {
 
     @Override
     public void handleEntityEvent(byte p_21375_) {
-        if (p_21375_ == 4) {
-            this.stopAllAnimations();
-            this.attackAnimationState.start(this.tickCount);
-        } else if (p_21375_ == 5) {
-            this.attackTick = 0;
-        } else if (p_21375_ == 6) {
-            this.setShield(true);
-            this.setShieldHealth(1);
+        if (p_21375_ == 4 || p_21375_ == 5 || p_21375_ == 6){
+            this.handleShieldedEvent(p_21375_);
         } else {
             super.handleEntityEvent(p_21375_);
         }
+    }
+
+    @Override
+    public void animateAttack() {
+        this.stopAllAnimations();
+        this.attackAnimationState.start(this.tickCount);
     }
 
     @Override
@@ -355,7 +343,8 @@ public class VanguardServant extends AbstractSkeletonServant {
         return flag;
     }
 
-    protected double getAttackReachSqr(LivingEntity enemy) {
+    @Override
+    public double getShieldedAttackReachSqr(LivingEntity enemy) {
         if (this.getVehicle() instanceof IRavager) {
             float f = this.getVehicle().getBbWidth() - 0.1F;
             return f * 2.0F * f * 2.0F + enemy.getBbWidth();
@@ -363,14 +352,24 @@ public class VanguardServant extends AbstractSkeletonServant {
         return this.getBbWidth() * 6.0F * this.getBbWidth() * 6.0F + enemy.getBbWidth();
     }
 
-    public boolean targetClose(LivingEntity enemy, double distToEnemySqr) {
-        return (distToEnemySqr <= this.getAttackReachSqr(enemy) || this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.hasLineOfSight(enemy);
+    protected double getAttackReachSqr(LivingEntity enemy) {
+        return this.getShieldedAttackReachSqr(enemy);
+    }
+
+    @Override
+    public boolean targetClose(LivingEntity enemy, double distToEnemySqr){
+        return (distToEnemySqr <= this.getShieldedAttackReachSqr(enemy) || this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.hasLineOfSight(enemy);
     }
 
     public void resetMeleeAttack() {
         this.setVanguardFlags(1, false);
         this.attackTick = 0;
         this.level.broadcastEntityEvent(this, (byte) 5);
+    }
+
+    @Override
+    public boolean isShieldRepair(ItemStack itemStack) {
+        return itemStack.is(ItemTags.PLANKS);
     }
 
     @Override
@@ -394,28 +393,20 @@ public class VanguardServant extends AbstractSkeletonServant {
                 }
                 return InteractionResult.SUCCESS;
             }
-            if (!this.level.isClientSide) {
-                if (!this.hasShield() && itemstack.is(ItemTags.PLANKS) && this.getTarget() == null && this.hurtTime <= 0) {
-                    if (!pPlayer.getAbilities().instabuild) {
-                        itemstack.shrink(1);
-                    }
-                    this.setShield(true);
-                    this.setShieldHealth(1);
-                    this.level.broadcastEntityEvent(this, (byte) 6);
-                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
-                    return InteractionResult.SUCCESS;
-                }
+            if (!this.hasShield() && this.isShieldRepair(itemstack) && this.getTarget() == null && this.hurtTime <= 0) {
+                return this.repairShield(pPlayer, itemstack);
             }
         }
-        return InteractionResult.PASS;
+        return super.mobInteract(pPlayer, pHand);
     }
 
     class VanguardAttackGoal extends MeleeAttackGoal {
         private int delayCounter;
-        private static final float SPEED = 1.25F;
+        private double speed;
 
         public VanguardAttackGoal() {
-            super(VanguardServant.this, SPEED, true);
+            super(VanguardServant.this, VanguardServant.this.getFollowSpeed(), true);
+            this.speed = VanguardServant.this.getFollowSpeed();
         }
 
         @Override
@@ -441,7 +432,7 @@ public class VanguardServant extends AbstractSkeletonServant {
 
             if (--this.delayCounter <= 0 && !VanguardServant.this.targetClose(livingentity, d0)) {
                 this.delayCounter = 10;
-                VanguardServant.this.getNavigation().moveTo(livingentity, SPEED);
+                VanguardServant.this.getNavigation().moveTo(livingentity, this.speed);
             }
 
             this.checkAndPerformAttack(livingentity, VanguardServant.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));

@@ -115,9 +115,14 @@ public class HammerItem extends TieredItem implements Vanishable, IEnchantment {
         return super.useOn(p_41427_);
     }
 
-    public boolean getMineBlocks(Level pLevel, BlockState pState, BlockPos pPos) {
+    public boolean getMineBlocks(Level pLevel, LivingEntity livingEntity, BlockState pState, BlockPos pPos){
+        boolean flag = true;
+        if (livingEntity instanceof Player player) {
+            flag = pState.getDestroyProgress(player, pLevel, pPos) > -1.0F;
+        }
         return pState.is(BlockTags.MINEABLE_WITH_PICKAXE)
-                && pState.getDestroySpeed(pLevel, pPos) > -1.0F;
+                && pState.getDestroySpeed(pLevel, pPos) > -1.0F
+                && flag;
     }
 
     @Override
@@ -128,15 +133,15 @@ public class HammerItem extends TieredItem implements Vanishable, IEnchantment {
     @Override
     public boolean mineBlock(ItemStack pStack, Level pLevel, BlockState pState, BlockPos pPos, LivingEntity pEntityLiving) {
         if (pState.getDestroySpeed(pLevel, pPos) != 0.0F) {
-            pStack.hurtAndBreak(this.getMineBlocks(pLevel, pState, pPos) ? 1 : 2, pEntityLiving, (p_220044_0_) ->
+            pStack.hurtAndBreak(this.getMineBlocks(pLevel, pEntityLiving, pState, pPos) ? 1 : 2, pEntityLiving, (p_220044_0_) ->
                     p_220044_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         }
-        if (this.getMineBlocks(pLevel, pState, pPos)) {
-            pLevel.playSound(null, pPos.getX(), pPos.getY(), pPos.getZ(), ModSounds.DIRT_DEBRIS, pEntityLiving.getSoundSource(), 1.0F, 1.0F);
-            for (BlockPos blockPos : BlockFinder.multiBlockBreak(pEntityLiving, pPos, 1, 1, 1)) {
+        if (this.getMineBlocks(pLevel, pEntityLiving, pState, pPos)){
+            pLevel.playSound((Player) null, pPos.getX(), pPos.getY(), pPos.getZ(), ModSounds.DIRT_DEBRIS, pEntityLiving.getSoundSource(), 1.0F, 1.0F);
+            for (BlockPos blockPos : BlockFinder.multiBlockBreak(pEntityLiving, pPos, 1, 1, 1)){
                 BlockState blockstate = pLevel.getBlockState(blockPos);
-                if (this.getMineBlocks(pLevel, blockstate, blockPos)) {
-                    if (BlockFinder.breakBlock(pLevel, blockPos, pStack, pEntityLiving)) {
+                if (this.getMineBlocks(pLevel, pEntityLiving, blockstate, blockPos)){
+                    if (BlockFinder.breakBlock(pLevel, blockPos, pStack, pEntityLiving)){
                         if (blockstate.getDestroySpeed(pLevel, blockPos) != 0) {
                             pStack.hurtAndBreak(1, pEntityLiving, (p_220044_0_)
                                     -> p_220044_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND));

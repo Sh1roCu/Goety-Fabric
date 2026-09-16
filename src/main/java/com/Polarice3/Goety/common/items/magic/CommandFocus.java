@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.items.magic;
 
 import cn.sh1rocu.goety.api.extension.ILeftClickEntity;
 import com.Polarice3.Goety.api.entities.ally.IServant;
-import com.Polarice3.Goety.common.magic.spells.utility.CommandSpell;
+import com.Polarice3.Goety.common.magic.ModSpells;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -28,7 +28,7 @@ public class CommandFocus extends MagicFocus implements ILeftClickEntity {
     public static final String TAG_ENTITY_CLIENT = "ServantClient";
 
     public CommandFocus() {
-        super(new CommandSpell());
+        super(ModSpells.COMMAND);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.Polarice3.Goety.common.events;
 
 import cn.sh1rocu.goety.api.event.LivingHurtEvent;
 import cn.sh1rocu.goety.api.event.PlayerTickEvent;
+import com.Polarice3.Goety.api.entities.ally.illager.ICharmUser;
+import com.Polarice3.Goety.api.items.magic.ISoulContainer;
 import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.client.particles.LichShockwaveParticleOption;
 import com.Polarice3.Goety.common.blocks.entities.ArcaBlockEntity;
@@ -267,32 +269,32 @@ public class SoulEnergyEvents {
         Entity projectile = damageSource.getDirectEntity();
         boolean cancelled = false;
 
-        // if (killed instanceof LivingEntity victim) {
-        if (killer instanceof Player player) {
-            if (!(player instanceof FakePlayer)) {
-                if (projectile instanceof Fangs fangEntity && fangEntity.isTotemSpawned()) {
-                    SEHelper.rawHandleKill(player, victim, fangEntity.getSoulEater(), damageSource);
-                } else {
-                    SEHelper.handleKill(player, victim, damageSource);
-                }
-            }
-        }
-
-        LivingEntity owner = MobUtil.getOwner(killer);
-        if (owner != null) {
+        // if (killed instanceof LivingEntity victim){
+        if (killer instanceof LivingEntity livingKiller) {
             Player player = null;
-            if (MobUtil.getOwner(owner) instanceof Player player1) {
+            boolean charmMob = killer instanceof ICharmUser charmUser && charmUser.getCharm().getItem() instanceof ISoulContainer;
+            if (killer instanceof Player player1) {
                 player = player1;
-            }
-            if (owner instanceof Player playerEntity) {
-                player = playerEntity;
+            } else {
+                LivingEntity owner = MobUtil.getOwner(killer);
+                if (MobUtil.getOwner(owner) instanceof Player player1) {
+                    player = player1;
+                } else if (owner instanceof Player playerEntity) {
+                    player = playerEntity;
+                }
             }
             if (player != null) {
-                if (MobsConfig.ServantsAlwaysGiveSE.get() || CuriosFinder.hasDarkRobe(player) || CuriosFinder.hasUndeadSet(player) || ItemHelper.armorSet(owner, ModArmorMaterials.BLACK_IRON) || ItemHelper.armorSet(player, ModArmorMaterials.DARK) || killer instanceof RaiderServant) {
-                    if (!(player instanceof FakePlayer)) {
-                        SEHelper.handleKill(player, victim, damageSource);
+                if (!(player instanceof FakePlayer)) {
+                    if (projectile instanceof Fangs fangEntity && fangEntity.isTotemSpawned()) {
+                        SEHelper.rawHandleKill(player, victim, fangEntity.getSoulEater(), damageSource);
+                    } else {
+                        if (livingKiller instanceof Player || MobsConfig.ServantsAlwaysGiveSE.get() || CuriosFinder.hasDarkRobe(player) || CuriosFinder.hasUndeadSet(player) || ItemHelper.armorSet(player, ModArmorMaterials.BLACK_IRON) || ItemHelper.armorSet(player, ModArmorMaterials.DARK) || livingKiller instanceof RaiderServant || charmMob) {
+                            SEHelper.handleKill(livingKiller, victim, damageSource);
+                        }
                     }
                 }
+            } else if (charmMob) {
+                SEHelper.handleKill(livingKiller, victim, damageSource);
             }
         }
 

@@ -281,8 +281,10 @@ public class ClientInitEvents {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.DAMNED, DamnedModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.DAMNED_HUMAN, DamnedModel::createHumanLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.ILLAGER_SERVANT, IllagerServantModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.IMPERIAL_GUARD, ImperialGuardModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.VINDICATOR_CHEF, VindicatorChefModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.MOUNTAINEER, MountaineerModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayer.ROYAL_GUARD, RoyalGuardModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.GEOMANCER, GeomancerModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.ICEOLOGER, IceologerModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayer.WIND_CALLER, WindCallerModel::createBodyLayer);
@@ -587,6 +589,8 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.HOSTILE_BLACK_WOLF, BlackWolfRenderer::new);
         EntityRendererRegistry.register(ModEntityType.FRAYED, FrayedRenderer::new);
         EntityRendererRegistry.register(ModEntityType.RATTLED, RattledRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.ZOMBIE_VINDICATOR, ZombieVindicatorRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.SKELETON_PILLAGER, SkeletonPillagerRenderer::new);
         EntityRendererRegistry.register(ModEntityType.REAPER, ReaperRenderer::new);
         EntityRendererRegistry.register(ModEntityType.WRAITH, WraithRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BORDER_WRAITH, BorderWraithRenderer::new);
@@ -615,6 +619,7 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.JUNGLE_ZOMBIE_SERVANT, JungleZombieRenderer::new);
         EntityRendererRegistry.register(ModEntityType.FRAYED_SERVANT, FrayedServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.BLACKGUARD_SERVANT, BlackguardRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.BLACKGUARD_VARIANT_SERVANT, ZombieRoyalGuardRenderer::new);
         EntityRendererRegistry.register(ModEntityType.SKELETON_SERVANT, SkeletonServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.STRAY_SERVANT, SkeletonServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.WITHER_SKELETON_SERVANT, WitherSkeletonServantRenderer::new);
@@ -662,12 +667,14 @@ public class ClientInitEvents {
         EntityRendererRegistry.register(ModEntityType.PRISONER, PrisonerRenderer::new);
         EntityRendererRegistry.register(ModEntityType.NEOLLAGER, NeollagerRenderer::new);
         EntityRendererRegistry.register(ModEntityType.PILLAGER_SERVANT, PillagerServantRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.IMPERIAL_GUARD_SERVANT, ImperialGuardRenderer::new);
         EntityRendererRegistry.register(ModEntityType.PIKER_SERVANT, PikerServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.SIGNALER_SERVANT, SignalerServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.VINDICATOR_SERVANT, VindicatorServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.VINDICATOR_CHEF_SERVANT, VindicatorChefServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.MOUNTAINEER_SERVANT, MountaineerServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.CRUSHER_SERVANT, CrusherServantRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.ROYAL_GUARD_SERVANT, RoyalGuardRenderer::new);
         EntityRendererRegistry.register(ModEntityType.EVOKER_SERVANT, EvokerServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.GEOMANCER_SERVANT, GeomancerServantRenderer::new);
         EntityRendererRegistry.register(ModEntityType.ICEOLOGER_SERVANT, IceologerServantRenderer::new);

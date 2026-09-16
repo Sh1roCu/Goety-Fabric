@@ -10,6 +10,11 @@ import com.Polarice3.Goety.client.particles.RisingCircleParticleOption;
 import com.Polarice3.Goety.client.particles.ShockwaveParticleOption;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.effects.brew.BrewEffectInstance;
+import com.Polarice3.Goety.common.entities.ModEntityType;
+import com.Polarice3.Goety.common.entities.ally.illager.PillagerServant;
+import com.Polarice3.Goety.common.entities.ally.illager.VindicatorServant;
+import com.Polarice3.Goety.common.entities.hostile.HostileSkeletonPillager;
+import com.Polarice3.Goety.common.entities.hostile.HostileZombieVindicator;
 import com.Polarice3.Goety.common.entities.util.DragonBreathCloud;
 import com.Polarice3.Goety.common.events.spell.CastMagicEvent;
 import com.Polarice3.Goety.common.events.spell.CastingMagicEvent;
@@ -22,6 +27,7 @@ import com.Polarice3.Goety.config.ItemConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.*;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -54,10 +60,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.monster.Endermite;
-import net.minecraft.world.entity.monster.PatrollingMonster;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -99,6 +102,11 @@ public class PotionEvents {
                 if (livingEntity.hasEffect(GoetyEffects.ILLAGUE)) {
                     EffectsUtil.Illague(serverLevel, livingEntity);
                 }
+                /*if (livingEntity.hasEffect(GoetyEffects.SOUL_BURN))) {
+                    if (livingEntity.tickCount % 10 == 0) {
+                        serverLevel.sendParticles(ModParticleTypes.BIG_SOUL_FIRE, livingEntity.getX(), livingEntity.getY() + (livingEntity.getBbHeight() / 2.0F), livingEntity.getZ(), 1, 0, 0, 0, 1);
+                    }
+                }*/
                 if (livingEntity.hasEffect(GoetyEffects.VOID_TOUCHED)) {
                     if (livingEntity.tickCount % 10 == 0) {
                         ColorUtil colorUtil = VOID_TOUCHED;
@@ -159,8 +167,8 @@ public class PotionEvents {
                     }
                 }
             }
-            if (livingEntity.hasEffect(GoetyEffects.FREEZING)){
-                if (!livingEntity.level.isClientSide){
+            if (livingEntity.hasEffect(GoetyEffects.FREEZING)) {
+                if (!livingEntity.level.isClientSide) {
                     MobEffectInstance instance = livingEntity.getEffect(GoetyEffects.FREEZING);
                     if (instance != null) {
                         livingEntity.setIsInPowderSnow(true);
@@ -589,6 +597,35 @@ public class PotionEvents {
                         zombievillager.setVillagerXp(villager.getVillagerXp());
                         if (!zombievillager.isSilent()) {
                             serverLevel.levelEvent(null, 1026, zombievillager.blockPosition(), 0);
+                        }
+                    }
+                }
+            }
+        }
+        if (effected instanceof Mob mob) {
+            if (mob instanceof Vindicator || mob instanceof VindicatorServant) {
+                if (mob.hasEffect(GoetyEffects.NECROSIS)) {
+                    if (mob.level instanceof ServerLevel serverLevel) {
+                        HostileZombieVindicator zombieVindicator = mob.convertTo(ModEntityType.ZOMBIE_VINDICATOR, false);
+                        if (zombieVindicator != null) {
+                            zombieVindicator.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombieVindicator.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), (CompoundTag) null);
+                            ServerLivingEntityEvents.MOB_CONVERSION.invoker().onConversion(mob, zombieVindicator, true);
+                            if (!zombieVindicator.isSilent()) {
+                                serverLevel.levelEvent(null, 1026, zombieVindicator.blockPosition(), 0);
+                            }
+                        }
+                    }
+                }
+            } else if (mob instanceof Pillager || mob instanceof PillagerServant) {
+                if (mob.hasEffect(GoetyEffects.NECROSIS)) {
+                    if (mob.level instanceof ServerLevel serverLevel) {
+                        HostileSkeletonPillager skeletonPillager = mob.convertTo(ModEntityType.SKELETON_PILLAGER, false);
+                        if (skeletonPillager != null) {
+                            skeletonPillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(skeletonPillager.blockPosition()), MobSpawnType.CONVERSION, null, (CompoundTag) null);
+                            ServerLivingEntityEvents.MOB_CONVERSION.invoker().onConversion(mob, skeletonPillager, true);
+                            if (!skeletonPillager.isSilent()) {
+                                serverLevel.levelEvent((Player) null, 1026, skeletonPillager.blockPosition(), 0);
+                            }
                         }
                     }
                 }

@@ -13,6 +13,7 @@ public class ModStructureTypes {
     public static StructureType<BiggerJigsawStructure> BIGGER_JIGSAW_STRUCTURE = register("bigger_jigsaw", () -> () -> BiggerJigsawStructure.CODEC);
     public static StructureType<CryptStructure> CRYPT_STRUCTURE = register("crypt", () -> () -> CryptStructure.CODEC);
     public static StructureType<FinalTerminalStructure> FINAL_TERMINAL_STRUCTURE = register("final_terminal", () -> () -> FinalTerminalStructure.CODEC);
+    public static StructureType<WreckedMansionStructure> WRECKED_MANSION = register("wrecked_mansion", () -> () -> WreckedMansionStructure.CODEC);
 
     public static void init() {
 

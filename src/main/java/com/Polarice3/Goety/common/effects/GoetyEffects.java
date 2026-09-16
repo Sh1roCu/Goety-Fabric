@@ -102,6 +102,9 @@ public class GoetyEffects {
     public static final MobEffect NECROSIS = register("necrosis",
             () -> new GoetyBaseEffect(MobEffectCategory.NEUTRAL, 0x2f4e17));
 
+    /*public static final MobEffect SOUL_BURN = register("soul_burn",
+        () -> new BrewMobEffect(MobEffectCategory.HARMFUL, 0, false));*/
+
     public static final MobEffect VOID_TOUCHED = register("void_touched",
             () -> new GoetyBaseEffect(MobEffectCategory.HARMFUL, 0));
 

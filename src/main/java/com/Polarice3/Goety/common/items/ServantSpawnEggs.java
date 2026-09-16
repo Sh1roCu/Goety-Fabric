@@ -32,6 +32,9 @@ public class ServantSpawnEggs {
     public static final ServantSpawnEggItem BLACKGUARD_SERVANT_SPAWN_EGG = ModItems.register("blackguard_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.BLACKGUARD_SERVANT, 0x400000, 0xD9F2F2, egg()));
 
+    public static final ServantSpawnEggItem BLACKGUARD_VARIANT_SERVANT_SPAWN_EGG = ModItems.register("blackguard_variant_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(ModEntityType.BLACKGUARD_VARIANT_SERVANT, 0x303d45, 0xD9F2F2, egg()));
+
     public static final ServantSpawnEggItem SKELETON_SERVANT_SPAWN_EGG = ModItems.register("skeleton_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.SKELETON_SERVANT, 0x1f1f1f, 0x6e6473, egg()));
 
@@ -260,6 +263,9 @@ public class ServantSpawnEggs {
     public static final ServantSpawnEggItem PILLAGER_SERVANT_SPAWN_EGG = ModItems.register("pillager_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.PILLAGER_SERVANT, 0x341c22, 0xadbebe, egg()));
 
+    /*public static final ServantSpawnEggItem IMPERIAL_GUARD_SERVANT_SPAWN_EGG = ModItems.register("imperial_guard_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(ModEntityType.IMPERIAL_GUARD_SERVANT, 0x311505, 0xffc444, egg()));
+*/
     public static final ServantSpawnEggItem PIKER_SERVANT_SPAWN_EGG = ModItems.register("piker_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.PIKER_SERVANT, 0x341610, 0xc7cece, egg()));
 
@@ -277,6 +283,9 @@ public class ServantSpawnEggs {
 
     public static final ServantSpawnEggItem CRUSHER_SERVANT_SPAWN_EGG = ModItems.register("crusher_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.CRUSHER_SERVANT, 0x362a23, 0xcfb16c, egg()));
+
+    public static final ServantSpawnEggItem ROYAL_GUARD_SERVANT_SPAWN_EGG = ModItems.register("royal_guard_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(ModEntityType.ROYAL_GUARD_SERVANT, 0x0e1d28, 0xffc444, egg()));
 
     public static final ServantSpawnEggItem EVOKER_SERVANT_SPAWN_EGG = ModItems.register("evoker_servant_spawn_egg",
             () -> new ServantSpawnEggItem(ModEntityType.EVOKER_SERVANT, 0x959b9b, 0x0f1119, egg()));
